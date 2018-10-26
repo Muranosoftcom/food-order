@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using BusinessLogic.DTOs;
 using BusinessLogic.SpreadsheetParsing;
 using Core;
+using Domain.Entities;
 using Domain.Repositories;
 using SpreadsheetIntegration;
 using SpreadsheetIntegration.Core;
@@ -16,12 +17,12 @@ namespace BusinessLogic.Services
 {
     public class FoodService
     {
-        private readonly IFoodRepository _foodRepository;
+        private readonly IEditableRepository<DishItem> _dishRepository;
         private readonly IAsyncSpreadsheetProvider _spreadsheetProvider;
 
-        public FoodService(IFoodRepository foodRepository, IAsyncSpreadsheetProvider spreadsheetProvider)
+        public FoodService(IEditableRepository<DishItem> dishRepository, IAsyncSpreadsheetProvider spreadsheetProvider)
         {
-            _foodRepository = foodRepository;
+            _dishRepository = dishRepository;
             _spreadsheetProvider = spreadsheetProvider;
         }
 

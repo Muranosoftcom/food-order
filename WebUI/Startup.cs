@@ -14,6 +14,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Domain;
 using Domain.Contexts;
+using Domain.Entities;
+using Domain.Repositories;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -68,6 +70,9 @@ namespace SampleMvcApp
                 });
 
             services.AddSingleton<IGoogleSpreadsheetProvider, GoogleSpreadsheetProvider>();
+            services.AddScoped<IEditableRepository<User>,UserRepository>();
+            services.AddScoped<IRepository<Order>, OrderRepository>();
+            services.AddScoped<IEditableRepository<DishItem>,DishRepository>();
             
             // Add framework services.
             services.AddMvc()

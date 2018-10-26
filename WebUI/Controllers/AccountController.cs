@@ -2,6 +2,8 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Domain.Contexts;
+using Domain.Entities;
+using Domain.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -13,11 +15,11 @@ namespace WebUI.Controllers
 {
     public class AccountController : Controller
     {
-        private IFoodOrderContext _context;
+        private IEditableRepository<User> _userRepository; 
 
-        public AccountController(IFoodOrderContext context)
+        public AccountController(IEditableRepository<User> userRepository)
         {
-            _context = context;
+            _userRepository = _userRepository;
         }
 
         public async Task Login(string returnUrl = "/")
