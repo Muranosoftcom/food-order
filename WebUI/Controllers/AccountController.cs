@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using SampleMvcApp.ViewModels;
-using System.Linq;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Google;
+using WebUI.ViewModels;
 
-namespace SampleMvcApp.Controllers
+namespace WebUI.Controllers
 {
     public class AccountController : Controller
     {
