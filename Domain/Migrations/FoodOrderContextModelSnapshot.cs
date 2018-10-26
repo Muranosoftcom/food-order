@@ -19,7 +19,20 @@ namespace Domain.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Domain.DishItem", b =>
+            modelBuilder.Entity("Domain.DishItemToWeekDay", b =>
+                {
+                    b.Property<int>("DishItemId");
+
+                    b.Property<int>("WeekDayId");
+
+                    b.HasKey("DishItemId", "WeekDayId");
+
+                    b.HasIndex("WeekDayId");
+
+                    b.ToTable("DishItemsToWeekDays");
+                });
+
+            modelBuilder.Entity("Domain.Entities.DishItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -37,29 +50,12 @@ namespace Domain.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("Money");
 
-                    b.Property<int?>("WeekDayId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("WeekDayId");
 
                     b.ToTable("DishItems");
                 });
 
-            modelBuilder.Entity("Domain.DishItemToWeekDay", b =>
-                {
-                    b.Property<int>("DishItemId");
-
-                    b.Property<int>("WeekDayId");
-
-                    b.HasKey("DishItemId", "WeekDayId");
-
-                    b.HasIndex("WeekDayId");
-
-                    b.ToTable("DishItemsToWeekDays");
-                });
-
-            modelBuilder.Entity("Domain.WeekDay", b =>
+            modelBuilder.Entity("Domain.Entities.WeekDay", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,22 +69,15 @@ namespace Domain.Migrations
                     b.ToTable("WeekDays");
                 });
 
-            modelBuilder.Entity("Domain.DishItem", b =>
-                {
-                    b.HasOne("Domain.WeekDay")
-                        .WithMany("AvailableItems")
-                        .HasForeignKey("WeekDayId");
-                });
-
             modelBuilder.Entity("Domain.DishItemToWeekDay", b =>
                 {
-                    b.HasOne("Domain.DishItem", "DishItem")
-                        .WithMany()
+                    b.HasOne("Domain.Entities.DishItem", "DishItem")
+                        .WithMany("AvailableOn")
                         .HasForeignKey("DishItemId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Domain.WeekDay", "WeekDay")
-                        .WithMany()
+                    b.HasOne("Domain.Entities.WeekDay", "WeekDay")
+                        .WithMany("AvailableItems")
                         .HasForeignKey("WeekDayId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

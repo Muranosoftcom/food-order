@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Domain;
+using Domain.Entities;
 using SpreadsheetIntegration.Core;
 using SpreadsheetIntegration.Google;
 using Xunit;
@@ -42,6 +44,16 @@ namespace Test
                     }
                 }
             }
+        }
+
+        [Fact]
+        public void TestDb()
+        {
+            var context = new FoodOrderContext().CreateDbContext(null);
+            context.WeekDays.Add(new WeekDay {Name = "Wd"});
+            context.SaveChanges();
+            var t = context.WeekDays.First();
+            Assert.Same(t.Name, "Wd");
         }
     }
 }
