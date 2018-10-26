@@ -11,7 +11,9 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Domain;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace SampleMvcApp
@@ -36,6 +38,9 @@ namespace SampleMvcApp
                 options.CheckConsentNeeded = context => HostingEnvironment.IsProduction();
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            
+            services.AddDbContext<FoodOrderContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("FoodOrderDatabase")));
 
             // Add authentication services
             services.AddAuthentication(o =>
