@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using BusinessLogic.DTOs;
 using BusinessLogic.SpreadsheetParsing;
 using Core;
+using Domain;
 using Domain.Entities;
 using Domain.Repositories;
 using SpreadsheetIntegration;
@@ -46,10 +47,11 @@ namespace BusinessLogic.Services
                         Categories = x.GroupBy(g => g.Category).Select(c => new CategoryDTO
                         {
                             Name = c.Key,
-                            Dishes = c.Select(d => new DishDTO
+                            Dishes = c.GroupBy(g => (g.Name, g.Price)).Select(d => new DishDTO
                             {
-                                Name = d.Name,
-                                Price = d.Price
+                                Name = d.Key.Item1,
+                                Price = d.Key.Item2,
+                                WeekDay = d.Select(g => g.Day).ToArray()
                             }).ToArray()
                         }).ToArray()
                     };
@@ -67,10 +69,11 @@ namespace BusinessLogic.Services
                         Categories = x.GroupBy(g => g.Category).Select(c => new CategoryDTO
                         {
                             Name = c.Key,
-                            Dishes = c.Select(d => new DishDTO
+                            Dishes = c.GroupBy(g => (g.Name, g.Price)).Select(d => new DishDTO
                             {
-                                Name = d.Name,
-                                Price = d.Price
+                                Name = d.Key.Item1,
+                                Price = d.Key.Item2,
+                                WeekDay = d.Select(g => g.Day).ToArray()
                             }).ToArray()
                         }).ToArray()
                     };
@@ -87,7 +90,77 @@ namespace BusinessLogic.Services
 
         private void SaveChanges(List<FoodDTO> food)
         {
+            Dictionary<DishKey, DishItem> dishItems = food.SelectMany(x => x.Categories.SelectMany(c => c.Dishes.Select(d => new DishItem
+            {
+                Name = d.Name,
+                Price = d.Price,
+                AvailableUntil = DateTime.Today,
+                AvailableOn = d.WeekDay.Select(g => new DishItemToWeekDay
+                {
+                    WeekDayId = (int) g
+                }).ToList(),
+                SupplierKey = x.SupplierId,
+                Category = new DishCategory
+                {
+                    Name = c.Name
+                }
+            }))).ToDictionary(x => new DishKey(x.Name, x.SupplierKey));
 
+            DishItem[] existingItems = _dishRepository.All().Where(x => dishItems.ContainsKey(new DishKey(x.Name, x.SupplierKey))).ToArray();
+
+            foreach (var dishItem in existingItems.Except(dishItems.Values, new DishPriceComparer()))
+            {
+                dishItem.Price = dishItems[new DishKey(dishItem.Name, dishItem.SupplierKey)].Price;
+                _dishRepository.Update(dishItem);
+            }
+        }
+
+        private class DishPriceComparer : IEqualityComparer<DishItem>
+        {
+            public bool Equals(DishItem x, DishItem y)
+            {
+                return x.Price == y.Price;
+            }
+
+            public int GetHashCode(DishItem obj)
+            {
+                return obj.Price.GetHashCode();
+            }
+        }
+
+        private class DishKey : IEquatable<DishKey>
+        {
+            public DishKey(string name, int supplierId)
+            {
+                Name = name;
+                SupplierId = supplierId;
+            }
+            
+            public string Name { get; }
+            public int SupplierId { get; }
+
+            public bool Equals(DishKey other)
+            {
+                if (ReferenceEquals(null, other)) return false;
+                if (ReferenceEquals(this, other)) return true;
+                return string.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) && SupplierId == other.SupplierId;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != this.GetType()) return false;
+                return Equals((DishKey) obj);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return ((Name != null ? Name.GetHashCode() : 0) * 397) ^ SupplierId;
+                }
+            }
         }
     }
 }
