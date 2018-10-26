@@ -11,10 +11,10 @@ namespace Domain.Repositories
     {
         IQueryable<T> All<T>() where T : Entity;
         T GetById<T>(int id) where T : Entity;
-        Task Insert<T>(T entity) where T : Entity;
-        Task Insert<T>(IEnumerable<T> entities) where T : Entity;
+        Task InsertAsync<T>(T entity) where T : Entity;
+        Task InsertAsync<T>(IEnumerable<T> entities) where T : Entity;
         void Delete<T>(T entity) where T : Entity;
         void Update<T>(T entity) where T : Entity;
-        Task Save();
+        Task SaveAsync();
     }
 }

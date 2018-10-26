@@ -11,9 +11,9 @@ namespace Domain.Repositories
     {
         private FoodOrderContext _context;
 
-        public FoodOrderRepository(IFoodOrderContext context)
+        public FoodOrderRepository(FoodOrderContext context)
         {
-            _context = _context;
+            _context = context;
         }
 
         public IQueryable<T> All<T>() where T : Entity
@@ -26,12 +26,12 @@ namespace Domain.Repositories
             return _context.Set<T>().FirstOrDefault(x => x.Id == id);
         }                
 
-        public Task Insert<T>(T entity) where T : Entity
+        public Task InsertAsync<T>(T entity) where T : Entity
         {
             return _context.Set<T>().AddAsync(entity);
         }
         
-        public Task Insert<T>(IEnumerable<T> entities) where T : Entity
+        public Task InsertAsync<T>(IEnumerable<T> entities) where T : Entity
         {
             return _context.Set<T>().AddRangeAsync(entities);
         }
@@ -51,7 +51,12 @@ namespace Domain.Repositories
             _context.UpdateRange(entities);
         }
 
-        public Task Save()
+        public Task AddDishItemAsync(DishItem dishItem)
+        {
+            return _context.DishItems.AddAsync(dishItem);
+        }
+
+        public Task SaveAsync()
         {
             return _context.SaveChangesAsync();
         }
