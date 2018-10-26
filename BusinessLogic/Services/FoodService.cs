@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading;
@@ -29,6 +30,7 @@ namespace BusinessLogic.Services
 
         public async Task SynchronizeFood()
         {
+            TaskCompletionSource<Unit> completionSource = new TaskCompletionSource<Unit>();
             IObservable<ValuesRange> glagolFood = _spreadsheetProvider.GetAsync(
                 "1ik4DnYQL3hCbxF4PRmmeaGhcTXYW4BcCbGvtijoK_rk",
                 new SpreadsheetGetRequest("Menu", "A2:F30"), CancellationToken.None).ToObservable();
@@ -85,10 +87,11 @@ namespace BusinessLogic.Services
             {
                 x.Add(y);
                 return x;
-            }).Subscribe(SaveChanges);
+            }).Subscribe(x => SaveChanges(x, completionSource));
+            await completionSource.Task;
         }
 
-        private void SaveChanges(List<FoodDTO> food)
+        private void SaveChanges(List<FoodDTO> food, TaskCompletionSource<Unit> completionSource)
         {
             Dictionary<DishKey, DishItem> dishItems = food.SelectMany(x => x.Categories.SelectMany(c =>
                 c.Dishes.Select(d =>
@@ -126,6 +129,7 @@ namespace BusinessLogic.Services
             }
 
             _repo.Save();
+            completionSource.SetResult(Unit.Default);
         }
 
         private class DishKeyComparer : IEqualityComparer<DishItem>
@@ -136,15 +140,7 @@ namespace BusinessLogic.Services
                 if (ReferenceEquals(x, y)) return true;
                 return string.Equals(x.Name, y.Name) && x.SupplierKey == y.SupplierKey;
             }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(null, obj)) return false;
-                if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != this.GetType()) return false;
-                return Equals((DishItem) obj);
-            }
-
+          
             public int GetHashCode(DishItem obj)
             {
                 unchecked

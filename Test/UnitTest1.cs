@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using BusinessLogic.Services;
 using Domain;
 using Domain.Contexts;
 using Domain.Entities;
+using Domain.Repositories;
 using SpreadsheetIntegration.Core;
 using SpreadsheetIntegration.Google;
 using Xunit;
@@ -52,6 +55,15 @@ namespace Test
 //
 //            
 //        }
+        }
+
+        [Fact]
+        public async Task TestSync()
+        {
+            var context = new FoodOrderContext().CreateDbContext(null);
+            var repo = new FoodOrderRepository(context);
+            var service = new FoodService(repo, new GoogleSpreadsheetProvider());
+            await service.SynchronizeFood();
         }
 
         [Fact]

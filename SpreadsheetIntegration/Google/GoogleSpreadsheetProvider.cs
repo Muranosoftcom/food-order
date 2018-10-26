@@ -10,7 +10,7 @@ namespace SpreadsheetIntegration.Google {
 	public class GoogleSpreadsheetProvider : IGoogleSpreadsheetProvider {
 		private readonly SheetsService _clientService;
 
-		public GoogleSpreadsheetProvider(SheetsService clientService) {
+		public GoogleSpreadsheetProvider() {
 			_clientService = GoogleClientServiceProvider.GetService();
 		}
 
