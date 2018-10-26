@@ -15,7 +15,7 @@ namespace Domain
         [Column(TypeName="Money")]
         public decimal Price { get; set; }
         public DateTime AvailableUntil { get; set; }
-        public ICollection<WeekDay> AvailableOn { get; set; }
+        //public ICollection<WeekDay> AvailableOn { get; set; }
         public int PositiveReviews { get; set; }
         public int NegativeReviews { get; set; }
     }
