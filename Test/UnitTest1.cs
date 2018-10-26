@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Domain;
 using Domain.Contexts;
 using Domain.Entities;
+using Domain.Repositories;
 using SpreadsheetIntegration.Core;
 using SpreadsheetIntegration.Google;
 using Xunit;
@@ -67,6 +68,31 @@ namespace Test
             context.SaveChanges();
             var w = context.WeekDays.FirstOrDefault(x => x.Name == "Wd");
             Assert.Null(w);            
+        }
+
+        [Fact]
+        public void AddDishItem()
+        {
+            var context = new FoodOrderContext().CreateDbContext(null);
+            var repo = new FoodOrderRepository(context);
+            var dishItem = new DishItem
+            {
+                Name = "Salo",
+                Price = 100,
+                Category = new DishCategory
+                {
+                    Name = "Еда богов"
+                },
+                Supplier = repo.All<Supplier>().FirstOrDefault(x => x.Name == "ГлаголЪ"),
+                AvailableOn = new List<DishItemToWeekDay> {new DishItemToWeekDay {WeekDay = repo.GetById<WeekDay>(1)}},
+                AvailableUntil = DateTime.Now
+            };
+
+            repo.AddDishItem(dishItem);
+            repo.Save();
+            var i = repo.All<DishItem>().FirstOrDefault(x => x.Name == "Salo");
+            Assert.Equal(dishItem.AvailableOn.First().DishItemId, i.AvailableOn.First().DishItemId);
+            Assert.Equal(dishItem.AvailableOn.First().WeekDayId, i.AvailableOn.First().WeekDayId);
         }
     }
 }

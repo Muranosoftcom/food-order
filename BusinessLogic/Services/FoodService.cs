@@ -106,13 +106,13 @@ namespace BusinessLogic.Services
                 }
             }))).ToDictionary(x => new DishKey(x.Name, x.SupplierKey));
 
-            DishItem[] existingItems = _dishRepository.All().Where(x => dishItems.ContainsKey(new DishKey(x.Name, x.SupplierKey))).ToArray();
-
-            foreach (var dishItem in existingItems.Except(dishItems.Values, new DishPriceComparer()))
-            {
-                dishItem.Price = dishItems[new DishKey(dishItem.Name, dishItem.SupplierKey)].Price;
-                _dishRepository.Update(dishItem);
-            }
+//            DishItem[] existingItems = _dishRepository.All().Where(x => dishItems.ContainsKey(new DishKey(x.Name, x.SupplierKey))).ToArray();
+//
+//            foreach (var dishItem in existingItems.Except(dishItems.Values, new DishPriceComparer()))
+//            {
+//                dishItem.Price = dishItems[new DishKey(dishItem.Name, dishItem.SupplierKey)].Price;
+//                _dishRepository.Update(dishItem);
+//            }
         }
 
         private class DishPriceComparer : IEqualityComparer<DishItem>

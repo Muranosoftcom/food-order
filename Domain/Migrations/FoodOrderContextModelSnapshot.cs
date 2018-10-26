@@ -43,7 +43,7 @@ namespace Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DishCategory");
+                    b.ToTable("DishCategories");
                 });
 
             modelBuilder.Entity("Domain.Entities.DishItem", b =>
@@ -77,6 +77,48 @@ namespace Domain.Migrations
                     b.ToTable("DishItems");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("Money");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Domain.Entities.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DishItemId");
+
+                    b.Property<int>("OrderKey");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("Money");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DishItemId");
+
+                    b.HasIndex("OrderKey");
+
+                    b.ToTable("OrderItems");
+                });
+
             modelBuilder.Entity("Domain.Entities.Supplier", b =>
                 {
                     b.Property<int>("Id")
@@ -89,11 +131,25 @@ namespace Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Supplier");
+                });
 
-                    b.HasData(
-                        new { Id = 1, Name = "Столовая №1" },
-                        new { Id = 2, Name = "ГлаголЪ" }
-                    );
+            modelBuilder.Entity("Domain.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.WeekDay", b =>
@@ -108,16 +164,6 @@ namespace Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("WeekDays");
-
-                    b.HasData(
-                        new { Id = 1, Name = "Mon" },
-                        new { Id = 2, Name = "Tue" },
-                        new { Id = 3, Name = "Wed" },
-                        new { Id = 4, Name = "Thu" },
-                        new { Id = 5, Name = "Fri" },
-                        new { Id = 6, Name = "Sat" },
-                        new { Id = 7, Name = "Sun" }
-                    );
                 });
 
             modelBuilder.Entity("Domain.DishItemToWeekDay", b =>
@@ -143,6 +189,27 @@ namespace Domain.Migrations
                     b.HasOne("Domain.Entities.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierKey")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Order", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Entities.OrderItem", b =>
+                {
+                    b.HasOne("Domain.Entities.DishItem", "DishItem")
+                        .WithMany()
+                        .HasForeignKey("DishItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Entities.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderKey")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

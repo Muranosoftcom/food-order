@@ -11,9 +11,9 @@ namespace Domain.Repositories
     {
         private FoodOrderContext _context;
 
-        public FoodOrderRepository(IFoodOrderContext context)
+        public FoodOrderRepository(FoodOrderContext context)
         {
-            _context = _context;
+            _context = context;
         }
 
         public IQueryable<T> All<T>() where T : Entity
@@ -49,6 +49,11 @@ namespace Domain.Repositories
         public void Update<T>(IEnumerable<T> entities) where T : Entity
         {
             _context.UpdateRange(entities);
+        }
+
+        public Task AddDishItem(DishItem dishItem)
+        {
+            return _context.DishItems.AddAsync(dishItem);
         }
 
         public Task Save()
