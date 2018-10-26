@@ -4,6 +4,6 @@ using SpreadsheetIntegration.Core;
 
 namespace SpreadsheetIntegration {
 	public interface IAsyncSpreadsheetProvider {
-		Task UpdateAsync(string sheetId, SpreadsheetUpdateRequest updateRequest, CancellationToken cancellationToken);
+		Task<ValuesRange> GetAsync(string sheetId, SpreadsheetGetRequest updateRequest, CancellationToken cancellationToken);
 	}
 }

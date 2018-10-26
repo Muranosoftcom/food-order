@@ -1,6 +1,10 @@
 namespace Domain.Repositories
 {
-    public class FoodRepository
+    public interface IFoodRepository
+    {
+    }
+
+    public class FoodRepository : IFoodRepository
     {
         
     }

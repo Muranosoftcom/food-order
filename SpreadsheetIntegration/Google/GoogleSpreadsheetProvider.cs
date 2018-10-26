@@ -14,13 +14,13 @@ namespace SpreadsheetIntegration.Google {
 			_clientService = clientService;
 		}
 
-		public ValuesRange Get(string sheetId, SpreadsheetGetRequest getRequest) {
+		public async Task<ValuesRange> GetAsync(string sheetId, SpreadsheetGetRequest getRequest, CancellationToken cancellationToken) {
 			(CellCoordinate cellCoordinate, _) = CellCoordinate.ParseRange(getRequest.CellsRange);
 
 			SpreadsheetsResource.ValuesResource.GetRequest request =
 				_clientService.Spreadsheets.Values.Get(sheetId, $"{getRequest.Sheet}!{getRequest.CellsRange}");
 			request.ValueRenderOption = SpreadsheetsResource.ValuesResource.GetRequest.ValueRenderOptionEnum.UNFORMATTEDVALUE;
-			ValueRange response = request.Execute();
+			ValueRange response = await request.ExecuteAsync(cancellationToken);
 			IList<IList<object>> values = response.Values;
 
 			IEnumerable<Cell> cells = values.Select((x, row) => x.Select((y, coll) => new Cell {
@@ -34,37 +34,6 @@ namespace SpreadsheetIntegration.Google {
 			var result = new ValuesRange(cells);
 
 			return result;
-		}
-
-		public void Update(string sheetId, SpreadsheetUpdateRequest updateRequest) {
-			IList<IList<object>> updateData = updateRequest.RequestData.AsEnumerable(replaceEmpty: true).Select(x => (IList<object>)x.Select(i => i.Value).ToList()).ToList();
-
-			var vr = new ValueRange {
-				Values = updateData
-			};
-
-			SpreadsheetsResource.ValuesResource.UpdateRequest request = 
-				_clientService.Spreadsheets.Values.Update(vr, sheetId, $"{updateRequest.Sheet}!{updateRequest.RequestData.MinCell}:{updateRequest.RequestData.MaxCell}");
-			request.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
-			request.Execute();
-		}
-
-		public ValuesRange UpdateAndGet(string sheetId, SpreadsheetGetRequest getRequest, SpreadsheetUpdateRequest updateRequest) {
-			Update(sheetId, updateRequest);
-			return Get(sheetId, getRequest);
-		}
-
-		public async Task UpdateAsync(string sheetId, SpreadsheetUpdateRequest updateRequest, CancellationToken cancellationToken) {
-			IList<IList<object>> updateData = updateRequest.RequestData.AsEnumerable(replaceEmpty: true).Select(x => (IList<object>)x.Select(i => i.Value).ToList()).ToList();
-
-			var vr = new ValueRange {
-				Values = updateData
-			};
-
-			SpreadsheetsResource.ValuesResource.UpdateRequest request = 
-				_clientService.Spreadsheets.Values.Update(vr, sheetId, $"{updateRequest.Sheet}!{updateRequest.RequestData.MinCell}:{updateRequest.RequestData.MaxCell}");
-			request.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
-			await request.ExecuteAsync(cancellationToken);
 		}
 	}
 }

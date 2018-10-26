@@ -4,4 +4,10 @@
         <TargetFramework>netcoreapp2.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Core\Core.csproj" />
+      <ProjectReference Include="..\Domain\Domain.csproj" />
+      <ProjectReference Include="..\SpreadsheetIntegration\SpreadsheetIntegration.csproj" />
+    </ItemGroup>
+
 </Project>
