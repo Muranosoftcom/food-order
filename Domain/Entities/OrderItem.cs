@@ -7,6 +7,7 @@ namespace Domain.Entities
     public class OrderItem
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }        
         [Column(TypeName="Money")]
         public decimal Price { get; set; }
