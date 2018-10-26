@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using SampleMvcApp.ViewModels;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace SampleMvcApp.Controllers
 {
@@ -14,20 +15,14 @@ namespace SampleMvcApp.Controllers
     {
         public async Task Login(string returnUrl = "/")
         {
-            await HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = returnUrl });
+            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties() { RedirectUri = returnUrl });
         }
 
         [Authorize]
-        public async Task Logout()
+        public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync("Auth0", new AuthenticationProperties
-            {
-                // Indicate here where Auth0 should redirect the user after a logout.
-                // Note that the resulting absolute Uri must be whitelisted in the 
-                // **Allowed Logout URLs** settings for the client.
-                RedirectUri = Url.Action("Index", "Home")
-            });
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
         [Authorize]

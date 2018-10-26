@@ -17,7 +17,7 @@ namespace SampleMvcApp
                 .ConfigureAppConfiguration((hostingContext, config) => {
 					config.SetBasePath(Directory.GetCurrentDirectory());
 					config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-					config.AddJsonFile("appsettings.production.json", optional: false, reloadOnChange: true);
+					config.AddJsonFile("secrets.json", optional: false, reloadOnChange: true);
 					config.AddCommandLine(args);
 				})
 				.UseStartup<Startup>();
