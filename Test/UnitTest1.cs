@@ -7,6 +7,7 @@ using Domain;
 using Domain.Contexts;
 using Domain.Entities;
 using Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 using SpreadsheetIntegration.Core;
 using SpreadsheetIntegration.Google;
 using Xunit;
@@ -76,6 +77,8 @@ namespace Test
         {
             var context = new FoodOrderContext().CreateDbContext(null);
             var repo = new FoodOrderRepository(context);
+            var date = DateTime.Now;
+            
             var dishItem = new DishItem
             {
                 Name = "Salo",
@@ -86,12 +89,12 @@ namespace Test
                 },
                 Supplier = repo.All<Supplier>().FirstOrDefault(x => x.Name == "ГлаголЪ"),
                 AvailableOn = new List<DishItemToWeekDay> {new DishItemToWeekDay {WeekDay = repo.GetById<WeekDay>(1)}},
-                AvailableUntil = DateTime.Now
+                AvailableUntil = date
             };
 
-            await repo.AddDishItemAsync(dishItem);
+            await repo.InsertAsync(dishItem);
             await repo.SaveAsync();
-            var i = repo.All<DishItem>().FirstOrDefault(x => x.Name == "Salo");
+            var i = repo.All<DishItem>().Include(x => x.AvailableOn).FirstOrDefault(x => x.AvailableUntil == date);
             Assert.Equal(dishItem.AvailableOn.First().DishItemId, i.AvailableOn.First().DishItemId);
             Assert.Equal(dishItem.AvailableOn.First().WeekDayId, i.AvailableOn.First().WeekDayId);
         }
