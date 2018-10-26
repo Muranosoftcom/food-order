@@ -5,10 +5,10 @@ VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetIntegration", "SpreadsheetIntegration\SpreadsheetIntegration.csproj", "{8299F8DC-C5AF-4353-BB5A-BE6B8E19953F}"
 EndProject
-				Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "WebUI\WebUI.csproj", "{7B7873B1-7C7D-42C6-A6E7-B718758E84E1}"
-				EndProject
-				Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{FC515C84-24ED-4435-8959-5E7BFCA332B1}"
-				EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "WebUI\WebUI.csproj", "{7B7873B1-7C7D-42C6-A6E7-B718758E84E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{FC515C84-24ED-4435-8959-5E7BFCA332B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
