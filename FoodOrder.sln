@@ -5,7 +5,11 @@ VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetIntegration", "SpreadsheetIntegration\SpreadsheetIntegration.csproj", "{8299F8DC-C5AF-4353-BB5A-BE6B8E19953F}"
 EndProject
+<<<<<<< HEAD:SampleMvcApp.sln
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{4DC676C1-2BD1-4BD2-9E7F-74137E3BF169}"
+=======
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "WebUI\WebUI.csproj", "{7B7873B1-7C7D-42C6-A6E7-B718758E84E1}"
+>>>>>>> be9153432aeb1917b86385264e8acaaca382d2a5:FoodOrder.sln
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +21,17 @@ Global
 		{8299F8DC-C5AF-4353-BB5A-BE6B8E19953F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8299F8DC-C5AF-4353-BB5A-BE6B8E19953F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8299F8DC-C5AF-4353-BB5A-BE6B8E19953F}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD:SampleMvcApp.sln
+		{4DC676C1-2BD1-4BD2-9E7F-74137E3BF169}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DC676C1-2BD1-4BD2-9E7F-74137E3BF169}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DC676C1-2BD1-4BD2-9E7F-74137E3BF169}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DC676C1-2BD1-4BD2-9E7F-74137E3BF169}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
 		{7B7873B1-7C7D-42C6-A6E7-B718758E84E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B7873B1-7C7D-42C6-A6E7-B718758E84E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B7873B1-7C7D-42C6-A6E7-B718758E84E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B7873B1-7C7D-42C6-A6E7-B718758E84E1}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> be9153432aeb1917b86385264e8acaaca382d2a5:FoodOrder.sln
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
