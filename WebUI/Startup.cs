@@ -70,9 +70,8 @@ namespace SampleMvcApp
                 });
 
             services.AddSingleton<IGoogleSpreadsheetProvider, GoogleSpreadsheetProvider>();
-            services.AddScoped<IEditableRepository<User>,UserRepository>();
-            services.AddScoped<IRepository<Order>, OrderRepository>();
-            services.AddScoped<IEditableRepository<DishItem>,DishRepository>();
+            services.AddScoped<FoodOrderContext>();
+            services.AddScoped<IRepository, FoodOrderRepository>();
             
             // Add framework services.
             services.AddMvc()

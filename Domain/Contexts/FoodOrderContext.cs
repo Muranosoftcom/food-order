@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace Domain.Contexts
 {
-    public class FoodOrderContext : DbContext, IDesignTimeDbContextFactory<FoodOrderContext>, IFoodOrderContext
+    public class FoodOrderContext : DbContext, 
+//        IDesignTimeDbContextFactory<FoodOrderContext>,
+        IFoodOrderContext
     {
         public FoodOrderContext(DbContextOptions<FoodOrderContext> options)
             : base(options)
@@ -57,12 +59,12 @@ namespace Domain.Contexts
             );
         }
 
-        public FoodOrderContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<FoodOrderContext>();
-            optionsBuilder.UseSqlServer("Server=ua-muk100;Database=foodOrderDatabase;User id=login;Password=12345;");
-
-            return new FoodOrderContext(optionsBuilder.Options);
-        }
+//        public FoodOrderContext CreateDbContext(string[] args)
+//        {
+//            var optionsBuilder = new DbContextOptionsBuilder<FoodOrderContext>();
+//            optionsBuilder.UseSqlServer("Server=ua-muk100;Database=foodOrderDatabase;User id=login;Password=12345;");
+//
+//            return new FoodOrderContext(optionsBuilder.Options);
+//        }
     }
 }

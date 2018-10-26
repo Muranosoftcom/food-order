@@ -15,11 +15,11 @@ namespace WebUI.Controllers
 {
     public class AccountController : Controller
     {
-        private IEditableRepository<User> _userRepository; 
+        private IRepository _repo; 
 
-        public AccountController(IEditableRepository<User> userRepository)
+        public AccountController(IRepository repo)
         {
-            _userRepository = _userRepository;
+            _repo = repo;
         }
 
         public async Task Login(string returnUrl = "/")
