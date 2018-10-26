@@ -10,11 +10,13 @@ namespace Domain.Entities
         public int Id { get; set; }        
         [Column(TypeName="Money")]
         public decimal Price { get; set; }
-        public DateTime OrderedAt { get; set; }
         
         [ForeignKey("DishItemId")]
         public DishItem DishItem { get; set; }
         public int DishItemId { get; set; }
             
+        [ForeignKey("OrderKey")]
+        public Order Order { get; set;}
+        public int OrderKey { get; set; }        
     }
 }
