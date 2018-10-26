@@ -32,6 +32,20 @@ namespace Domain.Migrations
                     b.ToTable("DishItemsToWeekDays");
                 });
 
+            modelBuilder.Entity("Domain.Entities.DishCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(20);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DishCategory");
+                });
+
             modelBuilder.Entity("Domain.Entities.DishItem", b =>
                 {
                     b.Property<int>("Id")
@@ -39,6 +53,8 @@ namespace Domain.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("AvailableUntil");
+
+                    b.Property<int>("CategoryKey");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50);
@@ -50,9 +66,29 @@ namespace Domain.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("Money");
 
+                    b.Property<int>("SupplierKey");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryKey");
+
+                    b.HasIndex("SupplierKey");
+
                     b.ToTable("DishItems");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Supplier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(20);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Supplier");
                 });
 
             modelBuilder.Entity("Domain.Entities.WeekDay", b =>
@@ -79,6 +115,19 @@ namespace Domain.Migrations
                     b.HasOne("Domain.Entities.WeekDay", "WeekDay")
                         .WithMany("AvailableItems")
                         .HasForeignKey("WeekDayId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Entities.DishItem", b =>
+                {
+                    b.HasOne("Domain.Entities.DishCategory", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryKey")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Entities.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierKey")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

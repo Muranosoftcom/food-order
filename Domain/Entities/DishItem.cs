@@ -17,5 +17,14 @@ namespace Domain.Entities
         public ICollection<DishItemToWeekDay> AvailableOn { get; set; }
         public int PositiveReviews { get; set; }
         public int NegativeReviews { get; set; }
+        
+        [ForeignKey("CategoryKey")]
+        public DishCategory Category { get; set; }        
+        public int CategoryKey { get; set; }
+        
+        [ForeignKey("SupplierKey")]        
+        public Supplier Supplier { get; set; }
+        public int SupplierKey { get; set; }
+        
     }
 }

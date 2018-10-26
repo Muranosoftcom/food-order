@@ -41,7 +41,7 @@ namespace Domain
         public FoodOrderContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<FoodOrderContext>();
-            optionsBuilder.UseSqlServer("Server=ua-muk100;Database=foodOrderDatabase;Trusted_Connection=True;User id=login;Password=12345;");
+            optionsBuilder.UseSqlServer("Server=ua-muk100;Database=foodOrderDatabase;User id=login;Password=12345;");
 
             return new FoodOrderContext(optionsBuilder.Options);
         }
