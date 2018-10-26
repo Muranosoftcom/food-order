@@ -2,7 +2,7 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Domain
+namespace Domain.Contexts
 {
     public class FoodOrderContext : DbContext, IDesignTimeDbContextFactory<FoodOrderContext>
     {
@@ -36,6 +36,20 @@ namespace Domain
                 .HasOne(bc => bc.DishItem)
                 .WithMany(c => c.AvailableOn)
                 .HasForeignKey(bc => bc.DishItemId);
+            
+            modelBuilder.Entity<Supplier>().HasData(
+                new Supplier {Name = "Столовая №1"},
+                new Supplier {Name = "ГлаголЪ"});
+
+            modelBuilder.Entity<WeekDay>().HasData(
+                new WeekDay {Name = "Mon"},
+                new WeekDay{Name = "Tue"},
+                new WeekDay{Name = "Wed"},
+                new WeekDay{Name = "Thu"},
+                new WeekDay{Name = "Fri"},
+                new WeekDay{Name = "Sat"},
+                new WeekDay{Name = "Sun"}
+            );
         }
 
         public FoodOrderContext CreateDbContext(string[] args)
