@@ -57,12 +57,16 @@ namespace Test
         [Fact]
         public void TestDb()
         {
-            var context = new FoodOrderContext();
-//                .CreateDbContext(null);
+            var context = new FoodOrderContext().CreateDbContext(null);
             context.WeekDays.Add(new WeekDay {Name = "Wd"});
             context.SaveChanges();
-            var t = context.WeekDays.First();
+            var t = context.WeekDays.FirstOrDefault(x => x.Name == "Wd");            
             Assert.Equal(t.Name, "Wd");
+            
+            context.Remove(t);
+            context.SaveChanges();
+            var w = context.WeekDays.FirstOrDefault(x => x.Name == "Wd");
+            Assert.Null(w);            
         }
     }
 }
