@@ -11,7 +11,7 @@ namespace SpreadsheetIntegration.Google {
 		private readonly SheetsService _clientService;
 
 		public GoogleSpreadsheetProvider(SheetsService clientService) {
-			_clientService = clientService;
+			_clientService = GoogleClientServiceProvider.GetService();
 		}
 
 		public async Task<ValuesRange> GetAsync(string sheetId, SpreadsheetGetRequest getRequest, CancellationToken cancellationToken) {
