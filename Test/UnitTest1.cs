@@ -73,7 +73,7 @@ namespace Test
             context.WeekDays.Add(new WeekDay {Name = "Wd"});
             context.SaveChanges();
             var t = context.WeekDays.First();
-            Assert.Same(t.Name, "Wd");
+            Assert.Equal(t.Name, "Wd");
         }
     }
 }
