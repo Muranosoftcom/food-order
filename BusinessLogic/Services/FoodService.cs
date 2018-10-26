@@ -90,41 +90,67 @@ namespace BusinessLogic.Services
 
         private void SaveChanges(List<FoodDTO> food)
         {
-            Dictionary<DishKey, DishItem> dishItems = food.SelectMany(x => x.Categories.SelectMany(c => c.Dishes.Select(d => new DishItem
-            {
-                Name = d.Name,
-                Price = d.Price,
-                AvailableUntil = DateTime.Today,
-                AvailableOn = d.WeekDay.Select(g => new DishItemToWeekDay
-                {
-                    WeekDayId = (int) g
-                }).ToList(),
-                SupplierKey = x.SupplierId,
-                Category = new DishCategory
-                {
-                    Name = c.Name
-                }
-            }))).ToDictionary(x => new DishKey(x.Name, x.SupplierKey));
+            Dictionary<DishKey, DishItem> dishItems = food.SelectMany(x => x.Categories.SelectMany(c =>
+                c.Dishes.Select(d =>
+                    new DishItem
+                    {
+                        Name = d.Name,
+                        Price = d.Price,
+                        AvailableUntil = DateTime.Today,
+                        AvailableOn = d.WeekDay.Select(g => new DishItemToWeekDay
+                        {
+                            WeekDayId = (int) g
+                        }).ToList(),
+                        SupplierKey = x.SupplierId,
+                        Category = new DishCategory
+                        {
+                            Name = c.Name
+                        }
+                    }))).ToDictionary(x => new DishKey(x.Name, x.SupplierKey));
 
-            DishItem[] existingItems = _dishRepository.All().Where(x => dishItems.ContainsKey(new DishKey(x.Name, x.SupplierKey))).ToArray();
+            DishItem[] allDishes = _repo.All<DishItem>().ToArray();
+            DishItem[] existingItems = allDishes.Intersect(dishItems.Values, new DishKeyComparer()).ToArray();
 
-            foreach (var dishItem in existingItems.Except(dishItems.Values, new DishPriceComparer()))
+            foreach (var dishItem in existingItems)
             {
-                dishItem.Price = dishItems[new DishKey(dishItem.Name, dishItem.SupplierKey)].Price;
-                _dishRepository.Update(dishItem);
+                var item = dishItems[new DishKey(dishItem.Name, dishItem.SupplierKey)];
+                dishItem.Price = item.Price;
+                dishItem.AvailableUntil = DateTime.Today;
+                dishItem.AvailableOn = item.AvailableOn;
+                _repo.Update(dishItem);
             }
+
+            foreach (var item in dishItems.Values.Except(allDishes, new DishKeyComparer()))
+            {
+                _repo.Insert(item);
+            }
+
+            _repo.Save();
         }
 
-        private class DishPriceComparer : IEqualityComparer<DishItem>
+        private class DishKeyComparer : IEqualityComparer<DishItem>
         {
             public bool Equals(DishItem x, DishItem y)
             {
-                return x.Price == y.Price;
+                if (ReferenceEquals(null, y)) return false;
+                if (ReferenceEquals(x, y)) return true;
+                return string.Equals(x.Name, y.Name) && x.SupplierKey == y.SupplierKey;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != this.GetType()) return false;
+                return Equals((DishItem) obj);
             }
 
             public int GetHashCode(DishItem obj)
             {
-                return obj.Price.GetHashCode();
+                unchecked
+                {
+                    return ((obj.Name != null ? obj.Name.GetHashCode() : 0) * 397) ^ obj.SupplierKey;
+                }
             }
         }
 
@@ -135,15 +161,16 @@ namespace BusinessLogic.Services
                 Name = name;
                 SupplierId = supplierId;
             }
-            
-            public string Name { get; }
-            public int SupplierId { get; }
+
+            private string Name { get; }
+            private int SupplierId { get; }
 
             public bool Equals(DishKey other)
             {
                 if (ReferenceEquals(null, other)) return false;
                 if (ReferenceEquals(this, other)) return true;
-                return string.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) && SupplierId == other.SupplierId;
+                return string.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) &&
+                       SupplierId == other.SupplierId;
             }
 
             public override bool Equals(object obj)
