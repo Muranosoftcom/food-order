@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Domain;
 using Domain.Contexts;
 using Domain.Entities;
@@ -71,7 +72,7 @@ namespace Test
         }
 
         [Fact]
-        public void AddDishItem()
+        public async Task AddDishItem()
         {
             var context = new FoodOrderContext().CreateDbContext(null);
             var repo = new FoodOrderRepository(context);
@@ -88,8 +89,8 @@ namespace Test
                 AvailableUntil = DateTime.Now
             };
 
-            repo.AddDishItem(dishItem);
-            repo.Save();
+            await repo.AddDishItemAsync(dishItem);
+            await repo.SaveAsync();
             var i = repo.All<DishItem>().FirstOrDefault(x => x.Name == "Salo");
             Assert.Equal(dishItem.AvailableOn.First().DishItemId, i.AvailableOn.First().DishItemId);
             Assert.Equal(dishItem.AvailableOn.First().WeekDayId, i.AvailableOn.First().WeekDayId);
