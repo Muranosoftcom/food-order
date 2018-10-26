@@ -23,6 +23,5 @@ namespace Domain.Entities
         [ForeignKey("SupplierKey")]        
         public Supplier Supplier { get; set; }
         public int SupplierKey { get; set; }
-        
     }
 }
