@@ -49,21 +49,7 @@ namespace Test
 //            var glagolResult = new GoogleSpreadsheetProvider(GoogleClientServiceProvider.GetService()).Get(
 //                "1ik4DnYQL3hCbxF4PRmmeaGhcTXYW4BcCbGvtijoK_rk", new SpreadsheetGetRequest("Menu", "A2:F30"));
 //
-//            foreach (var row in glagolResult.AsEnumerable())
-//            {
-//                lastCategory = row.First().Value;
-//                foreach (var cell in row.Skip(1).Where(x => !string.IsNullOrEmpty(x.Value))
-//                    .Select((x, index) => new {x, index = index + 1}))
-//                {
-//                    objects.Add(new
-//                    {
-//                        Category = lastCategory,
-//                        Name = cell.x.Value,
-//                        Price = 0,
-//                        Day = (DayOfWeek) cell.index
-//                    });
-//                }
-//            }
+//            
 //        }
         }
 
