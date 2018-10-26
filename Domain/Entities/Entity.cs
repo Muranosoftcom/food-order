@@ -3,9 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class DishCategory: Entity
+    public class Entity
     {
-        [StringLength(20)]
-        public string Name { get; set; }        
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
     }
 }

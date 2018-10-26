@@ -18,12 +18,12 @@ namespace BusinessLogic.Services
 {
     public class FoodService
     {
-        private readonly IEditableRepository<DishItem> _dishRepository;
+        private readonly IRepository _repo;
         private readonly IAsyncSpreadsheetProvider _spreadsheetProvider;
 
-        public FoodService(IEditableRepository<DishItem> dishRepository, IAsyncSpreadsheetProvider spreadsheetProvider)
+        public FoodService(IRepository repo, IAsyncSpreadsheetProvider spreadsheetProvider)
         {
-            _dishRepository = dishRepository;
+            _repo = repo;
             _spreadsheetProvider = spreadsheetProvider;
         }
 

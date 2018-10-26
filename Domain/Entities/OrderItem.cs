@@ -4,11 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class OrderItem
+    public class OrderItem: Entity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }        
+      
         [Column(TypeName="Money")]
         public decimal Price { get; set; }
         
