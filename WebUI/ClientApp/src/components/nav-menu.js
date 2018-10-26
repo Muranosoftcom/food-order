@@ -8,6 +8,8 @@ class NavMenu extends Component {
 	};
 
 	render() {
+		const { isAuthenticated } = this.props;
+
 		return (
 			<Navbar color="primary" dark expand="md" fixed="top">
 				<Container>
@@ -18,10 +20,9 @@ class NavMenu extends Component {
 					<Collapse isOpen={this.state.isOpen} navbar>
 						<Nav className="ml-auto" navbar>
 							<Link to={"/order"}>
-								<NavItem color="light">Заказать обед</NavItem>
-							</Link>
-							<Link to={"/fetchdata"}>
-								<NavItem color="light">Fetch data</NavItem>
+								<NavItem color="white">
+									{isAuthenticated ? "Заказать обед" : "Войти чтобы Заказать обед"}
+								</NavItem>
 							</Link>
 						</Nav>
 					</Collapse>

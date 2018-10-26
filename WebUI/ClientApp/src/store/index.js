@@ -1,6 +1,10 @@
 import { observable, computed, action, decorate } from "mobx";
 
 class RootStore {
+	constuctor() {
+
+	}
+
 	user = null;
 
 	get isAuthenticated() {
