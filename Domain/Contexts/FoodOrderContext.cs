@@ -17,12 +17,18 @@ namespace Domain.Contexts
 
         public DbSet<DishItem> DishItems { get; set; }
 
-//        public DbSet<DishCategory> DishCategories { get; set; }
+        public DbSet<DishCategory> DishCategories { get; set; }
 
         public DbSet<WeekDay> WeekDays { get; set; }
 
         public DbSet<DishItemToWeekDay> DishItemsToWeekDays { get; set; }
 
+        public DbSet<OrderItem> OrderItems { get; set; }
+        
+        public DbSet<Order> Orders { get; set; }
+        
+        public DbSet<User> Users { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<DishItemToWeekDay>().HasKey(x => new {x.DishItemId, x.WeekDayId});
