@@ -24,7 +24,7 @@ namespace Test
             foreach (var row in result.AsEnumerable())
             {
 
-                foreach (var cell in row.Where(x => !string.IsNullOrEmpty(x.Value)).Select((x, index) => new {x, index}))
+                foreach (var cell in row.Where(x => !string.IsNullOrEmpty(x.Value)).Select((x, index) => new {x, index = index + 1}))
                 {
                     if (cell.x.Value.StartsWith("__"))
                     {
@@ -37,7 +37,7 @@ namespace Test
                             Category = lastCategory,
                             Name = cell.x.Value,
                             Price = rx.Match(cell.x.Value).Groups["price"].Value,
-                            Day = 
+                           // Day = (Week)cell.index
                         });
                     }
                 }
