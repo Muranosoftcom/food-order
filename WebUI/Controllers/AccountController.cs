@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Domain.Contexts;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -12,6 +13,13 @@ namespace WebUI.Controllers
 {
     public class AccountController : Controller
     {
+        private IFoodOrderContext _context;
+
+        public AccountController(IFoodOrderContext context)
+        {
+            _context = context;
+        }
+
         public async Task Login(string returnUrl = "/")
         {
             await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties() { RedirectUri = returnUrl });

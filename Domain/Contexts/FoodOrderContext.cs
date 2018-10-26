@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace Domain.Contexts
 {
-    public class FoodOrderContext : DbContext, IDesignTimeDbContextFactory<FoodOrderContext>
+    public class FoodOrderContext : DbContext, IDesignTimeDbContextFactory<FoodOrderContext>, IFoodOrderContext
     {
         public FoodOrderContext(DbContextOptions<FoodOrderContext> options)
             : base(options)

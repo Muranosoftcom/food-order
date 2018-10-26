@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using SpreadsheetIntegration.Google;
 
 namespace SampleMvcApp
 {
@@ -65,6 +66,8 @@ namespace SampleMvcApp
                     o.ExpireTimeSpan = TimeSpan.FromHours(2);
                 });
 
+            services.AddSingleton<IGoogleSpreadsheetProvider, GoogleSpreadsheetProvider>();
+            
             // Add framework services.
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
