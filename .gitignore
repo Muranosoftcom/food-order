@@ -339,3 +339,10 @@ ASALocalRun/
 
 
 # End of https://www.gitignore.io/api/visualstudio
+
+/WebUI/ClientApp/node_modules/
+/WebUI/ClientApp/
+/WebUI/ClientApp/npm-debug.log*
+/WebUI/ClientApp/yarn-debug.log*
+/WebUI/ClientApp/yarn-error.log*
+/WebUI/ClientApp/npm-debug.log
