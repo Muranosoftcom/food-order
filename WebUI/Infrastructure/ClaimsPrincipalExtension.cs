@@ -21,6 +21,6 @@ namespace WebUI.Infrastructure
                 : (int?) null;
         }
 
-        public static bool IsAuthenticated (this ClaimsPrincipal claims) => (!claims?.Identity.IsAuthenticated ?? false);
+        public static bool IsAuthenticated (this ClaimsPrincipal claims) => !(!claims?.Identity.IsAuthenticated ?? false);
     }
 }

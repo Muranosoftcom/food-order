@@ -14,6 +14,13 @@ namespace WebUI.Controllers
 {
     public class AccountController : Controller
     {
+        private IRepository _repo; 
+
+        public AccountController(IRepository repo)
+        {
+            _repo = repo;
+        }
+
         public async Task Login(string returnUrl = "/")
         {
             if (!User.IsAuthenticated())
