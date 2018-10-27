@@ -91,11 +91,11 @@ namespace WebUI.Controllers
         [HttpPost]
         [Authorize]
         [Route("post-order")]
-        public async Task<ActionResult> PostOrder([FromBody] SupplierDto supplierDto)
+        public async Task<ActionResult> PostOrder([FromBody] int[] dishesIds)
         {
             var userId = User.GetUserId().Value;
-            DishDto[] orderedItemsDtos = supplierDto.Categories.SelectMany(x => x.Dishes).ToArray();
-            HashSet<int> orderedItemsIds = new HashSet<int>(orderedItemsDtos.Select(x => x.Id));
+            var orderedItemsIds = new HashSet<int>(dishesIds);
+                        
             IQueryable<DishItem> orderedDishItems = _repo.All<DishItem>().Where(x => orderedItemsIds.Contains(x.Id));
 
             decimal orderPrice = orderedDishItems.Select(x => x.Price).Sum();
