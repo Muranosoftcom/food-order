@@ -1,8 +1,8 @@
 namespace Core
 {
-    public enum FoodProvider
+    public enum FoodSupplier
     {
         Glagol = 1,
-        Kafe = 2
+        Cafe = 2
     }
 }

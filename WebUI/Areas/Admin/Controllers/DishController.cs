@@ -9,14 +9,18 @@ using WebUI.Areas.Admin.Models;
 
 namespace WebUI.Areas.Admin.Controllers
 {
-    [Area("admin")]
-    public class DishController : Controller
-    {
+    
+    public class DishController : BaseController {
         private readonly IFoodService _foodService;
 
         public DishController(IFoodService foodService)
         {
             _foodService = foodService;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
         }
 
         // GET: Dish/Create

@@ -71,13 +71,15 @@ namespace WebUI
                             if (user == null)
                             {
                                 user = new User { Email = email, FirstName = userName };
-                                db.Users.AddAsync(user);
+                                await db.Users.AddAsync(user);
                                 db.SaveChanges();
                             }
                             
                             var claim = new Claim("userId", user.Id.ToString());
+                            var isAdminClaim = new Claim("isAdmin", user.IsAdmin.ToString());
                             var claimIdentity =  new ClaimsIdentity();
                             claimIdentity.AddClaim(claim);
+                            claimIdentity.AddClaim(isAdminClaim);
                             ctx.Principal.AddIdentity(claimIdentity);
                         } 
                     };

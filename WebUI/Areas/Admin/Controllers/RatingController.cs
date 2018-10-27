@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Areas.Admin.Controllers
 {
-    public class HomeController : BaseController {
+    public class RatingController : BaseController {
         public IActionResult Index()
         {
             return View();

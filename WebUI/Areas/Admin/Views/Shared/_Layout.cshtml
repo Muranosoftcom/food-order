@@ -1,5 +1,4 @@
 ﻿@using WebUI.Infrastructure
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,37 +22,29 @@
     </environment>
 </head>
 <body class="layout">
-    <nav class="navbar navbar-inverse navbar-fixed-top layout__header">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Горячие обеды</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li><a asp-controller="Account" asp-action="Profile">Hello @User.Identity.Name!</a></li>
-                        @if (User.IsAdmin())
-                         {
-                             <li><a asp-controller="Admin" asp-action="Home">Админ</a></li>
-                         }
-                        <li><a asp-controller="Order" asp-action="Index">Мой заказ</a></li>
-                        <li><a id="qsLogoutBtn" asp-controller="Account" asp-action="Logout">Выход</a></li>
-                    }
-                    else
-                    {
-                        <li><a id="qsLoginBtn" asp-controller="Account" asp-action="Login">Сделать заказ</a></li>
-                    }
-                </ul>
-            </div>
+<nav class="navbar navbar-inverse navbar-fixed-top layout__header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Горячие обеды</a>
         </div>
-    </nav>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a asp-controller="Dish" asp-action="Sync">Синхронизировать обеды</a></li>
+                <li><a asp-controller="Dish" asp-action="Index">Посмотреть меню</a></li>
+                <li><a asp-controller="Order" asp-action="Index">Посмотреть список заказов</a></li>
+                <li><a asp-controller="Order" asp-action="Statistic">Статистика заказов</a></li>
+                <li><a asp-controller="Rating" asp-action="Index">Рейтинг обедов</a></li>
+                <li><a id="qsLogoutBtn" asp-controller="Account" asp-action="Logout">Выход</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
     <partial name="_CookieConsentPartial" />
 
