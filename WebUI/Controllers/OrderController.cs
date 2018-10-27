@@ -169,7 +169,7 @@ namespace WebUI.Controllers
 
         [HttpGet]
         [Route("get-week-order")]
-        public ActionResult<WeekMenuDto> GetWeekOrder(DayOfWeek dayOfWeek)
+        public ActionResult<WeekMenuDto> GetWeekOrder()
         {
             Order[] orders;
             if (!HttpContext.User?.Identity.IsAuthenticated ?? false)
@@ -188,6 +188,7 @@ namespace WebUI.Controllers
         private WeekDayDto ToWeekDayDto (Order order) {
             return new WeekDayDto {
                 WeekDay = order.Date.DayOfWeek.ToString(),
+                UserName = $"{order.User.FirstName} {order.User.LastName}",
                 Suppliers = order.OrderItems.Select(x => new SupplierDto {
                     SupplierId = x.DishItem.Supplier.Id,
                     SupplierName = x.DishItem.Supplier.Name,
