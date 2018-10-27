@@ -205,7 +205,7 @@ namespace WebUI.Controllers
 
         [HttpGet]
         [Route("get-today-order")]
-        public ActionResult<WeekMenuDto> GetWeekOrder()
+        public ActionResult<WeekMenuDto> GetTodayOrder()
         {
             Order[] orders;
             if (!HttpContext.User?.Identity.IsAuthenticated ?? false)
