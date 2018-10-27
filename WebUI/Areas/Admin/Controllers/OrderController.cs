@@ -6,9 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Areas.Admin.Controllers
 {
-    public class HomeController : BaseController {
+    public class OrderController : BaseController
+    {
         public IActionResult Index()
         {
+            return View();
+        }
+
+        public IActionResult Statistic () {
             return View();
         }
     }
