@@ -37,7 +37,7 @@ namespace WebUI.Controllers
                 .Include(x => x.AvailableOn)
                 .Include(x => x.Supplier)
                 .Include(x => x.Category)
-                .Where(x => x.AvailableUntil >= now);             
+                .Where(x => x.AvailableUntil >= now);
 
             List<(string dayName, DishItem dish)> dayNameDishPairs = new List<(string, DishItem)>();
             foreach (var dish in availableDishes)
@@ -75,7 +75,9 @@ namespace WebUI.Controllers
                                 {
                                     Id = f.Id,
                                     Name = f.Name,
-                                    Price = f.Price
+                                    Price = f.Price,
+                                    NegativeRewievs = f.NegativeReviews,
+                                    PositiveRewievs = f.PositiveReviews
                                 }).ToArray()
                             }).ToArray()
                         };
@@ -119,11 +121,37 @@ namespace WebUI.Controllers
         [Route("get-today-order")]
         public ActionResult<WeekMenuDto> GetTodayOrder()
         {
-            var orders = !User.IsAuthenticated() 
-                ? _repo.All<Order>().Where(x => x.Date == DateTime.Today).ToArray() 
-                : _repo.All<Order>().Where(x => x.UserId == User.GetUserId().Value && x.Date == DateTime.Today).ToArray();
+            var orders = !User.IsAuthenticated()
+                ? _repo.All<Order>().Where(x => x.Date == DateTime.Today).ToArray()
+                : _repo.All<Order>().Where(x => x.UserId == User.GetUserId().Value && x.Date == DateTime.Today)
+                    .ToArray();
 
             return new WeekMenuDto {WeekDays = orders.Select(ToWeekDayDto).ToArray()};
+        }
+
+        [HttpPut]
+        [Route("increment-rating")]
+        [Authorize]
+        public async Task<ActionResult> IncrementRating(int dishItemId)
+        {
+            var dishItem = _repo.GetById<DishItem>(dishItemId);
+            dishItem.PositiveReviews++;
+            _repo.Update(dishItem);
+            await _repo.SaveAsync();
+            return new OkResult();
+        }
+
+
+        [HttpPut]
+        [Route("decrement-rating")]
+        [Authorize]
+        public async Task<ActionResult> DecrementRating(int dishItemId)
+        {
+            var dishItem = _repo.GetById<DishItem>(dishItemId);
+            dishItem.NegativeReviews++;
+            _repo.Update(dishItem);
+            await _repo.SaveAsync();
+            return new OkResult();
         }
 
         private WeekDayDto ToWeekDayDto(Order order)
@@ -143,7 +171,9 @@ namespace WebUI.Controllers
                         Dishes = c.Select(d => new DishDto
                         {
                             Id = d.DishItemId,
-                            Name = d.DishItem.Name
+                            Name = d.DishItem.Name,
+                            NegativeRewievs = d.DishItem.NegativeReviews,
+                            PositiveRewievs = d.DishItem.PositiveReviews
                         }).ToArray()
                     }).ToArray()
                 }).ToArray()
