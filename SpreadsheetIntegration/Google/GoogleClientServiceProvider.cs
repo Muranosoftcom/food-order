@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
@@ -11,7 +12,7 @@ namespace SpreadsheetIntegration.Google {
 			string ApplicationName = "Food ordering";
 
 			ServiceAccountCredential credential;
-			using (var stream = new FileStream("D:/Food ordering-9e07ded32cf7.json", FileMode.Open, FileAccess.Read)) {
+			using (var stream = new FileStream(Path.Combine(Environment.CurrentDirectory, "Food ordering-9e07ded32cf7.json"), FileMode.Open, FileAccess.Read)) {
 				credential = GoogleCredential.FromStream(stream).CreateScoped(scopes).UnderlyingCredential as ServiceAccountCredential;
 			}
 
