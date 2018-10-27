@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BusinessLogic.Services;
 using Domain;
@@ -9,7 +8,6 @@ using Domain.Contexts;
 using Domain.Entities;
 using Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
-using SpreadsheetIntegration.Core;
 using SpreadsheetIntegration.Google;
 using Xunit;
 
@@ -115,6 +113,8 @@ namespace Test
             var context = new FoodOrderContext().CreateDbContext(null);
             var repo = new FoodOrderRepository(context);
 
+            var prevCount = repo.All<User>().Count();
+            
             repo.InsertAsync(
                 new User[]
                 {
@@ -126,23 +126,27 @@ namespace Test
                     },
                     new User
                     {
-                        Email = "admin_email@mail.com",
+                        Email = "admin@mail.com",
                         FirstName = "Admin",
                         LastName = "Admin"
                     },
                     new User
                     {
-                        Email = "fake_email@mail.com",
-                        FirstName = "FakeFirst",
-                        LastName = "FakeLast"
+                        Email = "egor@mail.com",
+                        FirstName = "Egor",
+                        LastName = "Manevich"
                     },
                     new User
                     {
-                        Email = "fake_email@mail.com",
-                        FirstName = "FakeFirst",
-                        LastName = "FakeLast"
+                        Email = "human@mail.com",
+                        FirstName = "Human",
+                        LastName = "Human"
                     },
                 });
+            repo.Save();
+            var currentCount = repo.All<User>().Count();
+            var diff = currentCount - prevCount;
+            Assert.Equal(diff, 4);
         }
     }
 }

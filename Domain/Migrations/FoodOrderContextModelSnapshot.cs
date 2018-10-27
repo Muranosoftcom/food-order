@@ -4,7 +4,6 @@ using Domain.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Domain.Migrations
 {
@@ -143,6 +142,8 @@ namespace Domain.Migrations
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(100);
+
+                    b.Property<bool>("IsAdmin");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(100);
