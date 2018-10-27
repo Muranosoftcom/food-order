@@ -2,4 +2,19 @@
 	&__user-name {
 		max-width: 100px;
 	}
+
+	&__supplier-name {
+		padding: 10px;
+		background: #5199DB;
+	}
+
+	&__category-name {
+		padding: 5px 10px;
+		margin-left: 0;
+		background: #E4F3FF;
+	}
+
+	&__dish-view {
+		padding: 5px 10px;
+	}
 }

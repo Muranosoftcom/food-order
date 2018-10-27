@@ -17,12 +17,13 @@ class DishView extends React.Component {
 		const { dish, isSelected } = this.props;
 
 		return (
-			<li className="dish__item">
-				dish.name <span>{dish.price}</span>
+			<div className="dish-view">
+				<span className="dish-view__name">{dish.name}</span>
+				<span className="dish-view__price">{dish.price && dish.price}</span>
 				<Button color={isSelected ? "success" : "secondary"} onClick={this.handleSelect}>
 					{isSelected ? "-" : "+"}
 				</Button>
-			</li>
+			</div>
 		);
 	}
 }

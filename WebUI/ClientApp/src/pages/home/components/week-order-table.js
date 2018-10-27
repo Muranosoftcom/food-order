@@ -1,25 +1,29 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Table } from "reactstrap";
 import "./week-order-table.scss";
 
 class WeekOrderTable extends React.Component {
 	renderSupplier(supplier) {
-		return [
-			<li key={supplier.supplierId}>
-				<span>
+		return (
+			<Fragment>
+				<div className="week-order-table__supplier-name" key={supplier.supplierId}>
 					<strong>{supplier.supplierName}</strong>
-				</span>
-			</li>,
-			...supplier.categories.map(category => [
-				<li key={category.id}>{category.name}</li>,
-				...category.dishes.map(dish => (
-					<li key={dish.id}>
-						<span>{dish.name}</span>
-						<span>{dish.price}</span>
-					</li>
-				)),
-			]),
-		];
+				</div>
+				{supplier.categories.map(category => (
+					<Fragment>
+						<div className="week-order-table__category-name" key={category.id}>
+							{category.name}
+						</div>
+						{category.dishes.map(dish => (
+							<div className="week-order-table__dish-view" key={dish.id}>
+								<span>{dish.name}</span>
+								<span>{dish.price}</span>
+							</div>
+						))}
+					</Fragment>
+				))}
+			</Fragment>
+		);
 	}
 
 	render() {
@@ -37,13 +41,13 @@ class WeekOrderTable extends React.Component {
 					{!weekDaysOrders || !weekDaysOrders.length
 						? null
 						: weekDaysOrders.map(weekDaysOrder => (
-								<tr key={weekDaysOrder.userName}>
+								<tr key={weekDaysOrder.userName + weekDaysOrder.weekDay}>
 									<td>{weekDaysOrder.userName}</td>
 									<td>
-										<ul>
+										<div>
 											{weekDaysOrder.suppliers &&
 												weekDaysOrder.suppliers.map(supplier => this.renderSupplier(supplier))}
-										</ul>
+										</div>
 									</td>
 								</tr>
 						  ))}
