@@ -108,5 +108,41 @@ namespace Test
             Assert.Equal(dishItem.AvailableOn.First().DishItemId, i.AvailableOn.First().DishItemId);
             Assert.Equal(dishItem.AvailableOn.First().WeekDayId, i.AvailableOn.First().WeekDayId);
         }
+
+        [Fact]
+        public void FillDatabaseWithUsers()
+        {
+            var context = new FoodOrderContext().CreateDbContext(null);
+            var repo = new FoodOrderRepository(context);
+
+            repo.InsertAsync(
+                new User[]
+                {
+                    new User
+                    {
+                        Email = "fake_email@mail.com",
+                        FirstName = "FakeFirst",
+                        LastName = "FakeLast"
+                    },
+                    new User
+                    {
+                        Email = "admin_email@mail.com",
+                        FirstName = "Admin",
+                        LastName = "Admin"
+                    },
+                    new User
+                    {
+                        Email = "fake_email@mail.com",
+                        FirstName = "FakeFirst",
+                        LastName = "FakeLast"
+                    },
+                    new User
+                    {
+                        Email = "fake_email@mail.com",
+                        FirstName = "FakeFirst",
+                        LastName = "FakeLast"
+                    },
+                });
+        }
     }
 }
