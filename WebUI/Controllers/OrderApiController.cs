@@ -16,7 +16,6 @@ namespace WebUI.Controllers
 {
     [Route("api/order")]
     [ApiController]
-    [Authorize]
     public class OrderApiController : Controller
     {
         private IRepository _repo;
@@ -27,6 +26,7 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("get-week-menu")]
         public ActionResult<WeekMenuDto> GetWeekMenu()
         {
@@ -86,6 +86,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("post-order")]
         public async Task<ActionResult> PostOrder([FromBody] SupplierDto supplierDto)
         {
