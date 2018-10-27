@@ -51,11 +51,6 @@ namespace Domain.Repositories
             _context.UpdateRange(entities);
         }
 
-        public Task AddDishItemAsync(DishItem dishItem)
-        {
-            return _context.DishItems.AddAsync(dishItem);
-        }
-
         public Task SaveAsync()
         {
             return _context.SaveChangesAsync();

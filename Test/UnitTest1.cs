@@ -8,6 +8,7 @@ using Domain;
 using Domain.Contexts;
 using Domain.Entities;
 using Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 using SpreadsheetIntegration.Core;
 using SpreadsheetIntegration.Google;
 using Xunit;
@@ -79,6 +80,33 @@ namespace Test
             context.SaveChanges();
             var w = context.WeekDays.FirstOrDefault(x => x.Name == "Wd");
             Assert.Null(w);            
+        }
+        
+        [Fact]
+        public async Task AddDishItem()
+        {
+            var context = new FoodOrderContext().CreateDbContext(null);
+            var repo = new FoodOrderRepository(context);
+            var date = DateTime.Now;
+            
+            var dishItem = new DishItem
+            {
+                Name = "Salo",
+                Price = 100,
+                Category = new DishCategory
+                {
+                    Name = "Еда богов"
+                },
+                Supplier = repo.All<Supplier>().FirstOrDefault(x => x.Name == "ГлаголЪ"),
+                AvailableOn = new List<DishItemToWeekDay> {new DishItemToWeekDay {WeekDay = repo.GetById<WeekDay>(1)}},
+                AvailableUntil = date
+            };
+
+            await repo.InsertAsync(dishItem);
+            await repo.SaveAsync();
+            var i = repo.All<DishItem>().Include(x => x.AvailableOn).FirstOrDefault(x => x.AvailableUntil == date);
+            Assert.Equal(dishItem.AvailableOn.First().DishItemId, i.AvailableOn.First().DishItemId);
+            Assert.Equal(dishItem.AvailableOn.First().WeekDayId, i.AvailableOn.First().WeekDayId);
         }
     }
 }
