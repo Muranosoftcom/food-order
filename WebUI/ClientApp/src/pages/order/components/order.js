@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Col, Container, Row } from "reactstrap";
-import { DishView } from "./dish-view";
+import DishView from "./dish-view";
 
 export default class OrderPage extends React.Component {
 	state = {
@@ -17,13 +17,16 @@ export default class OrderPage extends React.Component {
 		try {
 			const data = await this.props.onLoadData();
 			console.log(data);
+			console.log(data.weekDays);
+
+			const [weekDay] = data.weekDays;
 
 			this.setState({
-				weekDay: data.weekDays[0],
+				weekDay,
 				loading: false,
 			});
 		} catch (e) {
-			console.error(e.message());
+			// console.error(e);
 			this.setState({
 				loading: false,
 			});
@@ -34,7 +37,7 @@ export default class OrderPage extends React.Component {
 		this.setState(prevState => {
 			return prevState.selectedDishes.some(selectedDish => dish.id === selectedDish.id)
 				? {
-						selectedDishes: prevState.selectedDishesId.filter(selectedDish => selectedDish.id !== dish.id),
+						selectedDishes: prevState.selectedDishes.filter(selectedDish => selectedDish.id !== dish.id),
 				  }
 				: {
 						selectedDishes: [...prevState.selectedDishes, dish],
@@ -43,14 +46,15 @@ export default class OrderPage extends React.Component {
 	};
 
 	renderDishes(dishes) {
-		const { selectedDishesId } = this.state;
+		const { selectedDishes } = this.state;
 
 		return dishes && dishes.length ? (
 			<ul className="dish">
 				{dishes.map(dish => (
 					<DishView
+						key={dish.id}
 						dish={dish}
-						isSelected={selectedDishesId.some(id => dish.id === id)}
+						isSelected={selectedDishes.some(id => dish.id === id)}
 						onSelect={this.handleToggle}
 					/>
 				))}
