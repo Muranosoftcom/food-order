@@ -19,7 +19,7 @@ namespace WebUI.Controllers
     [ApiController]
     public class OrderApiController : Controller
     {
-        private IRepository _repo;
+        private readonly IRepository _repo;
 
         public OrderApiController(IRepository repo)
         {
@@ -119,15 +119,9 @@ namespace WebUI.Controllers
         [Route("get-today-order")]
         public ActionResult<WeekMenuDto> GetTodayOrder()
         {
-            Order[] orders;
-            if (!HttpContext.User?.Identity.IsAuthenticated ?? false)
-            {
-                orders = _repo.All<Order>().Where(x => x.Date == DateTime.Today).ToArray();
-            }
-            else
-            {
-                orders = _repo.All<Order>().Where(x => x.UserId == User.GetUserId().Value && x.Date == DateTime.Today).ToArray();
-            }
+            var orders = !User.IsAuthenticated() 
+                ? _repo.All<Order>().Where(x => x.Date == DateTime.Today).ToArray() 
+                : _repo.All<Order>().Where(x => x.UserId == User.GetUserId().Value && x.Date == DateTime.Today).ToArray();
 
             return new WeekMenuDto {WeekDays = orders.Select(ToWeekDayDto).ToArray()};
         }

@@ -7,22 +7,16 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebUI.Infrastructure;
 using WebUI.ViewModels;
 
 namespace WebUI.Controllers
 {
     public class AccountController : Controller
     {
-        private IRepository _repo; 
-
-        public AccountController(IRepository repo)
-        {
-            _repo = repo;
-        }
-
         public async Task Login(string returnUrl = "/")
         {
-            if (!HttpContext.User?.Identity.IsAuthenticated ?? false)
+            if (!User.IsAuthenticated())
             {
                 await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties() { RedirectUri = returnUrl });
             }
