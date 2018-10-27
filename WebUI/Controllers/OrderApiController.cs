@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTOs;
@@ -10,6 +11,7 @@ using Domain.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Swashbuckle.AspNetCore.Swagger;
 using WebUI.Infrastructure;
 
@@ -20,10 +22,17 @@ namespace WebUI.Controllers
     public class OrderApiController : Controller
     {
         private readonly IRepository _repo;
+        private readonly IConfiguration _configuration;
+        private int _glagolPrice;
+        private int _cafePrice;
 
-        public OrderApiController(IRepository repo)
+        public OrderApiController(IRepository repo, IConfiguration configuration)
         {
             _repo = repo;
+            _configuration = configuration;
+
+            int.TryParse(_configuration["OrderPrice:Glagol"], out _glagolPrice);
+            int.TryParse(_configuration["OrderPrice:Cafe"], out _cafePrice);
         }
 
         [HttpGet]
@@ -37,7 +46,7 @@ namespace WebUI.Controllers
                 .Include(x => x.AvailableOn)
                 .Include(x => x.Supplier)
                 .Include(x => x.Category)
-                .Where(x => x.AvailableUntil >= now);             
+                .Where(x => x.AvailableUntil >= now);
 
             List<(string dayName, DishItem dish)> dayNameDishPairs = new List<(string, DishItem)>();
             foreach (var dish in availableDishes)
@@ -75,7 +84,9 @@ namespace WebUI.Controllers
                                 {
                                     Id = f.Id,
                                     Name = f.Name,
-                                    Price = f.Price
+                                    Price = f.Price,
+                                    NegativeRewievs = f.NegativeReviews,
+                                    PositiveRewievs = f.PositiveReviews
                                 }).ToArray()
                             }).ToArray()
                         };
@@ -125,8 +136,32 @@ namespace WebUI.Controllers
             var orders = !User.IsAuthenticated() 
                 ? query.Where(x => x.Date.Date == DateTime.Today.Date).ToArray() 
                 : query.Where(x => x.UserId == User.GetUserId().Value && x.Date.Date == DateTime.Today.Date).ToArray();
-
             return new WeekMenuDto {WeekDays = orders.Select(ToWeekDayDto).ToArray()};
+        }
+
+        [HttpPut]
+        [Route("increment-rating")]
+        [Authorize]
+        public async Task<ActionResult> IncrementRating(int dishItemId)
+        {
+            var dishItem = _repo.GetById<DishItem>(dishItemId);
+            dishItem.PositiveReviews++;
+            _repo.Update(dishItem);
+            await _repo.SaveAsync();
+            return new OkResult();
+        }
+
+
+        [HttpPut]
+        [Route("decrement-rating")]
+        [Authorize]
+        public async Task<ActionResult> DecrementRating(int dishItemId)
+        {
+            var dishItem = _repo.GetById<DishItem>(dishItemId);
+            dishItem.NegativeReviews++;
+            _repo.Update(dishItem);
+            await _repo.SaveAsync();
+            return new OkResult();
         }
 
         private WeekDayDto ToWeekDayDto(Order order)
@@ -146,7 +181,9 @@ namespace WebUI.Controllers
                         Dishes = c.Select(d => new DishDto
                         {
                             Id = d.DishItemId,
-                            Name = d.DishItem.Name
+                            Name = d.DishItem.Name,
+                            NegativeRewievs = d.DishItem.NegativeReviews,
+                            PositiveRewievs = d.DishItem.PositiveReviews
                         }).ToArray()
                     }).ToArray()
                 }).ToArray()
