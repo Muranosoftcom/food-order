@@ -1,25 +1,27 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Table } from "reactstrap";
 import "./week-order-table.scss";
 
 class WeekOrderTable extends React.Component {
 	renderSupplier(supplier) {
-		return [
-			<li key={supplier.supplierId}>
-				<span>
+		return (
+			<Fragment>
+				<div key={supplier.supplierId}>
 					<strong>{supplier.supplierName}</strong>
-				</span>
-			</li>,
-			...supplier.categories.map(category => [
-				<li key={category.id}>{category.name}</li>,
-				...category.dishes.map(dish => (
-					<li key={dish.id}>
-						<span>{dish.name}</span>
-						<span>{dish.price}</span>
-					</li>
-				)),
-			]),
-		];
+				</div>
+				{supplier.categories.map(category => (
+					<Fragment>
+						<div key={category.id}>{category.name}</div>
+						{category.dishes.map(dish => (
+							<div key={dish.id}>
+								<span>{dish.name}</span>
+								<span>{dish.price}</span>
+							</div>
+						))}
+					</Fragment>
+				))}
+			</Fragment>
+		);
 	}
 
 	render() {
