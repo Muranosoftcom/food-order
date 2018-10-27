@@ -28,4 +28,10 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Food ordering-9e07ded32cf7.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

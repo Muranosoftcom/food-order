@@ -182,7 +182,7 @@ namespace Domain.Migrations
             modelBuilder.Entity("Domain.Entities.DishItem", b =>
                 {
                     b.HasOne("Domain.Entities.DishCategory", "Category")
-                        .WithMany("DishItems")
+                        .WithMany()
                         .HasForeignKey("CategoryKey")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -208,7 +208,7 @@ namespace Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain.Entities.Order", "Order")
-                        .WithMany()
+                        .WithMany("OrderItems")
                         .HasForeignKey("OrderKey")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

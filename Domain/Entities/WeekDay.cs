@@ -8,6 +8,6 @@ namespace Domain.Entities
     {        
         [MaxLength(15)]
         public string Name { get; set; }
-        public ICollection<DishItemToWeekDay> AvailableItems { get; set; }
+        public virtual ICollection<DishItemToWeekDay> AvailableItems { get; set; }
     }
 }

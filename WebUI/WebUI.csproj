@@ -13,4 +13,9 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\SpreadsheetIntegration\SpreadsheetIntegration.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="Food ordering-9e07ded32cf7.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
