@@ -1,10 +1,12 @@
 import React from "react";
-import { Container, Col, Row, Button } from "reactstrap";
+import { Button, Col, Container, Row } from "reactstrap";
+import { DishView } from "./dish-view";
 
 export default class OrderPage extends React.Component {
 	state = {
 		loading: false,
 		weekDay: null,
+		selectedDishes: [],
 	};
 
 	async componentDidMount() {
@@ -28,14 +30,30 @@ export default class OrderPage extends React.Component {
 		}
 	}
 
+	handleToggle = dish => {
+		this.setState(prevState => {
+			return prevState.selectedDishes.some(selectedDish => dish.id === selectedDish.id)
+				? {
+						selectedDishes: prevState.selectedDishesId.filter(selectedDish => selectedDish.id !== dish.id),
+				  }
+				: {
+						selectedDishes: [...prevState.selectedDishes, dish],
+				  };
+		});
+	};
+
 	renderDishes(dishes) {
+		const { selectedDishesId } = this.state;
+
 		return dishes && dishes.length ? (
-			<ul className="meals">
-				<li className="meals__item">Food 1</li>
-				<li className="meals__item">Food 2</li>
-				<li className="meals__item">Food 3</li>
-				<li className="meals__item">Food 4</li>
-				<li className="meals__item">Food 5</li>
+			<ul className="dish">
+				{dishes.map(dish => (
+					<DishView
+						dish={dish}
+						isSelected={selectedDishesId.some(id => dish.id === id)}
+						onSelect={this.handleToggle}
+					/>
+				))}
 			</ul>
 		) : null;
 	}
@@ -75,21 +93,7 @@ export default class OrderPage extends React.Component {
 									</div>
 								</div>
 								<div className="basket">
-									<ul>
-										<li>
-											Food 1 <Button color="danger">x</Button>
-										</li>
-										<li>
-											Food 2 <Button color="danger">x</Button>
-										</li>
-										<li>
-											Food 3 <Button color="danger">x</Button>
-										</li>
-										<li>
-											Food 4 <Button color="danger">x</Button>
-										</li>
-									</ul>
-
+									{this.renderDishes(this.state.selectedDishes)}
 									<Button color="primary">Заказать</Button>
 								</div>
 							</Col>
