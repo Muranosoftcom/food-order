@@ -13,5 +13,7 @@ namespace WebUI.Areas.Admin.Models
         [DisplayName("Дата заказа")]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
+        [DisplayName("Максимальная сумма")]
+        public decimal MaxPrice { get; set; }
     }
 }
