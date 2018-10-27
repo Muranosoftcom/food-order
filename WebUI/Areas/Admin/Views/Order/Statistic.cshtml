@@ -1,8 +1,47 @@
-﻿
+﻿@model IEnumerable<WebUI.Areas.Admin.Models.OverpriceViewModel>
+
 @{
     ViewData["Title"] = "Statistic";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Coming soon</h2>
+<h2>Превышение цен</h2>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PriceDifference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+                
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceDifference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

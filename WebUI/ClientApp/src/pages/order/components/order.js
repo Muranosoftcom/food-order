@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Col, Container, Row } from "reactstrap";
-import { DishView } from "./dish-view";
+import DishView from "./dish-view";
 
 export default class OrderPage extends React.Component {
 	state = {
