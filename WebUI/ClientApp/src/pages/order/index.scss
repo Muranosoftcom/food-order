@@ -1,3 +1,14 @@
+.order-page {
+	&__title {
+		padding-left: 20px;
+		margin-bottom: 2rem;
+	}
+
+	&__week-name {
+		border-bottom: 1px dotted;
+	}
+}
+
 .dish-view {
 	align-items: center;
 	display: flex;
@@ -17,6 +28,7 @@
 .basket {
 	border: 1px solid;
 	padding: 40px;
+
 
 	&__price {
 
@@ -39,10 +51,6 @@
 	background: #E4F3FF;
 }
 
-.order-page__title {
-	padding-left: 20px;
-	margin-bottom: 2rem;
-}
 
 .price-container {
 
