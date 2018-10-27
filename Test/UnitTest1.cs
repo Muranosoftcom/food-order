@@ -113,6 +113,8 @@ namespace Test
             var context = new FoodOrderContext().CreateDbContext(null);
             var repo = new FoodOrderRepository(context);
 
+            var prevCount = repo.All<User>().Count();
+            
             repo.InsertAsync(
                 new User[]
                 {
@@ -124,23 +126,27 @@ namespace Test
                     },
                     new User
                     {
-                        Email = "admin_email@mail.com",
+                        Email = "admin@mail.com",
                         FirstName = "Admin",
                         LastName = "Admin"
                     },
                     new User
                     {
-                        Email = "fake_email@mail.com",
-                        FirstName = "FakeFirst",
-                        LastName = "FakeLast"
+                        Email = "egor@mail.com",
+                        FirstName = "Egor",
+                        LastName = "Manevich"
                     },
                     new User
                     {
-                        Email = "fake_email@mail.com",
-                        FirstName = "FakeFirst",
-                        LastName = "FakeLast"
+                        Email = "human@mail.com",
+                        FirstName = "Human",
+                        LastName = "Human"
                     },
                 });
+            repo.Save();
+            var currentCount = repo.All<User>().Count();
+            var diff = currentCount - prevCount;
+            Assert.Equal(diff, 4);
         }
     }
 }

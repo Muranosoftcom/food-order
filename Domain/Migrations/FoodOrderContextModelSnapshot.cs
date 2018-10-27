@@ -143,6 +143,8 @@ namespace Domain.Migrations
                     b.Property<string>("FirstName")
                         .HasMaxLength(100);
 
+                    b.Property<bool>("IsAdmin");
+
                     b.Property<string>("LastName")
                         .HasMaxLength(100);
 

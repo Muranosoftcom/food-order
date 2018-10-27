@@ -16,7 +16,7 @@ namespace WebUI.Controllers
 {
     [Route("api/order")]
     [ApiController]
-//    [Authorize]
+    [Authorize]
     public class OrderApiController : Controller
     {
         private IRepository _repo;
@@ -122,7 +122,8 @@ namespace WebUI.Controllers
         {
             var now = DateTime.UtcNow;
 
-            var availableDishes = _repo.All<DishItem>().Include(x => x.AvailableOn).Where(x => x.AvailableUntil > now)
+            var availableDishes = _repo.All<DishItem>().Include(x => x.AvailableOn)
+//                .Where(x => x.AvailableUntil >= now)
                 .ToArray();
 
             List<(string dayName, DishItem dish)> dayNameDishPairs = new List<(string, DishItem)>();
@@ -175,30 +176,29 @@ namespace WebUI.Controllers
         public async Task<ActionResult> PostOrder([FromBody] SupplierDto supplierDto)
         {
             var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
-
             DishDto[] orderedItemsDtos = supplierDto.Categories.SelectMany(x => x.Dishes).ToArray();
             HashSet<int> orderedItemsIds = new HashSet<int>(orderedItemsDtos.Select(x => x.Id));
-            IQueryable<DishItem> orderedItems = _repo.All<DishItem>().Where(x => orderedItemsIds.Contains(x.Id));
+            IQueryable<DishItem> orderedDishItems = _repo.All<DishItem>().Where(x => orderedItemsIds.Contains(x.Id));
 
-            decimal orderPrice = orderedItems.Select(x => x.Price).Sum();
+            decimal orderPrice = orderedDishItems.Select(x => x.Price).Sum();
             User user = _repo.GetById<User>(userId);
             var order = new Order
             {
                 Date = DateTime.Now,
                 Price = orderPrice,
-                User = user
+                User = user,
+                OrderItems = orderedDishItems.Select(x => new OrderItem
+                {
+                    Price = x.Price,
+                    DishItem = x
+                }).ToArray()
             };
-            var orderItems = orderedItems.Select(x => new OrderItem
-            {
-                Price = x.Price,
-                DishItem = x,
-                Order = order
-            });
-            await _repo.InsertAsync(orderedItems);
+            await _repo.InsertAsync(order);
+            _repo.Save();
             return new OkResult();
         }
 
-        
+
         [HttpGet]
         [Route("get-week-order")]
         public ActionResult<WeekMenuDto> GetWeekOrder()
@@ -217,17 +217,22 @@ namespace WebUI.Controllers
             return new WeekMenuDto {WeekDays = orders.Select(ToWeekDayDto).ToArray()};
         }
 
-        private WeekDayDto ToWeekDayDto (Order order) {
-            return new WeekDayDto {
+        private WeekDayDto ToWeekDayDto(Order order)
+        {
+            return new WeekDayDto
+            {
                 WeekDay = order.Date.DayOfWeek.ToString(),
                 UserName = $"{order.User.FirstName} {order.User.LastName}",
-                Suppliers = order.OrderItems.Select(x => new SupplierDto {
+                Suppliers = order.OrderItems.Select(x => new SupplierDto
+                {
                     SupplierId = x.DishItem.Supplier.Id,
                     SupplierName = x.DishItem.Supplier.Name,
-                    Categories = order.OrderItems.GroupBy(oi => oi.DishItem.Category).Select(c => new CategoryDto {
+                    Categories = order.OrderItems.GroupBy(oi => oi.DishItem.Category).Select(c => new CategoryDto
+                    {
                         Id = c.Key.Id,
                         Name = c.Key.Name,
-                        Dishes = c.Select(d => new DishDto {
+                        Dishes = c.Select(d => new DishDto
+                        {
                             Id = d.DishItemId,
                             Name = d.DishItem.Name
                         }).ToArray()
