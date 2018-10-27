@@ -200,7 +200,7 @@ namespace WebUI.Controllers
 
 
         [HttpGet]
-        [Route("get-week-order")]
+        [Route("get-today-order")]
         public ActionResult<WeekMenuDto> GetWeekOrder()
         {
             Order[] orders;
