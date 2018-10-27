@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTOs;
@@ -10,6 +11,7 @@ using Domain.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Swashbuckle.AspNetCore.Swagger;
 using WebUI.Infrastructure;
 
@@ -20,10 +22,17 @@ namespace WebUI.Controllers
     public class OrderApiController : Controller
     {
         private readonly IRepository _repo;
+        private readonly IConfiguration _configuration;
+        private int _glagolPrice;
+        private int _cafePrice;
 
-        public OrderApiController(IRepository repo)
+        public OrderApiController(IRepository repo, IConfiguration configuration)
         {
             _repo = repo;
+            _configuration = configuration;
+
+            int.TryParse(_configuration["OrderPrice:Glagol"], out _glagolPrice);
+            int.TryParse(_configuration["OrderPrice:Cafe"], out _cafePrice);
         }
 
         [HttpGet]
