@@ -2,7 +2,7 @@ using Core;
 
 namespace BusinessLogic.DTOs
 {
-    public class DishDTO
+    public class DishDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

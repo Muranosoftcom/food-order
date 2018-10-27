@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
+//using BusinessLogic.Dtos;
 using BusinessLogic.DTOs;
 using BusinessLogic.SpreadsheetParsing;
 using Core;
@@ -42,14 +43,14 @@ namespace BusinessLogic.Services
             var glagolFoodDto = glagolFood.Select(x => ParsingRegistry.GetParser(FoodProvider.Glagol).ExtractFood(x))
                 .Select(x =>
                 {
-                    var food = new FoodDTO
+                    var food = new SupplierDto
                     {
                         SupplierId = (int) FoodProvider.Glagol,
                         SupplierName = "ГлаголЪ",
-                        Categories = x.GroupBy(g => g.Category).Select(c => new CategoryDTO
+                        Categories = x.GroupBy(g => g.Category).Select(c => new CategoryDto
                         {
                             Name = c.Key,
-                            Dishes = c.GroupBy(g => (g.Name, g.Price)).Select(d => new DishDTO
+                            Dishes = c.GroupBy(g => (g.Name, g.Price)).Select(d => new DishDto
                             {
                                 Name = d.Key.Item1,
                                 Price = d.Key.Item2,
@@ -64,14 +65,14 @@ namespace BusinessLogic.Services
             var kafeFoodDto = kafeFood.Select(x => ParsingRegistry.GetParser(FoodProvider.Kafe).ExtractFood(x)).Select(
                 x =>
                 {
-                    var food = new FoodDTO
+                    var food = new SupplierDto
                     {
                         SupplierId = (int) FoodProvider.Kafe,
                         SupplierName = "Столовая",
-                        Categories = x.GroupBy(g => g.Category).Select(c => new CategoryDTO
+                        Categories = x.GroupBy(g => g.Category).Select(c => new CategoryDto
                         {
                             Name = c.Key,
-                            Dishes = c.GroupBy(g => (g.Name, g.Price)).Select(d => new DishDTO
+                            Dishes = c.GroupBy(g => (g.Name, g.Price)).Select(d => new DishDto
                             {
                                 Name = d.Key.Item1,
                                 Price = d.Key.Item2,
@@ -83,7 +84,7 @@ namespace BusinessLogic.Services
                     return food;
                 });
 
-            glagolFoodDto.Merge(kafeFoodDto).Aggregate(new List<FoodDTO>(), (x, y) =>
+            glagolFoodDto.Merge(kafeFoodDto).Aggregate(new List<SupplierDto>(), (x, y) =>
             {
                 x.Add(y);
                 return x;
@@ -91,7 +92,7 @@ namespace BusinessLogic.Services
             await completionSource.Task;
         }
 
-        private void SaveChanges(List<FoodDTO> food, TaskCompletionSource<Unit> completionSource)
+        private void SaveChanges(List<SupplierDto> food, TaskCompletionSource<Unit> completionSource)
         {
             Dictionary<DishKey, DishItem> dishItems = food.SelectMany(x => x.Categories.SelectMany(c =>
                 c.Dishes.Select(d =>
@@ -122,14 +123,14 @@ namespace BusinessLogic.Services
                 dishItem.AvailableOn = item.AvailableOn;
                 _repo.Update(dishItem);
             }
-
-            foreach (var item in dishItems.Values.Except(allDishes, new DishKeyComparer()))
-            {
-                _repo.Insert(item);
-            }
-
-            _repo.Save();
-            completionSource.SetResult(Unit.Default);
+//
+//            foreach (var item in dishItems.Values.Except(allDishes, new DishKeyComparer()))
+//            {
+//                _repo.Insert(item);
+//            }
+//
+//            _repo.Save();
+//            completionSource.SetResult(Unit.Default);
         }
 
         private class DishKeyComparer : IEqualityComparer<DishItem>
