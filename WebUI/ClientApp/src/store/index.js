@@ -1,20 +1,21 @@
-import { observable, computed, action, decorate } from "mobx";
+import { computed, decorate } from "mobx";
 
 class RootStore {
-	constuctor() {
-
+	constuctor(isAutenticated) {
+		this._isAutenticated = isAutenticated;
 	}
 
 	user = null;
 
 	get isAuthenticated() {
-		return this.user !== null;
+		return this._isAutenticated;
 	}
 }
 
 decorate(RootStore, {
-	user: observable,
 	isAuthenticated: computed,
 });
 
-export default new RootStore();
+export function createStore(isAutenticated) {
+	return new RootStore(isAutenticated);
+}
