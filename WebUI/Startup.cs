@@ -28,6 +28,8 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using SpreadsheetIntegration.Google;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 
 namespace WebUI
 {
@@ -126,6 +128,11 @@ namespace WebUI
         {
             if (env.IsDevelopment())
             {
+				app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+				{
+					ProjectPath = Path.Combine(Directory.GetCurrentDirectory(), "ClientApp"),
+					HotModuleReplacement = true
+				});
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -151,16 +158,6 @@ namespace WebUI
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-
-//            app.UseSpa(spa =>
-//			{
-//				spa.Options.SourcePath = "ClientApp";
-//
-//				if (env.IsDevelopment())
-//				{
-//					spa.UseReactDevelopmentServer(npmScript: "start");
-//				}
-//			});
         }
     }
 }

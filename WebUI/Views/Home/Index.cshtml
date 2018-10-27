@@ -4,9 +4,18 @@
 
 <div class="row">
     <div class="col-md-12">
-        <div id="root">Hellooo</div>
-        <!---->
-        <!--<h2>Welcome to the Auth0 ASP.NET Core MVC Starter Project</h2>-->
-        <!--<p>To follow along in building this sample please <a href="https://auth0.com/docs/quickstart/webapp/aspnet-core">refer to the Quickstart</a>.-->
+        <div id="root"></div>
     </div>
+
+
 </div>
+
+@section scripts
+{
+    <environment names="Development">
+        <script src="~/dist/home.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/dist/home.js" asp-append-version="true"></script>
+    </environment>
+}
