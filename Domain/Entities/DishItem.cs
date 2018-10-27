@@ -12,7 +12,7 @@ namespace Domain.Entities
         [Column(TypeName="Money")]
         public decimal Price { get; set; }
         public DateTime AvailableUntil { get; set; }
-        public ICollection<DishItemToWeekDay> AvailableOn { get; set; }
+        public virtual ICollection<DishItemToWeekDay> AvailableOn { get; set; }
         public int PositiveReviews { get; set; }
         public int NegativeReviews { get; set; }
         
