@@ -4,14 +4,15 @@
 	"main": "src/index.js",
 	"license": "MIT",
 	"scripts": {
-		"start": "react-scripts start ",
-		"build": "react-scripts build",
-		"test": "react-scripts test"
+		"start": "yarn && react-scripts start ",
+		"build": "yarn && react-scripts build",
+		"test": "yarn && react-scripts test"
 	},
 	"dependencies": {
 		"axios": "^0.18.0",
 		"bootstrap": "^4.1.3",
 		"classnames": "^2.2.6",
+		"js-cookie": "^2.2.0",
 		"mobx": "4.5.2",
 		"mobx-react": "^5.3.6",
 		"react": "^16.6.0",
