@@ -1,15 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTOs;
-using Domain;
+using Core;
 using Domain.Entities;
 using Domain.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Swashbuckle.AspNetCore.Swagger;
 using WebUI.Infrastructure;
 
@@ -20,10 +24,17 @@ namespace WebUI.Controllers
     public class OrderApiController : Controller
     {
         private readonly IRepository _repo;
+        private readonly IConfiguration _configuration;
+        private int _glagolPrice;
+        private int _cafePrice;
 
-        public OrderApiController(IRepository repo)
+        public OrderApiController(IRepository repo, IConfiguration configuration)
         {
             _repo = repo;
+            _configuration = configuration;
+
+            int.TryParse(_configuration["OrderPrice:Glagol"], out _glagolPrice);
+            int.TryParse(_configuration["OrderPrice:Cafe"], out _cafePrice);
         }
 
         [HttpGet]
@@ -37,7 +48,7 @@ namespace WebUI.Controllers
                 .Include(x => x.AvailableOn)
                 .Include(x => x.Supplier)
                 .Include(x => x.Category)
-                .Where(x => x.AvailableUntil >= now);             
+                .Where(x => x.AvailableUntil >= now);
 
             List<(string dayName, DishItem dish)> dayNameDishPairs = new List<(string, DishItem)>();
             foreach (var dish in availableDishes)
@@ -75,7 +86,9 @@ namespace WebUI.Controllers
                                 {
                                     Id = f.Id,
                                     Name = f.Name,
-                                    Price = f.Price
+                                    Price = f.Price,
+                                    NegativeRewievs = f.NegativeReviews,
+                                    PositiveRewievs = f.PositiveReviews
                                 }).ToArray()
                             }).ToArray()
                         };
@@ -89,14 +102,21 @@ namespace WebUI.Controllers
         [HttpPost]
         [Authorize]
         [Route("post-order")]
-        public async Task<ActionResult> PostOrder([FromBody] SupplierDto supplierDto)
+        public async Task<ActionResult> PostOrder([FromBody] int[] dishesIds)
         {
             var userId = User.GetUserId().Value;
-            DishDto[] orderedItemsDtos = supplierDto.Categories.SelectMany(x => x.Dishes).ToArray();
-            HashSet<int> orderedItemsIds = new HashSet<int>(orderedItemsDtos.Select(x => x.Id));
+            var orderedItemsIds = new HashSet<int>(dishesIds);
+                        
             IQueryable<DishItem> orderedDishItems = _repo.All<DishItem>().Where(x => orderedItemsIds.Contains(x.Id));
+            
 
             decimal orderPrice = orderedDishItems.Select(x => x.Price).Sum();
+            int? supplierId = orderedDishItems.Select(x => x.Supplier.Id).FirstOrDefault();
+            if (supplierId.HasValue)
+            {
+                int maxPrice = GetMaxSumForSupplier(supplierId.Value);
+                orderPrice = Math.Max(maxPrice, orderPrice);
+            }
             User user = _repo.GetById<User>(userId);
             var order = new Order
             {
@@ -114,7 +134,6 @@ namespace WebUI.Controllers
             return new OkResult();
         }
 
-
         [HttpGet]
         [Route("get-today-order")]
         public ActionResult<WeekMenuDto> GetTodayOrder()
@@ -125,8 +144,32 @@ namespace WebUI.Controllers
             var orders = !User.IsAuthenticated() 
                 ? query.Where(x => x.Date.Date == DateTime.Today.Date).ToArray() 
                 : query.Where(x => x.UserId == User.GetUserId().Value && x.Date.Date == DateTime.Today.Date).ToArray();
-
             return new WeekMenuDto {WeekDays = orders.Select(ToWeekDayDto).ToArray()};
+        }
+
+        [HttpPut]
+        [Route("increment-rating")]
+        [Authorize]
+        public async Task<ActionResult> IncrementRating(int dishItemId)
+        {
+            var dishItem = _repo.GetById<DishItem>(dishItemId);
+            dishItem.PositiveReviews++;
+            _repo.Update(dishItem);
+            await _repo.SaveAsync();
+            return new OkResult();
+        }
+
+
+        [HttpPut]
+        [Route("decrement-rating")]
+        [Authorize]
+        public async Task<ActionResult> DecrementRating(int dishItemId)
+        {
+            var dishItem = _repo.GetById<DishItem>(dishItemId);
+            dishItem.NegativeReviews++;
+            _repo.Update(dishItem);
+            await _repo.SaveAsync();
+            return new OkResult();
         }
 
         private WeekDayDto ToWeekDayDto(Order order)
@@ -146,11 +189,28 @@ namespace WebUI.Controllers
                         Dishes = c.Select(d => new DishDto
                         {
                             Id = d.DishItemId,
-                            Name = d.DishItem.Name
+                            Name = d.DishItem.Name,
+                            NegativeRewievs = d.DishItem.NegativeReviews,
+                            PositiveRewievs = d.DishItem.PositiveReviews
                         }).ToArray()
                     }).ToArray()
                 }).ToArray()
             };
+        }
+        
+        private int GetMaxSumForSupplier(int supplierIdValue)
+        {
+            switch (supplierIdValue)
+            {
+                case (int) FoodSupplier.Cafe: {
+                    return _cafePrice;
+                }
+                case (int) FoodSupplier.Glagol: {
+                    return _glagolPrice;
+                }
+                default:
+                    throw new KeyNotFoundException("FoodSupplier should be correlated with OrderPrice configuration in appSettings.json");
+            }
         }
     }
 }

@@ -347,3 +347,4 @@ ASALocalRun/
 /WebUI/ClientApp/yarn-debug.log*
 /WebUI/ClientApp/yarn-error.log*
 /WebUI/ClientApp/npm-debug.log
+/WebUI/wwwroot/
