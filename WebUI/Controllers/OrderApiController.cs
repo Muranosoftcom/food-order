@@ -5,11 +5,13 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTOs;
-using Domain;
+using Core;
 using Domain.Entities;
 using Domain.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Swashbuckle.AspNetCore.Swagger;
@@ -106,8 +108,15 @@ namespace WebUI.Controllers
             DishDto[] orderedItemsDtos = supplierDto.Categories.SelectMany(x => x.Dishes).ToArray();
             HashSet<int> orderedItemsIds = new HashSet<int>(orderedItemsDtos.Select(x => x.Id));
             IQueryable<DishItem> orderedDishItems = _repo.All<DishItem>().Where(x => orderedItemsIds.Contains(x.Id));
+            
 
             decimal orderPrice = orderedDishItems.Select(x => x.Price).Sum();
+            int? supplierId = orderedDishItems.Select(x => x.Supplier.Id).FirstOrDefault();
+            if (supplierId.HasValue)
+            {
+                int maxPrice = GetMaxSumForSupplier(supplierId.Value);
+                orderPrice = Math.Max(maxPrice, orderPrice);
+            }
             User user = _repo.GetById<User>(userId);
             var order = new Order
             {
@@ -124,7 +133,6 @@ namespace WebUI.Controllers
             _repo.Save();
             return new OkResult();
         }
-
 
         [HttpGet]
         [Route("get-today-order")]
@@ -188,6 +196,21 @@ namespace WebUI.Controllers
                     }).ToArray()
                 }).ToArray()
             };
+        }
+        
+        private int GetMaxSumForSupplier(int supplierIdValue)
+        {
+            switch (supplierIdValue)
+            {
+                case (int) FoodSupplier.Cafe: {
+                    return _cafePrice;
+                }
+                case (int) FoodSupplier.Glagol: {
+                    return _glagolPrice;
+                }
+                default:
+                    throw new KeyNotFoundException("FoodSupplier should be correlated with OrderPrice configuration in appSettings.json");
+            }
         }
     }
 }
