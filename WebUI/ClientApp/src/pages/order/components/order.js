@@ -26,9 +26,6 @@ export default class OrderPage extends React.Component {
 
 		try {
 			const data = await this.props.onLoadData();
-			console.log(data);
-			console.log(data.weekDays);
-
 			const [weekDay] = data.weekDays;
 
 			this.setState({

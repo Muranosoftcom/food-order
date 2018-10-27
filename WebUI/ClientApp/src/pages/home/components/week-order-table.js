@@ -6,14 +6,16 @@ class WeekOrderTable extends React.Component {
 	renderSupplier(supplier) {
 		return (
 			<Fragment>
-				<div key={supplier.supplierId}>
+				<div className="week-order-table__supplier-name" key={supplier.supplierId}>
 					<strong>{supplier.supplierName}</strong>
 				</div>
 				{supplier.categories.map(category => (
 					<Fragment>
-						<div key={category.id}>{category.name}</div>
+						<div className="week-order-table__category-name" key={category.id}>
+							{category.name}
+						</div>
 						{category.dishes.map(dish => (
-							<div key={dish.id}>
+							<div className="week-order-table__dish-view" key={dish.id}>
 								<span>{dish.name}</span>
 								<span>{dish.price}</span>
 							</div>
@@ -39,13 +41,13 @@ class WeekOrderTable extends React.Component {
 					{!weekDaysOrders || !weekDaysOrders.length
 						? null
 						: weekDaysOrders.map(weekDaysOrder => (
-								<tr key={weekDaysOrder.userName}>
+								<tr key={weekDaysOrder.userName + weekDaysOrder.weekDay}>
 									<td>{weekDaysOrder.userName}</td>
 									<td>
-										<ul>
+										<div>
 											{weekDaysOrder.suppliers &&
 												weekDaysOrder.suppliers.map(supplier => this.renderSupplier(supplier))}
-										</ul>
+										</div>
 									</td>
 								</tr>
 						  ))}
