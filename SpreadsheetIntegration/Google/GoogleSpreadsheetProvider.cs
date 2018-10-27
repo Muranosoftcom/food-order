@@ -7,7 +7,7 @@ using Google.Apis.Sheets.v4.Data;
 using SpreadsheetIntegration.Core;
 
 namespace SpreadsheetIntegration.Google {
-	public class GoogleSpreadsheetProvider : IGoogleSpreadsheetProvider {
+	public class GoogleSpreadsheetProvider : IAsyncSpreadsheetProvider {
 		private readonly SheetsService _clientService;
 
 		public GoogleSpreadsheetProvider() {

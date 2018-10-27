@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BusinessLogic.DTOs;
-using Domain;
 using Domain.Entities;
 using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;

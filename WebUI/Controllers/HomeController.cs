@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Security.Claims;
-using BusinessLogic.DTOs;
-using Domain.Entities;
-using Domain.Repositories;
+﻿using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Controllers
