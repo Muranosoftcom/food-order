@@ -93,7 +93,7 @@ namespace BusinessLogic.Services
             await completionSource.Task;
         }
 
-        private void SaveChanges(List<SupplierDto> food, TaskCompletionSource<Unit> completionSource)
+        private async Task SaveChanges(List<SupplierDto> food, TaskCompletionSource<Unit> completionSource)
         {
             var categories = _repo.All<DishCategory>().ToList();
             categories.AddRange(food.SelectMany(x => x.Categories.Select(c => new DishCategory {Name = c.Name})));
