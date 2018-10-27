@@ -17,7 +17,6 @@ namespace WebUI.Controllers
 {
     [Route("api/order")]
     [ApiController]
-    [Authorize]
     public class OrderApiController : Controller
     {
         private IRepository _repo;
@@ -26,111 +25,25 @@ namespace WebUI.Controllers
         {
             _repo = repo;
         }
-//
-//        [HttpGet]
-//        [Route("get-day-menu")]
-//        public ActionResult GetDayMenu (DateTime date) {
-//            var now = DateTime.UtcNow;
-//
-//            var order = _repo.All<Order>().SingleOrDefault(x => x.Date == date);
-//            var items = _repo.All<OrderItem>().Where(x => x.OrderKey == order.Id).ToArray();
-//
-//            List<(string dayName, DishItem dish)> dayNameDishPairs = new List<(string, DishItem)>();
-//            foreach (var dish in order.OrderItems) {
-//                var dayNames = dish.AvailableOn.Select(x => x.WeekDay.Name).ToArray();
-//                foreach (var dayName in dayNames) {
-//                    dayNameDishPairs.Add((dayName: dayName, dish: dish));
-//                }
-//            }
-//
-//            var dishesByDayName = dayNameDishPairs.ToLookup(x => x.dayName, x => x.dish);
-//
-//            var dto = new WeekMenuDto {
-//                WeekDays = dishesByDayName.Select(x => new WeekDayDto {
-//                    WeekDay = x.Key,
-//                    Suppliers = x.GroupBy(d => (id: d.Supplier.Id, name: d.Supplier.Name)).Select(d => {
-//                        var dishItemByPair =
-//                            d.ToDictionary(di => (categoryId: di.Category.Id, categoryName: di.Category.Name),
-//                                di => di);
-//                        return new SupplierDto {
-//                            SupplierId = d.Key.id,
-//                            SupplierName = d.Key.name,
-//                            Categories = d.Select(dishSupplierPair => new CategoryDto {
-//                                Id = dishSupplierPair.Category.Id,
-//                                Name = dishSupplierPair.Category.Name,
-//                                Dishes = dishItemByPair.Select(y => new DishDto {
-//                                    Id = y.Value.Id,
-//                                    Name = y.Value.Name,
-//                                    Price = y.Value.Price
-//                                }).ToArray()
-//                            }).ToArray()
-//                        };
-//                    }).ToArray()
-//                }).ToArray()
-//            };
-//
-//            return new JsonResult(dto);
-//        }
-
-//        [HttpGet]
-//        [Route("get-day-menu")]
-//        public ActionResult GetDayMenu (DateTime date) {
-//            var now = DateTime.UtcNow;
-//
-//            var order = _repo.All<Order>().SingleOrDefault(x => x.Date == date);
-//                          var items = _repo.All<OrderItem>().Where(x => x.OrderKey == order.Id).ToArray();
-//              
-//                          List<(string dayName, DishItem dish)> dayNameDishPairs = new List<(string, DishItem)>();
-//                          foreach (var dish in order) {
-//                              var dayNames = dish.AvailableOn.Select(x => x.WeekDay.Name).ToArray();
-//                              foreach (var dayName in dayNames) {
-//                                  dayNameDishPairs.Add((dayName: dayName, dish: dish));
-//                              }
-//                          }
-//              
-//                          var dishesByDayName = dayNameDishPairs.ToLookup(x => x.dayName, x => x.dish);
-//              
-//                          var dto = new WeekMenuDto {
-//                              WeekDays = dishesByDayName.Select(x => new WeekDayDto {
-//                                  WeekDay = x.Key,
-//                                  Suppliers = x.GroupBy(d => (id: d.Supplier.Id, name: d.Supplier.Name)).Select(d => {
-//                                      var dishItemByPair =
-//                                          d.ToDictionary(di => (categoryId: di.Category.Id, categoryName: di.Category.Name),
-//                                              di => di);
-//                                      return new SupplierDto {
-//                                          SupplierId = d.Key.id,
-//                                          SupplierName = d.Key.name,
-//                                          Categories = d.Select(dishSupplierPair => new CategoryDto {
-//                                              Id = dishSupplierPair.Category.Id,
-//                                              Name = dishSupplierPair.Category.Name,
-//                                              Dishes = dishItemByPair.Select(y => new DishDto {
-//                                                  Id = y.Value.Id,
-//                                                  Name = y.Value.Name,
-//                                                  Price = y.Value.Price
-//                                              }).ToArray()
-//                                          }).ToArray()
-//                                      };
-//                                  }).ToArray()
-//                              }).ToArray()
-//                          };
-//
-//            return new JsonResult(dto);
-//        }
 
         [HttpGet]
+        [Authorize]
         [Route("get-week-menu")]
         public ActionResult<WeekMenuDto> GetWeekMenu()
         {
             var now = DateTime.UtcNow;
 
-            var availableDishes = _repo.All<DishItem>().Include(x => x.AvailableOn)
-//                .Where(x => x.AvailableUntil >= now)
-                .ToArray();
+            var availableDishes = _repo.All<DishItem>()
+                .Include(x => x.AvailableOn)
+                .Include(x => x.Supplier)
+                .Include(x => x.Category)
+                .Where(x => x.AvailableUntil >= now);             
 
             List<(string dayName, DishItem dish)> dayNameDishPairs = new List<(string, DishItem)>();
             foreach (var dish in availableDishes)
             {
-                var dayNames = dish.AvailableOn.Select(x => x.WeekDay.Name).ToArray();
+                var dayIds = new HashSet<int>(dish.AvailableOn.Select(x => x.WeekDayId));
+                var dayNames = _repo.All<WeekDay>().Where(x => dayIds.Contains(x.Id)).Select(x => x.Name);
                 foreach (var dayName in dayNames)
                 {
                     dayNameDishPairs.Add((dayName: dayName, dish: dish));
@@ -146,22 +59,23 @@ namespace WebUI.Controllers
                     WeekDay = x.Key,
                     Suppliers = x.GroupBy(d => (id: d.Supplier.Id, name: d.Supplier.Name)).Select(d =>
                     {
-                        var dishItemByPair =
-                            d.ToDictionary(di => (categoryId: di.Category.Id, categoryName: di.Category.Name),
-                                di => di);
+                        var dishItemByPairPairs =
+                            d.Select(di => (key: (categoryId: di.Category.Id, categoryName: di.Category.Name),
+                                value: di));
+                        var dishItemByPair = dishItemByPairPairs.ToLookup(y => y.key, y => y.value);
                         return new SupplierDto
                         {
                             SupplierId = d.Key.id,
                             SupplierName = d.Key.name,
-                            Categories = d.Select(dishSupplierPair => new CategoryDto
+                            Categories = dishItemByPair.Select(z => new CategoryDto
                             {
-                                Id = dishSupplierPair.Category.Id,
-                                Name = dishSupplierPair.Category.Name,
-                                Dishes = dishItemByPair.Select(y => new DishDto
+                                Id = z.Key.categoryId,
+                                Name = z.Key.categoryName,
+                                Dishes = z.Select(f => new DishDto
                                 {
-                                    Id = y.Value.Id,
-                                    Name = y.Value.Name,
-                                    Price = y.Value.Price
+                                    Id = f.Id,
+                                    Name = f.Name,
+                                    Price = f.Price
                                 }).ToArray()
                             }).ToArray()
                         };
@@ -173,6 +87,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("post-order")]
         public async Task<ActionResult> PostOrder([FromBody] SupplierDto supplierDto)
         {
@@ -201,8 +116,8 @@ namespace WebUI.Controllers
 
 
         [HttpGet]
-        [Route("get-week-order")]
-        public ActionResult<WeekMenuDto> GetWeekOrder()
+        [Route("get-today-order")]
+        public ActionResult<WeekMenuDto> GetTodayOrder()
         {
             Order[] orders;
             if (!HttpContext.User?.Identity.IsAuthenticated ?? false)
@@ -240,30 +155,5 @@ namespace WebUI.Controllers
                 }).ToArray()
             };
         }
-
-//        [HttpGet("{id}", Name = "GetTodo")]
-//        public ActionResult<TodoItem> GetById(long id)
-//        {
-//            var item = _context.TodoItems.Find(id);
-//            if (item == null)
-//            {
-//                return NotFound();
-//            }
-//
-//            return item;
-//        }
-
-
-        //        [HttpGet("{id}", Name = "GetTodo")]
-        //        public ActionResult<TodoItem> GetById(long id)
-        //        {
-        //            var item = _context.TodoItems.Find(id);
-        //            if (item == null)
-        //            {
-        //                return NotFound();
-        //            }
-        //
-        //            return item;
-        //        }
     }
 }
