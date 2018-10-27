@@ -2,7 +2,7 @@ namespace Core
 {
     public enum FoodSupplier
     {
-        Glagol = 1,
-        Cafe = 2
+        Cafe = 1,
+        Glagol = 2
     }
 }
