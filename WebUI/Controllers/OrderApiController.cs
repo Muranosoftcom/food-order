@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
+using WebUI.Infrastructure;
 
 namespace WebUI.Controllers
 {
@@ -175,7 +176,7 @@ namespace WebUI.Controllers
         [Route("post-order")]
         public async Task<ActionResult> PostOrder([FromBody] SupplierDto supplierDto)
         {
-            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+            var userId = User.GetUserId().Value;
             DishDto[] orderedItemsDtos = supplierDto.Categories.SelectMany(x => x.Dishes).ToArray();
             HashSet<int> orderedItemsIds = new HashSet<int>(orderedItemsDtos.Select(x => x.Id));
             IQueryable<DishItem> orderedDishItems = _repo.All<DishItem>().Where(x => orderedItemsIds.Contains(x.Id));
@@ -210,8 +211,7 @@ namespace WebUI.Controllers
             }
             else
             {
-                var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
-                orders = _repo.All<Order>().Where(x => x.UserId == userId && x.Date == DateTime.Today).ToArray();
+                orders = _repo.All<Order>().Where(x => x.UserId == User.GetUserId().Value && x.Date == DateTime.Today).ToArray();
             }
 
             return new WeekMenuDto {WeekDays = orders.Select(ToWeekDayDto).ToArray()};
