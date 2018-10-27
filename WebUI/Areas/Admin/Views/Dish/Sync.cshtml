@@ -16,9 +16,12 @@
         <dd>
             @Html.DisplayFor(model => model.SyncResult)
         </dd>
-    </dl>
+    </dl>   
     
     <form asp-action="Create" method="post">
         <input type="submit" value="Синхронизировать" class="btn btn-default" />
+    </form>
+    <form asp-action="SendNotification" method="post">
+        <input type="submit" value="Отправить нотификацию" class="btn btn-default" />
     </form>
 </div>
