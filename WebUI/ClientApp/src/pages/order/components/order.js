@@ -2,6 +2,15 @@ import React from "react";
 import { Button, Col, Container, Row } from "reactstrap";
 import DishView from "./dish-view";
 
+function trancformDays(day) {
+	if (day === "Mon") {
+		return "Понедельник";
+	}
+	if (day === "Tue") {
+		return "Вторник";
+	}
+}
+
 export default class OrderPage extends React.Component {
 	state = {
 		loading: false,
@@ -49,7 +58,7 @@ export default class OrderPage extends React.Component {
 		const { selectedDishes } = this.state;
 
 		return dishes && dishes.length ? (
-			<ul className="dish">
+			<div className="dish">
 				{dishes.map(dish => (
 					<DishView
 						key={dish.id}
@@ -58,7 +67,7 @@ export default class OrderPage extends React.Component {
 						onSelect={this.handleToggle}
 					/>
 				))}
-			</ul>
+			</div>
 		) : null;
 	}
 
@@ -69,40 +78,42 @@ export default class OrderPage extends React.Component {
 			<Container>
 				<Row>
 					<Col>
-						<h1>
-							Заказ еды на <span>{weekDay.name}</span>
+						<h1 className="order-page__title">
+							Заказ еды на <span>{trancformDays(weekDay.weekDay)}</span>
 						</h1>
 					</Col>
 				</Row>
-				{weekDay.suppliers &&
-					weekDay.suppliers.map(supplier => (
-						<Row key={supplier.supplierId}>
-							<Col sm={4} md={8}>
-								<section className="provider">
-									<div className="provider__title">{supplier.supplierName}</div>
-									{supplier.categories.map(category => (
-										<div key={category.id} className="meal-category">
-											<div className="meal-category__title">{category.name}</div>
-											{this.renderDishes(category.dishes)}
-										</div>
-									))}
-								</section>
-							</Col>
-							<Col sm={4} md={4}>
-								<div className="price-container">
-									<div className="price-container__title">Доступная сумма</div>
-									<div className="price-container__title">
-										<span>51</span>
-										<span>грн</span>
-									</div>
+				<Row>
+					<Col md={8}>
+						{weekDay.suppliers &&
+							weekDay.suppliers.map(supplier => (
+								<div key={supplier.supplierId}>
+									<section className="provider">
+										<div className="provider__title">{supplier.supplierName}</div>
+										{supplier.categories.map(category => (
+											<div key={category.id} className="meal-category">
+												<div className="meal-category__title">{category.name}</div>
+												{this.renderDishes(category.dishes)}
+											</div>
+										))}
+									</section>
 								</div>
-								<div className="basket">
-									{this.renderDishes(this.state.selectedDishes)}
-									<Button color="primary">Заказать</Button>
-								</div>
-							</Col>
-						</Row>
-					))}
+							))}
+					</Col>
+					<Col sm={4} md={4} className="basket">
+						<div className="price-container">
+							<div className="price-container__title">Доступная сумма</div>
+							<div className="price-container__title">
+								<span>51</span>
+								<span>грн</span>
+							</div>
+						</div>
+						<div className="basket__list">
+							{this.renderDishes(this.state.selectedDishes)}
+							<Button color="primary">Заказать</Button>
+						</div>
+					</Col>
+				</Row>
 			</Container>
 		) : null;
 	}
