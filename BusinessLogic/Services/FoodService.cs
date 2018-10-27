@@ -12,6 +12,7 @@ using Core;
 using Domain;
 using Domain.Entities;
 using Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 using SpreadsheetIntegration;
 using SpreadsheetIntegration.Core;
 
@@ -37,7 +38,7 @@ namespace BusinessLogic.Services
 
             IObservable<ValuesRange> kafeFood = _spreadsheetProvider.GetAsync(
                 "1sbbFJqa-X4KW91EmPyO9NTbP8bbuwg3szCSC3FTeR2c",
-                new SpreadsheetGetRequest("Menu", "A1:E100"), CancellationToken.None).ToObservable();
+                new SpreadsheetGetRequest("Menu", "A2:E100"), CancellationToken.None).ToObservable();
 
             var glagolFoodDto = glagolFood.Select(x => ParsingRegistry.GetParser(FoodProvider.Glagol).ExtractFood(x))
                 .Select(x =>
@@ -87,12 +88,14 @@ namespace BusinessLogic.Services
             {
                 x.Add(y);
                 return x;
-            }).Subscribe(x => SaveChanges(x, completionSource));
+            }).Subscribe(async x => await SaveChanges(x, completionSource));
             await completionSource.Task;
         }
 
-        private void SaveChanges(List<FoodDTO> food, TaskCompletionSource<Unit> completionSource)
+        private async Task SaveChanges(List<FoodDTO> food, TaskCompletionSource<Unit> completionSource)
         {
+            var categories = _repo.All<DishCategory>().ToList();
+            categories.AddRange(food.SelectMany(x => x.Categories.Select(c => new DishCategory {Name = c.Name})));
             Dictionary<DishKey, DishItem> dishItems = food.SelectMany(x => x.Categories.SelectMany(c =>
                 c.Dishes.Select(d =>
                     new DishItem
@@ -105,30 +108,33 @@ namespace BusinessLogic.Services
                             WeekDayId = (int) g
                         }).ToList(),
                         SupplierKey = x.SupplierId,
-                        Category = new DishCategory
-                        {
-                            Name = c.Name
-                        }
+                        Category = categories.FirstOrDefault(dc => dc.Name == c.Name) ?? new DishCategory { Name = c.Name }
                     }))).ToDictionary(x => new DishKey(x.Name, x.SupplierKey));
 
-            DishItem[] allDishes = _repo.All<DishItem>().ToArray();
+            DishItem[] allDishes = _repo.All<DishItem>().Include(x => x.AvailableOn).ToArray();
             DishItem[] existingItems = allDishes.Intersect(dishItems.Values, new DishKeyComparer()).ToArray();
 
             foreach (var dishItem in existingItems)
             {
                 var item = dishItems[new DishKey(dishItem.Name, dishItem.SupplierKey)];
                 dishItem.Price = item.Price;
+                dishItem.Category = item.Category;
                 dishItem.AvailableUntil = DateTime.Today;
                 dishItem.AvailableOn = item.AvailableOn;
                 _repo.Update(dishItem);
             }
 
-            foreach (var item in dishItems.Values.Except(allDishes, new DishKeyComparer()))
+            await _repo.InsertAsync(dishItems.Values.Except(allDishes, new DishKeyComparer()));
+            try
             {
-                _repo.Insert(item);
+                _repo.Save();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
 
-            _repo.Save();
             completionSource.SetResult(Unit.Default);
         }
 
