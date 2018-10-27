@@ -46,12 +46,12 @@ namespace BusinessLogic.Services
                 "1sbbFJqa-X4KW91EmPyO9NTbP8bbuwg3szCSC3FTeR2c",
                 new SpreadsheetGetRequest("Menu", "A2:E100"), CancellationToken.None).ToObservable();
 
-            var glagolFoodDto = glagolFood.Select(x => ParsingRegistry.GetParser(FoodProvider.Glagol).ExtractFood(x))
+            var glagolFoodDto = glagolFood.Select(x => ParsingRegistry.GetParser(FoodSupplier.Glagol).ExtractFood(x))
                 .Select(x =>
                 {
                     var food = new SupplierDto
                     {
-                        SupplierId = (int) FoodProvider.Glagol,
+                        SupplierId = (int) FoodSupplier.Glagol,
                         SupplierName = "ГлаголЪ",
                         Categories = x.GroupBy(g => g.Category).Select(c => new CategoryDto
                         {
@@ -68,12 +68,12 @@ namespace BusinessLogic.Services
                     return food;
                 });
 
-            var kafeFoodDto = kafeFood.Select(x => ParsingRegistry.GetParser(FoodProvider.Kafe).ExtractFood(x)).Select(
+            var kafeFoodDto = kafeFood.Select(x => ParsingRegistry.GetParser(FoodSupplier.Cafe).ExtractFood(x)).Select(
                 x =>
                 {
                     var food = new SupplierDto
                     {
-                        SupplierId = (int) FoodProvider.Kafe,
+                        SupplierId = (int) FoodSupplier.Cafe,
                         SupplierName = "Столовая",
                         Categories = x.GroupBy(g => g.Category).Select(c => new CategoryDto
                         {
