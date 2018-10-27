@@ -3,13 +3,8 @@ import ReactDOM from "react-dom";
 
 import "./index.scss";
 import App from "./components/app";
+import { getWeekOrder } from "./web-api";
 
 const rootElement = document.getElementById("root");
 
-function load() {
-	return new Promise(resolve => {
-		setTimeout(resolve, 1000);
-	});
-}
-
-ReactDOM.render(<App onLoadData={load} />, rootElement);
+ReactDOM.render(<App onLoadData={getWeekOrder} />, rootElement);
