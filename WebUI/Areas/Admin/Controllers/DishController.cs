@@ -12,6 +12,7 @@ using WebUI.Areas.Admin.Models;
 namespace WebUI.Areas.Admin.Controllers
 {
     
+    [Route("admin/dish")]
     public class DishController : BaseController
     {
         private IRepository _repository;
@@ -28,7 +29,7 @@ namespace WebUI.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: Dish/Create
+        [Route("sync")]
         public ActionResult Sync()
         {
             return View();
@@ -37,7 +38,7 @@ namespace WebUI.Areas.Admin.Controllers
 
         // POST: Dish/Create
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [Route("sync")]
         public async Task<ViewResult> Sync(SyncViewModel viewModel)
         {
             try

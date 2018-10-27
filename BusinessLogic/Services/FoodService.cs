@@ -108,7 +108,7 @@ namespace BusinessLogic.Services
                     {
                         Name = d.Name,
                         Price = d.Price,
-                        AvailableUntil = DateTime.Today,
+                        AvailableUntil = DateTime.Today.Next(DayOfWeek.Friday),
                         AvailableOn = d.WeekDay.Select(g => new DishItemToWeekDay
                         {
                             WeekDayId = (int) g

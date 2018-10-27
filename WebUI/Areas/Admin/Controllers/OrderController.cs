@@ -10,6 +10,7 @@ using WebUI.Areas.Admin.Models;
 
 namespace WebUI.Areas.Admin.Controllers
 {
+    [Route("admin/order")]
     public class OrderController : BaseController
     {
         private readonly IRepository _repository;
@@ -32,6 +33,7 @@ namespace WebUI.Areas.Admin.Controllers
             return View();
         }
 
+        [Route("statistic")]
         public IActionResult Statistic()
         {
             var higherPrice = _cafePrice > _glagolPrice ? _cafePrice : _glagolPrice;

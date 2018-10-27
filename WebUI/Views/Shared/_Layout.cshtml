@@ -32,13 +32,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Горячие обеды</a>
+                <a asp-controller="Home" asp-action="Index" class="navbar-brand">Горячие обеды</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li><a asp-controller="Account" asp-action="Profile">Hello @User.Identity.Name!</a></li>
+                        <li>Привет, @User.Identity.Name!</li>
                         @if (User.IsAdmin())
                          {
                              <li><a asp-controller="Admin" asp-action="Home">Админ</a></li>
