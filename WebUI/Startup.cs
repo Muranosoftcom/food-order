@@ -76,8 +76,10 @@ namespace WebUI
                             }
                             
                             var claim = new Claim("userId", user.Id.ToString());
+                            var isAdminClaim = new Claim("isAdmin", user.IsAdmin.ToString());
                             var claimIdentity =  new ClaimsIdentity();
                             claimIdentity.AddClaim(claim);
+                            claimIdentity.AddClaim(isAdminClaim);
                             ctx.Principal.AddIdentity(claimIdentity);
                         } 
                     };

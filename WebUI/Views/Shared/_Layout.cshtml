@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using WebUI.Infrastructure
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -37,6 +39,10 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li><a asp-controller="Account" asp-action="Profile">Hello @User.Identity.Name!</a></li>
+                        @if (User.IsAdmin())
+                         {
+                             <li><a asp-controller="Admin" asp-action="Home">Админ</a></li>
+                         }
                         <li><a asp-controller="Order" asp-action="Index">Мой заказ</a></li>
                         <li><a id="qsLogoutBtn" asp-controller="Account" asp-action="Logout">Выход</a></li>
                     }
