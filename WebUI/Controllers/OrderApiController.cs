@@ -16,7 +16,7 @@ namespace WebUI.Controllers
 {
     [Route("api/order")]
     [ApiController]
-//    [Authorize]
+    [Authorize]
     public class OrderApiController : Controller
     {
         private IRepository _repo;
@@ -122,7 +122,8 @@ namespace WebUI.Controllers
         {
             var now = DateTime.UtcNow;
 
-            var availableDishes = _repo.All<DishItem>().Include(x => x.AvailableOn).Where(x => x.AvailableUntil > now)
+            var availableDishes = _repo.All<DishItem>().Include(x => x.AvailableOn)
+//                .Where(x => x.AvailableUntil >= now)
                 .ToArray();
 
             List<(string dayName, DishItem dish)> dayNameDishPairs = new List<(string, DishItem)>();
@@ -174,9 +175,7 @@ namespace WebUI.Controllers
         [Route("post-order")]
         public async Task<ActionResult> PostOrder([FromBody] SupplierDto supplierDto)
         {
-//            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
-
-            var userId = 7;
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
             DishDto[] orderedItemsDtos = supplierDto.Categories.SelectMany(x => x.Dishes).ToArray();
             HashSet<int> orderedItemsIds = new HashSet<int>(orderedItemsDtos.Select(x => x.Id));
             IQueryable<DishItem> orderedDishItems = _repo.All<DishItem>().Where(x => orderedItemsIds.Contains(x.Id));
