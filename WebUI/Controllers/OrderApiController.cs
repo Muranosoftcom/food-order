@@ -90,7 +90,7 @@ namespace WebUI.Controllers
                                 }).ToArray()
                             }).ToArray()
                         };
-                    }).ToArray()
+                    }).OrderBy(t => t.SupplierId).ToArray()
                 }).ToArray()
             };
 
@@ -186,7 +186,7 @@ namespace WebUI.Controllers
                             PositiveRewievs = d.DishItem.PositiveReviews
                         }).ToArray()
                     }).ToArray()
-                }).ToArray()
+                }).OrderBy(x => x.SupplierId).ToArray()
             };
         }
     }
