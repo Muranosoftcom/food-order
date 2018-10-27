@@ -125,7 +125,7 @@ namespace BusinessLogic.Services
                 var item = dishItems[new DishKey(dishItem.Name, dishItem.SupplierKey)];
                 dishItem.Price = item.Price;
                 dishItem.Category = item.Category;
-                dishItem.AvailableUntil = DateTime.Today;
+                dishItem.AvailableUntil = DateTime.Today.Next(DayOfWeek.Friday);
                 dishItem.AvailableOn = item.AvailableOn;
                 _repo.Update(dishItem);
             }
