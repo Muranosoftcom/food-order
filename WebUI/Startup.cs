@@ -71,7 +71,7 @@ namespace WebUI
                             if (user == null)
                             {
                                 user = new User { Email = email, FirstName = userName };
-                                db.Users.AddAsync(user);
+                                await db.Users.AddAsync(user);
                                 db.SaveChanges();
                             }
                             
