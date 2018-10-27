@@ -4,6 +4,5 @@ namespace WebUI.Controllers
 {
     public class OrderController: Controller
     {
-        
     }
 }

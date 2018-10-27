@@ -70,7 +70,7 @@ module.exports = (env = {}, argv = {}) => {
 						loader: "babel-loader",
 						options: {
 							presets: ["@babel/preset-env"],
-							plugins: ["@babel/plugin-transform-runtime"],
+							plugins: ["@babel/plugin-transform-runtime", "@babel/plugin-proposal-class-properties"],
 						},
 					},
 				},
