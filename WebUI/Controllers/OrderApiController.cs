@@ -170,11 +170,11 @@ namespace WebUI.Controllers
             {
                 WeekDay = order.Date.DayOfWeek.ToString(),
                 UserName = $"{order.User?.FirstName} {order.User?.LastName}",
-                Suppliers = order.OrderItems.Select(x => new SupplierDto
+                Suppliers = order.OrderItems.GroupBy(x => (x.DishItem.Supplier.Id, x.DishItem.Supplier.Name)).Select(x => new SupplierDto
                 {
-                    SupplierId = x.DishItem.Supplier.Id,
-                    SupplierName = x.DishItem.Supplier.Name,
-                    Categories = order.OrderItems.GroupBy(oi => oi.DishItem.Category).Select(c => new CategoryDto
+                    SupplierId = x.Key.Id,
+                    SupplierName = x.Key.Name,
+                    Categories = x.GroupBy(oi => (oi.DishItem.Category.Id, oi.DishItem.Category.Name)).Select(c => new CategoryDto
                     {
                         Id = c.Key.Id,
                         Name = c.Key.Name,
