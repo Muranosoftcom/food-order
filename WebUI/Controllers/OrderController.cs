@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using BusinessLogic.DTOs;
 using Domain;
 using Domain.Entities;
@@ -22,10 +23,10 @@ namespace WebUI.Controllers
             _repo = repo;
         }
 
-        
-        [HttpGet]   
+
+        [HttpGet]
         [Route("get-week-menu")]
-        public ActionResult GetWeekMenu()
+        public ActionResult<WeekMenuDto> GetWeekMenu()
         {
             var now = DateTime.UtcNow;
 
@@ -74,10 +75,23 @@ namespace WebUI.Controllers
                 }).ToArray()
             };
 
-            return new JsonResult(dto);
+            return Json(dto);
         }
-        
-      
+
+//        [HttpPost]
+//        [Route("post-order")]
+//        public ContentResult PostOrder([FromBody] SupplierDto supplierDto)
+//        {
+//            var order = new Order
+//            {
+//                Date = DateTime.Now,
+////                User =
+//                Price = 
+//            }
+//            supplierDto.SupplierId;
+//            _
+//        }
+
 
 //        [HttpGet("{id}", Name = "GetTodo")]
 //        public ActionResult<TodoItem> GetById(long id)
