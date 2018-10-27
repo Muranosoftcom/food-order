@@ -117,7 +117,6 @@ namespace WebUI.Controllers
 //        }
 
         [HttpGet]
-        [HttpGet]
         [Route("get-week-menu")]
         public ActionResult<WeekMenuDto> GetWeekMenu()
         {
@@ -175,7 +174,7 @@ namespace WebUI.Controllers
         [Route("post-order")]
         public async Task<ActionResult> PostOrder([FromBody] SupplierDto supplierDto)
         {
-                var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
 
             DishDto[] orderedItemsDtos = supplierDto.Categories.SelectMany(x => x.Dishes).ToArray();
             HashSet<int> orderedItemsIds = new HashSet<int>(orderedItemsDtos.Select(x => x.Id));
@@ -199,6 +198,43 @@ namespace WebUI.Controllers
             return new OkResult();
         }
 
+        
+        [HttpGet]
+        [Route("get-week-order")]
+        public ActionResult<WeekMenuDto> GetWeekOrder()
+        {
+            Order[] orders;
+            if (!HttpContext.User?.Identity.IsAuthenticated ?? false)
+            {
+                orders = _repo.All<Order>().Where(x => x.Date == DateTime.Today).ToArray();
+            }
+            else
+            {
+                var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+                orders = _repo.All<Order>().Where(x => x.UserId == userId && x.Date == DateTime.Today).ToArray();
+            }
+
+            return new WeekMenuDto {WeekDays = orders.Select(ToWeekDayDto).ToArray()};
+        }
+
+        private WeekDayDto ToWeekDayDto (Order order) {
+            return new WeekDayDto {
+                WeekDay = order.Date.DayOfWeek.ToString(),
+                UserName = $"{order.User.FirstName} {order.User.LastName}",
+                Suppliers = order.OrderItems.Select(x => new SupplierDto {
+                    SupplierId = x.DishItem.Supplier.Id,
+                    SupplierName = x.DishItem.Supplier.Name,
+                    Categories = order.OrderItems.GroupBy(oi => oi.DishItem.Category).Select(c => new CategoryDto {
+                        Id = c.Key.Id,
+                        Name = c.Key.Name,
+                        Dishes = c.Select(d => new DishDto {
+                            Id = d.DishItemId,
+                            Name = d.DishItem.Name
+                        }).ToArray()
+                    }).ToArray()
+                }).ToArray()
+            };
+        }
 
 //        [HttpGet("{id}", Name = "GetTodo")]
 //        public ActionResult<TodoItem> GetById(long id)
