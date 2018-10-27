@@ -121,11 +121,12 @@ namespace WebUI.Controllers
         [Route("get-today-order")]
         public ActionResult<WeekMenuDto> GetTodayOrder()
         {
-            var orders = !User.IsAuthenticated()
-                ? _repo.All<Order>().Where(x => x.Date == DateTime.Today).ToArray()
-                : _repo.All<Order>().Where(x => x.UserId == User.GetUserId().Value && x.Date == DateTime.Today)
-                    .ToArray();
-
+            var query = _repo.All<Order>().Include(x => x.User)
+                .Include(x => x.OrderItems).ThenInclude(x => x.DishItem).ThenInclude(x => x.Category)
+                .Include(x => x.OrderItems).ThenInclude(x => x.DishItem).ThenInclude(x => x.Supplier);
+            var orders = !User.IsAuthenticated() 
+                ? query.Where(x => x.Date.Date == DateTime.Today.Date).ToArray() 
+                : query.Where(x => x.UserId == User.GetUserId().Value && x.Date.Date == DateTime.Today.Date).ToArray();
             return new WeekMenuDto {WeekDays = orders.Select(ToWeekDayDto).ToArray()};
         }
 
@@ -159,7 +160,7 @@ namespace WebUI.Controllers
             return new WeekDayDto
             {
                 WeekDay = order.Date.DayOfWeek.ToString(),
-                UserName = $"{order.User.FirstName} {order.User.LastName}",
+                UserName = $"{order.User?.FirstName} {order.User?.LastName}",
                 Suppliers = order.OrderItems.Select(x => new SupplierDto
                 {
                     SupplierId = x.DishItem.Supplier.Id,
