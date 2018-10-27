@@ -8,6 +8,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\SpreadsheetIntegration\SpreadsheetIntegration.csproj" />
   </ItemGroup>

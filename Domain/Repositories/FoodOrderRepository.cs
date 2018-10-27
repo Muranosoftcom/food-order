@@ -55,5 +55,9 @@ namespace Domain.Repositories
         {
             return _context.SaveChangesAsync();
         }
+
+        public void Save() {
+            _context.SaveChanges();
+        }
     }
 }

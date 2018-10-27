@@ -16,5 +16,6 @@ namespace Domain.Repositories
         void Delete<T>(T entity) where T : Entity;
         void Update<T>(T entity) where T : Entity;
         Task SaveAsync();
+        void Save();
     }
 }

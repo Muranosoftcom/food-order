@@ -39,7 +39,7 @@ namespace Domain.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .HasMaxLength(20);
+                        .HasMaxLength(100);
 
                     b.HasKey("Id");
 
@@ -57,7 +57,7 @@ namespace Domain.Migrations
                     b.Property<int>("CategoryKey");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(50);
+                        .HasMaxLength(100);
 
                     b.Property<int>("NegativeReviews");
 
@@ -182,7 +182,7 @@ namespace Domain.Migrations
             modelBuilder.Entity("Domain.Entities.DishItem", b =>
                 {
                     b.HasOne("Domain.Entities.DishCategory", "Category")
-                        .WithMany()
+                        .WithMany("DishItems")
                         .HasForeignKey("CategoryKey")
                         .OnDelete(DeleteBehavior.Cascade);
 

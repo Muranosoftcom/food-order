@@ -13,7 +13,9 @@ namespace BusinessLogic.SpreadsheetParsing
             string lastCategory = string.Empty;
             foreach (var row in valuesRange.AsEnumerable())
             {
-                lastCategory = row.First().Value;
+                lastCategory = string.IsNullOrEmpty(row.First().Value)
+                    ? lastCategory
+                    : row.First().Value;
                 foreach (var cell in row.Skip(1).Where(x => !string.IsNullOrEmpty(x.Value))
                     .Select((x, index) => new {x, index = index + 1}))
                 {

@@ -7,7 +7,7 @@ namespace Domain.Entities
 {
     public class DishItem: Entity
     {
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Name { get; set; }
         [Column(TypeName="Money")]
         public decimal Price { get; set; }
