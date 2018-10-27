@@ -101,7 +101,7 @@ namespace SampleMvcApp
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-//			 services.AddSpaStaticFiles(configuration =>
+//			services.AddSpaStaticFiles(configuration =>
 //			{
 //				configuration.RootPath = "ClientApp/build";
 //			});
@@ -129,7 +129,7 @@ namespace SampleMvcApp
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
 
 //            app.UseSpa(spa =>

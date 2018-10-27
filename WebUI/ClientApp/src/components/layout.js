@@ -17,7 +17,7 @@ class Layout extends Component {
 	};
 
 	handleLogin = () => {
-		axios.get("/login");
+		axios.get("/account/login");
 	};
 
 	handleLogout = () => {

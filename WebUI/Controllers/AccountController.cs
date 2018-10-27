@@ -24,7 +24,10 @@ namespace WebUI.Controllers
 
         public async Task Login(string returnUrl = "/")
         {
-            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties() { RedirectUri = returnUrl });
+            if (!HttpContext.User?.Identity.IsAuthenticated ?? false)
+            {
+                await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties() { RedirectUri = returnUrl });
+            }
         }
 
         [Authorize]
