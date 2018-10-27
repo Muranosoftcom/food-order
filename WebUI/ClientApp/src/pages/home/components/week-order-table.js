@@ -1,28 +1,48 @@
 import React from "react";
 import { Table } from "reactstrap";
+import "./week-order-table.scss";
 
-class OrdersTable extends React.Component {
+class WeekOrderTable extends React.Component {
+	renderSupplier(supplier) {
+		return [
+			<li key={supplier.supplierId}>
+				<span>
+					<strong>{supplier.supplierName}</strong>
+				</span>
+			</li>,
+			...supplier.categories.map(category => [
+				<li key={category.id}>{category.name}</li>,
+				...category.dishes.map(dish => (
+					<li key={dish.id}>
+						<span>{dish.name}</span>
+						<span>{dish.price}</span>
+					</li>
+				)),
+			]),
+		];
+	}
+
 	render() {
-		const { data } = this.props;
+		const { weekDaysOrders } = this.props;
 
 		return (
-			<Table responsive className="">
+			<Table responsive className="week-order-table">
 				<thead>
 					<tr>
-						<th>Имя сотрудника</th>
+						<th className="week-order-table__user-name">Имя сотрудника</th>
 						<th>Наименование заказа</th>
 					</tr>
 				</thead>
 				<tbody>
-					{!data || !data.length
+					{!weekDaysOrders || !weekDaysOrders.length
 						? null
-						: data.map(item => (
-								<tr key={item.userName}>
-									<td>{item.userName}</td>
+						: weekDaysOrders.map(weekDaysOrder => (
+								<tr key={weekDaysOrder.userName}>
+									<td>{weekDaysOrder.userName}</td>
 									<td>
 										<ul>
-											{item.dishes &&
-												item.dishes.map(dish => <li key={dish.name}>{dish.name}</li>)}
+											{weekDaysOrder.suppliers &&
+												weekDaysOrder.suppliers.map(supplier => this.renderSupplier(supplier))}
 										</ul>
 									</td>
 								</tr>
@@ -33,4 +53,4 @@ class OrdersTable extends React.Component {
 	}
 }
 
-export default OrdersTable;
+export default WeekOrderTable;
