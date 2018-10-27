@@ -1,6 +1,21 @@
-.layout {
-	&__body {
+html, body  {
+	height: 100%;
+}
 
+.layout {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	&__header {
+	}
+
+	&__body {
+		flex-grow: 2;
+	}
+
+	&__footer {
+		height: 50px;
 	}
 }
 

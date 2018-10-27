@@ -6,4 +6,10 @@ import App from "./components/app";
 
 const rootElement = document.getElementById("root");
 
-ReactDOM.render(<App />, rootElement);
+function load() {
+	return new Promise(resolve => {
+		setTimeout(resolve, 1000);
+	});
+}
+
+ReactDOM.render(<App onLoadData={load} />, rootElement);

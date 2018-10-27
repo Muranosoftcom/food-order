@@ -20,8 +20,8 @@
         <link rel="stylesheet" href="~/dist/styles.css" asp-append-version="true" />
     </environment>
 </head>
-<body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+<body class="layout">
+    <nav class="navbar navbar-inverse navbar-fixed-top layout__header">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -37,11 +37,12 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li><a asp-controller="Account" asp-action="Profile">Hello @User.Identity.Name!</a></li>
-                        <li><a id="qsLogoutBtn" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                        <li><a asp-controller="Order" asp-action="Index">Мой заказ</a></li>
+                        <li><a id="qsLogoutBtn" asp-controller="Account" asp-action="Logout">Выход</a></li>
                     }
                     else
                     {
-                        <li><a id="qsLoginBtn" asp-controller="Account" asp-action="Login">Login</a></li>
+                        <li><a id="qsLoginBtn" asp-controller="Account" asp-action="Login">Сделать заказ</a></li>
                     }
                 </ul>
             </div>
@@ -50,13 +51,12 @@
 
     <partial name="_CookieConsentPartial" />
 
-    <div class="container body-content">
+    <div class="container body-content layout__body">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - Food order</p>
-        </footer>
     </div>
+    <footer class="container layout__footer">
+        <p>&copy; 2018 - Food order</p>
+    </footer>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
