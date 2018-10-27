@@ -120,8 +120,8 @@ namespace WebUI.Controllers
         public ActionResult<WeekMenuDto> GetTodayOrder()
         {
             var orders = !User.IsAuthenticated() 
-                ? _repo.All<Order>().Where(x => x.Date == DateTime.Today).ToArray() 
-                : _repo.All<Order>().Where(x => x.UserId == User.GetUserId().Value && x.Date == DateTime.Today).ToArray();
+                ? _repo.All<Order>().Where(x => x.Date.Date == DateTime.Today.Date).ToArray() 
+                : _repo.All<Order>().Where(x => x.UserId == User.GetUserId().Value && x.Date.Date == DateTime.Today.Date).ToArray();
 
             return new WeekMenuDto {WeekDays = orders.Select(ToWeekDayDto).ToArray()};
         }
