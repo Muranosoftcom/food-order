@@ -5,13 +5,13 @@ namespace BusinessLogic.SpreadsheetParsing
 {
     public static class ParsingRegistry
     {
-        public static IParsingStrategy GetParser(FoodProvider provider)
+        public static IParsingStrategy GetParser(FoodSupplier supplier)
         {
-            switch (provider)
+            switch (supplier)
             {
-                case FoodProvider.Kafe:
+                case FoodSupplier.Cafe:
                     return new KafeParsingStrategy();
-                case FoodProvider.Glagol:
+                case FoodSupplier.Glagol:
                     return new GlagolParsingStrategy();
                 default: 
                     throw new ArgumentException();
