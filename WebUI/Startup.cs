@@ -9,27 +9,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Domain;
-using Domain.Contexts;
+using BusinessLogic.Services;
 using Domain.Entities;
-using Domain.Repositories;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.IdentityModel.Tokens;
 using SpreadsheetIntegration.Google;
 using Swashbuckle.AspNetCore.Swagger;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using SpreadsheetIntegration;
 
 namespace WebUI
 {
@@ -99,9 +89,10 @@ namespace WebUI
                     o.ExpireTimeSpan = TimeSpan.FromHours(2);
                 });
 
-            services.AddSingleton<IGoogleSpreadsheetProvider, GoogleSpreadsheetProvider>();
+            services.AddSingleton<IAsyncSpreadsheetProvider, GoogleSpreadsheetProvider>();
             services.AddScoped<FoodOrderContext>();
             services.AddScoped<IRepository, FoodOrderRepository>();
+            services.AddScoped<IFoodService, FoodService>();
             
             // Add framework services.
             services.AddMvc()
@@ -151,8 +142,12 @@ namespace WebUI
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
             });
-            
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

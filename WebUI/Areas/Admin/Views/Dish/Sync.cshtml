@@ -1,0 +1,24 @@
+﻿@model WebUI.Areas.Admin.Models.SyncViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Синхронизация обедов</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SyncResult)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SyncResult)
+        </dd>
+    </dl>
+    
+    <form asp-action="Create" method="post">
+        <input type="submit" value="Синхронизировать" class="btn btn-default" />
+    </form>
+</div>

@@ -1,5 +1,3 @@
-using Core;
-
 namespace BusinessLogic.DTOs
 {
     public class WeekDayDto

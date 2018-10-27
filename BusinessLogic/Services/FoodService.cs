@@ -19,7 +19,12 @@ using SpreadsheetIntegration.Core;
 
 namespace BusinessLogic.Services
 {
-    public class FoodService
+    public interface IFoodService
+    {
+        Task SynchronizeFood();
+    }
+
+    public class FoodService : IFoodService
     {
         private readonly IRepository _repo;
         private readonly IAsyncSpreadsheetProvider _spreadsheetProvider;
