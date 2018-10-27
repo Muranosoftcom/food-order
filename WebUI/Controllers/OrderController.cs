@@ -17,5 +17,10 @@ namespace WebUI.Controllers
         {
             _repo = repo;
         }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
     }
 }

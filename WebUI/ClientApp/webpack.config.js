@@ -8,7 +8,7 @@ module.exports = (env = {}, argv = {}) => {
 	const config = {
 		mode: argv.mode || "development", // we default to development when no 'mode' arg is passed
 		entry: {
-			shared: "./src/pages/shared.js",
+			shared: "./src/pages/shared/shared.js",
 			home: "./src/pages/home/index.js",
 			order: "./src/pages/order/index.js",
 		},

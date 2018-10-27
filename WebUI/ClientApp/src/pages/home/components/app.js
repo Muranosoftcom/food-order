@@ -1,11 +1,12 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Loader from "../../../common/components/loader";
-import AllTableData from "../components/all-orders-table";
+import AllTableData from "../components/week-order-table";
+import { Container, Col, Row } from "reactstrap";
 
 class App extends React.Component {
 	state = {
 		loading: false,
-		data: [],
+		weekDaysOrder: [],
 	};
 
 	async componentDidMount() {
@@ -13,24 +14,36 @@ class App extends React.Component {
 			loading: true,
 		});
 
-		const data = await this.props.onLoadData();
+		try {
+			const data = await this.props.onLoadData();
+			console.log(data);
 
-		this.setState({
-			data,
-			loading: false,
-		});
+			this.setState({
+				weekDaysOrder: data.weekDays,
+				loading: false,
+			});
+		} catch (e) {
+			console.error(e.message());
+			this.setState({
+				loading: false,
+			});
+		}
 	}
 
 	renderData() {
-		return this.state.data ? <AllTableData data={this.state.data} /> : null;
+		return this.state.weekDaysOrder ? <AllTableData weekDaysOrders={this.state.weekDaysOrder} /> : null;
 	}
 
 	render() {
 		return (
-			<Fragment>
-				<div className="layout__body">Заказ обедов на сегодня:</div>
+			<Container className="home-page">
+				<Row>
+					<Col>
+						<h1 className="home-page__title">Заказ обедов на сегодня</h1>
+					</Col>
+				</Row>
 				{this.state.loading ? <Loader /> : this.renderData()}
-			</Fragment>
+			</Container>
 		);
 	}
 }
