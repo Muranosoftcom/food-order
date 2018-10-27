@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
+using WebUI.Infrastructure;
 
 namespace WebUI.Controllers
 {
@@ -18,7 +19,7 @@ namespace WebUI.Controllers
     [ApiController]
     public class OrderApiController : Controller
     {
-        private IRepository _repo;
+        private readonly IRepository _repo;
 
         public OrderApiController(IRepository repo)
         {
@@ -90,7 +91,7 @@ namespace WebUI.Controllers
         [Route("post-order")]
         public async Task<ActionResult> PostOrder([FromBody] SupplierDto supplierDto)
         {
-            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+            var userId = User.GetUserId().Value;
             DishDto[] orderedItemsDtos = supplierDto.Categories.SelectMany(x => x.Dishes).ToArray();
             HashSet<int> orderedItemsIds = new HashSet<int>(orderedItemsDtos.Select(x => x.Id));
             IQueryable<DishItem> orderedDishItems = _repo.All<DishItem>().Where(x => orderedItemsIds.Contains(x.Id));
@@ -118,16 +119,9 @@ namespace WebUI.Controllers
         [Route("get-today-order")]
         public ActionResult<WeekMenuDto> GetTodayOrder()
         {
-            Order[] orders;
-            if (!HttpContext.User?.Identity.IsAuthenticated ?? false)
-            {
-                orders = _repo.All<Order>().Where(x => x.Date == DateTime.Today).ToArray();
-            }
-            else
-            {
-                var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
-                orders = _repo.All<Order>().Where(x => x.UserId == userId && x.Date == DateTime.Today).ToArray();
-            }
+            var orders = !User.IsAuthenticated() 
+                ? _repo.All<Order>().Where(x => x.Date == DateTime.Today).ToArray() 
+                : _repo.All<Order>().Where(x => x.UserId == User.GetUserId().Value && x.Date == DateTime.Today).ToArray();
 
             return new WeekMenuDto {WeekDays = orders.Select(ToWeekDayDto).ToArray()};
         }
