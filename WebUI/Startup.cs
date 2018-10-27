@@ -110,10 +110,6 @@ namespace WebUI
                     Contact = new Contact() { Name = "Talking Dotnet", Email = "contact@talkingdotnet.com", Url = "www.talkingdotnet.com" }
                 });
             });
-//			 services.AddSpaStaticFiles(configuration =>
-//			{
-//				configuration.RootPath = "ClientApp/build";
-//			});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -136,7 +132,7 @@ namespace WebUI
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
-//            app.UseSpaStaticFiles();
+            
             app.UseAuthentication();
 
             app.UseMvc(routes =>

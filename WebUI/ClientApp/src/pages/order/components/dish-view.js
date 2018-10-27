@@ -20,7 +20,7 @@ class DishView extends React.Component {
 			<div className="dish-view">
 				<span className="dish-view__name">{dish.name}</span>
 				<span className="dish-view__price">{dish.price && dish.price}</span>
-				<Button color={isSelected ? "success" : "secondary"} onClick={this.handleSelect}>
+				<Button color={isSelected ? "danger" : "secondary"} onClick={this.handleSelect}>
 					{isSelected ? "-" : "+"}
 				</Button>
 			</div>
