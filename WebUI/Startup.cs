@@ -1,29 +1,19 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+﻿using System;
+using Domain.Contexts;
+using Domain.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System;
-using System.IO;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Domain;
-using Domain.Contexts;
-using Domain.Entities;
-using Domain.Repositories;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using SpreadsheetIntegration.Google;
 
-namespace SampleMvcApp
+namespace WebUI
 {
     public class Startup
     {

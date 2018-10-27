@@ -13,18 +13,19 @@ namespace WebUI.Controllers
 {
     [Route("api/order")]
     [ApiController]
-    public class OrderController
+    public class OrderController : Controller
     {
-        private FoodOrderRepository _repo;
+        private IRepository _repo;
 
-
-        public OrderController(FoodOrderRepository repo)
+        public OrderController(IRepository repo)
         {
             _repo = repo;
         }
 
-        [HttpGet]
-        public ActionResult<ICollection<SupplierDto>> GetWeekMenu()
+        
+        [HttpGet]   
+        [Route("get-week-menu")]
+        public ActionResult GetWeekMenu()
         {
             var now = DateTime.UtcNow;
 
@@ -75,6 +76,8 @@ namespace WebUI.Controllers
 
             return new JsonResult(dto);
         }
+        
+      
 
 //        [HttpGet("{id}", Name = "GetTodo")]
 //        public ActionResult<TodoItem> GetById(long id)
