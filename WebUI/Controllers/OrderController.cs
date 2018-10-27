@@ -167,33 +167,69 @@ namespace WebUI.Controllers
             return new JsonResult(dto);
         }
 
-//        [HttpPost]
-//        [Route("post-order")]
-//        public ContentResult PostOrder([FromBody] SupplierDto supplierDto)
-//        {
-//            var order = new Order
-//            {
-//                Date = DateTime.Now,
-////                User =
-//                Price = 
-//            }
-//            supplierDto.SupplierId;
-//            _
-//        }
+        [HttpGet]
+        [Route("get-week-order")]
+        public ActionResult<WeekMenuDto> GetWeekOrder(DayOfWeek dayOfWeek)
+        {
+            Order[] orders;
+            if (!HttpContext.User?.Identity.IsAuthenticated ?? false)
+            {
+                orders = _repo.All<Order>().Where(x => x.Date == DateTime.Today).ToArray();
+            }
+            else
+            {
+                var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+                orders = _repo.All<Order>().Where(x => x.UserId == userId && x.Date == DateTime.Today).ToArray();
+            }
+
+            return new WeekMenuDto {WeekDays = orders.Select(ToWeekDayDto).ToArray()};
+        }
+
+        private WeekDayDto ToWeekDayDto (Order order) {
+            return new WeekDayDto {
+                WeekDay = order.Date.DayOfWeek.ToString(),
+                Suppliers = order.OrderItems.Select(x => new SupplierDto {
+                    SupplierId = x.DishItem.Supplier.Id,
+                    SupplierName = x.DishItem.Supplier.Name,
+                    Categories = order.OrderItems.GroupBy(oi => oi.DishItem.Category).Select(c => new CategoryDto {
+                        Id = c.Key.Id,
+                        Name = c.Key.Name,
+                        Dishes = c.Select(d => new DishDto {
+                            Id = d.DishItemId,
+                            Name = d.DishItem.Name
+                        }).ToArray()
+                    }).ToArray()
+                }).ToArray()
+            };
+        }
+
+        //        [HttpPost]
+        //        [Route("post-order")]
+        //        public ContentResult PostOrder([FromBody] SupplierDto supplierDto)
+        //        {
+        //            var order = new Order
+        //            {
+        //                Date = DateTime.Now,
+        ////                User =
+        //                Price = 
+        //            }
+        //            supplierDto.SupplierId;
+        //            _
+        //        }
 
 
-//        [HttpGet("{id}", Name = "GetTodo")]
-//        public ActionResult<TodoItem> GetById(long id)
-//        {
-//            var item = _context.TodoItems.Find(id);
-//            if (item == null)
-//            {
-//                return NotFound();
-//            }
-//
-//            return item;
-//        }
-       
+        //        [HttpGet("{id}", Name = "GetTodo")]
+        //        public ActionResult<TodoItem> GetById(long id)
+        //        {
+        //            var item = _context.TodoItems.Find(id);
+        //            if (item == null)
+        //            {
+        //                return NotFound();
+        //            }
+        //
+        //            return item;
+        //        }
+
 
 
 
