@@ -1,0 +1,41 @@
+.shopping-basket {
+	position: sticky;
+	top: 4.5rem;
+	padding: 1rem;
+	margin-bottom: 1rem;
+
+	&__payment {
+		margin-bottom: 1.5rem;
+	}
+
+	&__payment-value {
+		font-size: 4rem;
+	}
+
+	&__payment-money-unit {
+		color: #808080;
+		font-size: 1.5rem;
+		margin-left: 0.75rem;
+	}
+
+	&__dishes {
+		margin-bottom: 1.5rem;
+	}
+
+	&__order-button {}
+
+	&__order-button-icon {
+		fill: #fff;
+		margin-left: 1rem;
+	}
+}
+
+.overpayment {
+	&__title {
+		margin-right: 1em;
+	}
+
+	&__money-unit {
+		margin-left: 0.5em;
+	}
+}

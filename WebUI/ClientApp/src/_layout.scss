@@ -1,0 +1,27 @@
+.layout {
+	display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+
+  &__header {
+      background-color: #322525;
+  }
+
+  &__main{
+      flex-grow: 2;
+      margin-top: 3.5rem;
+      margin-bottom: auto;
+  }
+
+  &__footer {
+      background-color: #F2F2F2;
+      border-top: 1px solid #E5E5E5;
+      color: #808080;
+      flex-basis: 60px;
+      margin-top: 1rem;       
+      padding-bottom: 1rem;
+      padding-top: 1rem;
+  }
+}

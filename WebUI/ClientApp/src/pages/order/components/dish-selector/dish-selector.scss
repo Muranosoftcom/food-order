@@ -1,0 +1,65 @@
+.dish-selector {
+	$b: &;
+	$gray: #808080;
+
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+	padding: 0.5rem 0;
+	width: 100%;
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	&--disabled {
+		#{$b}__name {
+			color: $gray;
+		}
+
+		#{$b}__icon {
+			fill: $gray;
+		}
+	}
+
+	&__name {
+		flex-grow: 2;
+	}
+
+	&__price {
+		padding: 0 1rem;
+	}
+
+	&__money-unit {
+		color: $gray;
+		font-size: 0.75rem;
+		margin-left: 0.3rem;
+	}
+
+	&__button {
+		align-items: center;
+		background-color: transparent;
+		border: none;
+		display: flex;
+		cursor: pointer;
+		height: 2rem;
+		margin: 0;
+		outline: none !important;
+		padding: 0 0 0 0.5rem;
+	}
+
+	&__icon {
+		height: 2rem;
+		margin: 0;
+		padding: 0;
+		width: 2rem;
+
+		&--add {
+			fill: #5199db;
+		}
+
+		&--cancel {
+			fill: #d70c17;
+		}
+	}
+}

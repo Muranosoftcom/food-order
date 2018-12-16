@@ -1,0 +1,16 @@
+.day-tab {
+	text-align: center;
+
+	&--holiday {
+		background-color: #fff0bc;
+		color: #808080;
+	}
+	&--holiday#{&}--active {
+		background-color: #f69c00;
+	}
+
+	&--active {
+		background-color: #5199db;
+		color: #fff;
+	}
+}
