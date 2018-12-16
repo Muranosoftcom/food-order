@@ -36,6 +36,12 @@ namespace WebUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
+            });
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -48,47 +54,47 @@ namespace WebUI
 
             // Add authentication services
             services.AddAuthentication(o =>
+            {
+                o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            })
+            .AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                googleOptions.SaveTokens = true;
+                googleOptions.CallbackPath = "/login";
+                googleOptions.Events = new OAuthEvents
                 {
-                    o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-                })
-                .AddGoogle(googleOptions =>
-                {
-                    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-                    googleOptions.SaveTokens = true;
-                    googleOptions.CallbackPath = "/login";
-                    googleOptions.Events = new OAuthEvents
+                    OnTicketReceived = async ctx =>
                     {
-                        OnTicketReceived = async ctx =>
+                        // Relate to local users
+                        string email = ctx.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                        var userName = ctx.Principal.Identity.Name;
+                        var db = ctx.HttpContext.RequestServices.GetRequiredService<FoodOrderContext>();
+                        User user = await db.Users.FirstOrDefaultAsync(u => string.Compare(u.Email, email, StringComparison.CurrentCultureIgnoreCase) == 0);
+                        if (user == null)
                         {
-                            // Relate to local users
-                            string email = ctx.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                            var userName = ctx.Principal.Identity.Name;
-                            var db = ctx.HttpContext.RequestServices.GetRequiredService<FoodOrderContext>();
-                            User user = await db.Users.FirstOrDefaultAsync(u => string.Compare(u.Email, email, StringComparison.CurrentCultureIgnoreCase) == 0);
-                            if (user == null)
-                            {
-                                user = new User { Email = email, FirstName = userName };
-                                await db.Users.AddAsync(user);
-                                db.SaveChanges();
-                            }
+                            user = new User { Email = email, FirstName = userName };
+                            await db.Users.AddAsync(user);
+                            db.SaveChanges();
+                        }
                             
-                            var claim = new Claim("userId", user.Id.ToString());
-                            var isAdminClaim = new Claim("isAdmin", user.IsAdmin.ToString());
-                            var claimIdentity =  new ClaimsIdentity();
-                            claimIdentity.AddClaim(claim);
-                            claimIdentity.AddClaim(isAdminClaim);
-                            ctx.Principal.AddIdentity(claimIdentity);
-                        } 
-                    };
-                })
-                .AddCookie(o =>
-                {
-                    o.LoginPath = "/login";
-                    o.LogoutPath = "/logout";
-                    o.ExpireTimeSpan = TimeSpan.FromHours(2);
-                });
+                        var claim = new Claim("userId", user.Id.ToString());
+                        var isAdminClaim = new Claim("isAdmin", user.IsAdmin.ToString());
+                        var claimIdentity =  new ClaimsIdentity();
+                        claimIdentity.AddClaim(claim);
+                        claimIdentity.AddClaim(isAdminClaim);
+                        ctx.Principal.AddIdentity(claimIdentity);
+                    } 
+                };
+            })
+            .AddCookie(o =>
+            {
+                o.LoginPath = "/login";
+                o.LogoutPath = "/logout";
+                o.ExpireTimeSpan = TimeSpan.FromHours(2);
+            });
 
             services.AddSingleton<IAsyncSpreadsheetProvider, GoogleSpreadsheetProvider>();
             services.AddScoped<FoodOrderContext>();
