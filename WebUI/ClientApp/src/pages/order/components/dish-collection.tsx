@@ -12,7 +12,7 @@ interface Props {
 }
 
 class DishCollection extends React.Component<Props> {
-	static defaultProps = {
+	static defaultProps: Pick<Props, "canMultiSelect"> = {
 		canMultiSelect: true,
 	};
 
