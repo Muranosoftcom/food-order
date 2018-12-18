@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import User from "../../domain/user";
 import { config } from "../../config";
 
-interface AuthResponce {
+interface AuthResponse {
 	success: boolean;
 	token: string;
 	message: string;
@@ -30,7 +30,7 @@ export default class AuthService {
 		password = this.encryptPassword(password);
 
 		try {
-			const { success, token }: AuthResponce = (await axios.post(`${this.domainEndpoint}/login`, { name, password })).data;
+			const { success, token }: AuthResponse = (await axios.post(`${this.domainEndpoint}login`, { name, password })).data;
 
 			if ( success ) {
 				let user: UserDto | null = null;
@@ -57,7 +57,7 @@ export default class AuthService {
 		password = this.encryptPassword(password);
 
 		try {
-			const { success, token }: AuthResponce = (await axios.post(`${this.domainEndpoint}/signin`, { name, password })).data;
+			const { success, token }: AuthResponse = (await axios.post(`${this.domainEndpoint}signin`, { name, password })).data;
 
 			if ( success ) {
 				let user: UserDto | null = null;
