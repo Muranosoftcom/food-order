@@ -20,8 +20,8 @@ const MyOrders: React.FC<Props> = ({ orders, days }) => {
 		<Table className="my-orders" responsive bordered size="sm">
 			<thead>
 				<tr>
-					{days.map(({ shortName }) => (
-						<th key={shortName}>{translateDayName(shortName)}</th>
+					{days.map(({ dayName }) => (
+						<th key={dayName}>{translateDayName(dayName)}</th>
 					))}
 				</tr>
 			</thead>

@@ -2,9 +2,9 @@ import React from "react";
 import cn from "classnames";
 import { NavItem, NavLink } from "reactstrap";
 
-import { translateDayName } from "../../../utils/translate-day-name";
-import Day from "../../../domain/day";
+import Day from "../../../../../domain/day";
 import "./day-tab.scss";
+import { getDayShortName, prettifyDate } from "../../../../../utils/date-utils";
 
 interface Props {
 	day: Day;
@@ -22,7 +22,7 @@ class DayTab extends React.Component<Props> {
 	};
 
 	public render() {
-		const { isHoliday, shortName } = this.props.day;
+		const { isHoliday, shortDate } = this.props.day;
 		const classNames = cn("day-tab", {
 			"day-tab--holiday": isHoliday,
 			"day-tab--active": this.props.isActive,
@@ -32,7 +32,10 @@ class DayTab extends React.Component<Props> {
 			<NavItem className={classNames}>
 				<NavLink onClick={this.handleClick}>
 					<div className={cn("day-tab__day-name", { "day-tab__day-name--holiday": isHoliday })}>
-						{translateDayName(shortName)}
+						{getDayShortName(shortDate)}
+					</div>
+					<div className="day-tab__short-date">
+						({prettifyDate(shortDate)})
 					</div>
 				</NavLink>
 			</NavItem>

@@ -1,6 +1,6 @@
 import { moment } from "../vendors";
 
-const SHORT_DATE_FORMAT = "L"; // "MM/DD/YYYY";
+const SHORT_DATE_FORMAT = "MM/DD/YYYY";
 
 function trimTime(date) {
 	return moment(date).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
@@ -12,10 +12,6 @@ export function toShortDate(date) {
 
 export function fromShortDate(shortDate) {
 	return trimTime(moment(shortDate, SHORT_DATE_FORMAT));
-}
-
-export function getDayShortName(date, format = SHORT_DATE_FORMAT) {
-	return moment(date, format).format("ddd");
 }
 
 export function getNextWeekWorkingDays(days) {
@@ -31,4 +27,16 @@ export function getNextWeekWorkingDays(days) {
 	);
 
 	return days.filter(day => day.toMoment().isBetween(nextMonday, nextFriday, null, "[]"));
+}
+
+export function getDayName(shortDate) {
+	return fromShortDate(shortDate).format("dddd");
+}
+
+export function getDayShortName(shortDate) {
+	return fromShortDate(shortDate).format("ddd");
+}
+
+export function prettifyDate(shortDate) {
+	return fromShortDate(shortDate).format("D MMM");
 }

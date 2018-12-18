@@ -1,4 +1,4 @@
-import { getDayShortName, fromShortDate } from "../utils/date-utils";
+import { fromShortDate, getDayName } from "../utils/date-utils";
 
 class Day {
 	constructor(
@@ -6,8 +6,8 @@ class Day {
 		public isHoliday: boolean = false) {
 	}
 
-	public get shortName() {
-		return getDayShortName(this.shortDate)
+	public get dayName() {
+		return getDayName(this.shortDate)
 	}
 
 	public toMoment() {

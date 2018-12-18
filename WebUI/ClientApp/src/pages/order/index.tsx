@@ -5,7 +5,7 @@ import { Alert, Col, Row, TabContent, TabPane } from "reactstrap";
 
 import visibleOnlyForAuthenticatedUser from "../../hocs/visible-only-for-authenticated-user";
 import TodayOrder from "./components/today-order/today-order";
-import DaySwitcher from "./components/day-switcher";
+import DaySwitcher from "./components/day-switcher/day-switcher";
 import DayMenu from "../../domain/day-menu";
 import OrderPageStore from "./store/order-page-store";
 import "./index.scss";
@@ -27,13 +27,13 @@ function Order(props: Props) {
 					activeDay={activeDay}
 					onSwitch={switchDay}
 				/>
-				<TabContent activeTab={activeDay!.shortName}>
+				<TabContent activeTab={activeDay!.dayName}>
 					{nextWeekMenu.map((dayMenu: DayMenu) => {
-						const { shortName, isHoliday, shortDate } = dayMenu.weekDay;
+						const { dayName, isHoliday, shortDate } = dayMenu.weekDay;
 						const isOrdered = myOrders.some(userOrder => userOrder.day.shortDate === shortDate)
 
 						return (
-							<TabPane className="py-2" key={shortDate} tabId={shortName}>
+							<TabPane className="py-2" key={shortDate} tabId={dayName}>
 								{!isHoliday && (!isOrdered
 									? <TodayOrder menu={dayMenu} onOrderLunch={orderLunch}/>
 									: <Alert color="info">Вы уже заказали обед на этот день <Link to="/week-order/">подробнее...</Link></Alert>

@@ -1,5 +1,6 @@
-import moment, { Moment } from "moment";
+import { Moment } from "moment";
 import { action, computed, observable } from "mobx";
+import { moment } from "../vendors";
 
 export default class TimeWatcher {
 	private interval: any;

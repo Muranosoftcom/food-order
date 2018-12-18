@@ -1,0 +1,46 @@
+.day-tab {
+	$gray: #808080;
+	$white: #fff;
+
+	text-align: center;
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	&--holiday {
+		background-color: #fff0bc;
+		color: $gray;
+	}
+	&--holiday#{&}--active {
+		background-color: #f69c00;
+	}
+
+	&--active {
+		$blue: #5199db;
+
+		background-color: $blue;
+		color: $white;
+
+		&:hover {
+			cursor: default;
+
+			.nav-link {
+				border-color: $blue;
+			}
+		}
+	}
+
+	&--active &__short-date {
+		color: $white;
+	}
+
+	&__short-date {
+		color: $gray;
+		font-size: 0.5rem;
+	}
+
+	&__day-name {
+		text-transform: capitalize;
+	}
+}

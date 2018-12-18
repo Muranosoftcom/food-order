@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row } from "reactstrap";
+import { Alert, Col, Row } from "reactstrap";
 import { inject, observer } from "mobx-react";
 
 import SharedFoodAlert from "./components/shared-food-alert";
@@ -26,6 +26,7 @@ function Home({ homePageStore }: Props) {
 				</Row>
 			)}
 			{hasTodayOrders && <TodayOrders orders={todayOrders} currentUserId={currentUserId} />}
+			{!hasTodayOrders && <Alert info>Сегодня нет заказанных обедов.</Alert> }
 		</>
 	);
 }
