@@ -30,13 +30,13 @@ function Order(props: Props) {
 				<TabContent activeTab={activeDay!.dayName}>
 					{nextWeekMenu.map((dayMenu: DayMenu) => {
 						const { dayName, isHoliday, shortDate } = dayMenu.weekDay;
-						const isOrdered = myOrders.some(userOrder => userOrder.day.shortDate === shortDate)
+						const isDishOrdered = myOrders.some(userOrder => userOrder.day.shortDate === shortDate);
 
 						return (
 							<TabPane className="py-2" key={shortDate} tabId={dayName}>
-								{!isHoliday && (!isOrdered
+								{!isHoliday && (!isDishOrdered
 									? <TodayOrder menu={dayMenu} onOrderLunch={orderLunch}/>
-									: <Alert color="info">Вы уже заказали обед на этот день <Link to="/week-order/">подробнее...</Link></Alert>
+									: (<Alert color="info">Вы уже заказали обед на этот день <Link to="/week-order/">подробнее...</Link></Alert>)
 								)}
 								{isHoliday && <Alert color="info">Заказ обедов на выходной день не доступен</Alert>}
 							</TabPane>
@@ -49,7 +49,7 @@ function Order(props: Props) {
 		<Row className="my-4">
 			<Col>
 				<Alert color="warning">
-					Заказ обеда пока не доступен! Ожидается обновление меню от поставщика...
+					Заказ обеда пока не доступен! Ожидается обновление меню от поставщиков...
 				</Alert>
 			</Col>
 		</Row>

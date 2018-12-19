@@ -3,7 +3,7 @@ import { Col, Row, Alert } from "reactstrap";
 
 import ShoppingBasket from "../shopping-basket/shopping-basket";
 import DayMenu from "../../../../domain/day-menu";
-import Expander from "../../../../components/expander";
+import Expander from "../../../../components/expander/expander";
 import DishCollection from "../dish-collection";
 import "./today-order.scss";
 import Supplier from "../../../../domain/supplier";
@@ -71,11 +71,11 @@ export default class TodayOrder extends React.Component<Props, State> {
 		return (
 			<Expander
 				key={category.id}
-				className="meal-category border-bottom"
-				headerClassName="meal-category__title"
-				caption={category.name}
+				className="meal-category"
+				headerClassName="meal-category__header"
+				caption={<span className="meal-category__name">{category.name}</span>}
 			>
-				<div className="meal-category__dishes today-order-menu__dishes">
+				<div className="meal-category__dishes">
 					<DishCollection
 						canMultiSelect={category.canMultiSelect}
 						dishes={category.dishes}

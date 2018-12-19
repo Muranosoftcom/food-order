@@ -1,13 +1,15 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Collapse } from "reactstrap";
 
-import { ReactComponent as ChevronDown } from "../images/chevron-down.svg";
-import { ReactComponent as ChevronUp } from "../images/chevron-up.svg";
+import { ReactComponent as ChevronDown } from "../../images/chevron-down.svg";
+import { ReactComponent as ChevronUp } from "../../images/chevron-up.svg";
+
+import "./index.scss";
 
 interface Props {
 	className: string;
 	headerClassName: string;
-	caption: string;
+	caption: ReactNode;
 	defaultOpen: boolean;
 }
 
@@ -28,6 +30,12 @@ class Expander extends React.Component<Props, State> {
 		this.setState(prevState => ({ isOpen: !prevState.isOpen }));
 	};
 
+	private renderChevron() {
+		return this.state.isOpen
+			? <ChevronDown className="expander__chevron expander__chevron-down" />
+			: <ChevronUp className="expander__chevron expander__chevron-up" />;
+	}
+
 	public render() {
 		const { isOpen } = this.state;
 		const { className, headerClassName, caption, children } = this.props;
@@ -37,11 +45,8 @@ class Expander extends React.Component<Props, State> {
 				<div
 					className={`expander ${headerClassName}`}
 					onClick={this.toggleOpen}
-					style={{
-						cursor: "pointer",
-					}}
 				>
-					{caption} {isOpen ? <ChevronUp /> : <ChevronDown />}
+					{this.renderChevron()}{caption}
 				</div>
 				<Collapse isOpen={isOpen}>
 					<div className="expander__content">{children}</div>

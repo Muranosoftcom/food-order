@@ -34,8 +34,8 @@ class DishSelector extends React.Component<Props> {
 		}
 	};
 
-	render() {
-		const { className = "", dish, isSelected, disabled } = this.props;
+	public render() {
+		const { className, dish, isSelected, disabled } = this.props;
 
 		return (
 			<div

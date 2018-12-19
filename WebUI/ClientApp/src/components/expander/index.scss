@@ -1,0 +1,13 @@
+.expander {
+	cursor: pointer;
+
+	&__chevron {
+		font-size: 1rem;
+		height: 1em;
+		width: 1em;
+	}
+
+	&__chevron-up {
+		transform: rotateZ(90deg);
+	}
+}

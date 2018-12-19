@@ -26,7 +26,7 @@ function Home({ homePageStore }: Props) {
 				</Row>
 			)}
 			{hasTodayOrders && <TodayOrders orders={todayOrders} currentUserId={currentUserId} />}
-			{!hasTodayOrders && <Alert info>Сегодня нет заказанных обедов.</Alert> }
+			{!hasTodayOrders && <Alert className="mt-2" color="info">Сегодня нет заказанных обедов.</Alert> }
 		</>
 	);
 }
