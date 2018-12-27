@@ -12,11 +12,6 @@ namespace WebUI.Controllers
             _repository = repository;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public IActionResult Error()
         {
             return View();
