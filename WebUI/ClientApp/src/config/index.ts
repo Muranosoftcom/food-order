@@ -4,4 +4,5 @@ export const config = {
 	backendDomain: process.env.REACT_APP_BACKEND_DOMAIN || "",
 	secret: process.env.REACT_APP_JWT_SECRET || "",
 	timeUpdateInterval: Number(process.env.REACT_APP_TIME_UPDATE_INTERVAL || 5), // in seconds
+	googleClientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
 };

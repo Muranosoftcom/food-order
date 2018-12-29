@@ -1,6 +1,5 @@
 import AppViewModel from "../models/app";
 
-import CryptoService from "../services/crypto-service";
 import MenuService from "../services/menu-service";
 import OrderService from "../services/order-service";
 import AuthService from "../services/auth-service";
@@ -18,13 +17,12 @@ interface Services {
 	menuService: MenuService;
 	orderService: OrderService;
 	authService: AuthService;
-	cryptoService: CryptoService;
 	calendarService: CalendarService;
 }
 
-function createStores({ menuService, orderService, authService, cryptoService, calendarService }: Services) {
+function createStores({ menuService, orderService, authService, calendarService }: Services) {
 	const appModel = new AppViewModel({ calendarService, menuService, orderService });
-	const identityStore = new IdentityStore(authService, cryptoService);
+	const identityStore = new IdentityStore(authService);
 
 	const appStore = new AppStore({ appModel, identityStore });
 

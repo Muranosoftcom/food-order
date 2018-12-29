@@ -86,7 +86,10 @@ class Header extends React.Component<Props> {
 								{identity.isAuthenticated && (
 									<UncontrolledDropdown nav inNavbar>
 										<DropdownToggle nav caret>
-											<User name={identity.currentUser!.fullName} />
+											<User
+												name={identity.currentUser!.fullName}
+												pictureUrl={identity.currentUser!.pictureUrl}
+											/>
 										</DropdownToggle>
 										<DropdownMenu right>
 											<DropdownItem disabled>

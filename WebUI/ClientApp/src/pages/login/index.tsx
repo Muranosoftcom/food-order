@@ -1,27 +1,27 @@
 import React from "react";
 import { observer, inject } from "mobx-react";
 import { withRouter, Redirect, RouteComponentProps } from "react-router-dom";
-import { Row, Col, Button } from "reactstrap";
+import { Row, Col } from "reactstrap";
 
-import RegisterNewAccountForm from "./components/register-new-account-form";
-import UsersSelectForm from "./components/login-form";
+import SocialLogin  from "./components/social-login";
 import LoginPageStore from "./store/store";
+import { config } from "../../config";
 
 interface Props extends RouteComponentProps {
 	loginPageStore?: LoginPageStore;
 }
 
 class LoginPage extends React.Component<Props> {
-	get _redirectPath() {
-		const { from } = this.props.location.state || { from: { pathname: "/" /* isRegisterNew: false */ } };
+	private get redirectPath() {
+		const { from } = this.props.location.state || { from: { pathname: "/" } };
 		return from;
 	}
 
-	render() {
-		const { onShowRegisterNewForm, isAuthenticated, showLoginForm, loginForm, signInForm, showSignInForm } = this.props.loginPageStore!;
+	public render() {
+		const { isAuthenticated, loginByGoogle } = this.props.loginPageStore!;
 
 		return isAuthenticated ? (
-			<Redirect to={this._redirectPath} />
+			<Redirect to={this.redirectPath} />
 		) : (
 			<Row>
 				<Col lg={{ size: 6, offset: 3 }} md={{ size: 8, offset: 2 }}>
@@ -31,23 +31,17 @@ class LoginPage extends React.Component<Props> {
 						</Col>
 					</Row>
 					<Row>
-						<Col className="d-flex align-items-baseline">
-							<span>выберите пользователя или </span>
-							<Button color="link" onClick={onShowRegisterNewForm}>создайте нового</Button>
+						<Col>
+							<SocialLogin
+								provider="google"
+								appId={config.googleClientId}
+								onLoginSuccess={loginByGoogle}
+								onLoginFailure={(user: any, err: any) => console.error(user, err)}
+							>
+								Login with Google
+							</SocialLogin>
 						</Col>
 					</Row>
-					{showLoginForm && <Row className="mt-3">
-						<Col>
-							<UsersSelectForm form={loginForm!}/>
-						</Col>
-					</Row>}
-					{showSignInForm &&
-						<Row className="mt-2">
-							<Col>
-								<RegisterNewAccountForm form={signInForm} />
-							</Col>
-						</Row>
-					}
 				</Col>
 			</Row>
 		);
