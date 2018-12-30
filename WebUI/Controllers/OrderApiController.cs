@@ -17,19 +17,16 @@ using Microsoft.Extensions.Configuration;
 using Swashbuckle.AspNetCore.Swagger;
 using WebUI.Infrastructure;
 
-namespace WebUI.Controllers
-{
+namespace WebUI.Controllers {
     [Route("api/order")]
     [ApiController]
-    public class OrderApiController : Controller
-    {
+    public class OrderApiController : Controller {
         private readonly IRepository _repo;
         private readonly IConfiguration _configuration;
         private int _glagolPrice;
         private int _cafePrice;
 
-        public OrderApiController(IRepository repo, IConfiguration configuration)
-        {
+        public OrderApiController(IRepository repo, IConfiguration configuration) {
             _repo = repo;
             _configuration = configuration;
 
@@ -40,8 +37,7 @@ namespace WebUI.Controllers
         [HttpGet]
         [Authorize]
         [Route("get-week-menu")]
-        public ActionResult<WeekMenuDto> GetWeekMenu()
-        {
+        public ActionResult<WeekMenuDto> GetWeekMenu() {
             var now = DateTime.UtcNow;
 
             var availableDishes = _repo.All<DishItem>()
@@ -51,39 +47,31 @@ namespace WebUI.Controllers
                 .Where(x => x.AvailableUntil >= now);
 
             List<(string dayName, DishItem dish)> dayNameDishPairs = new List<(string, DishItem)>();
-            foreach (var dish in availableDishes)
-            {
+            foreach (var dish in availableDishes) {
                 var dayIds = new HashSet<int>(dish.AvailableOn.Select(x => x.WeekDayId));
                 var dayNames = _repo.All<WeekDay>().Where(x => dayIds.Contains(x.Id)).Select(x => x.Name);
-                foreach (var dayName in dayNames)
-                {
+                foreach (var dayName in dayNames) {
                     dayNameDishPairs.Add((dayName: dayName, dish: dish));
                 }
             }
 
             var dishesByDayName = dayNameDishPairs.ToLookup(x => x.dayName, x => x.dish);
 
-            var dto = new WeekMenuDto
-            {
-                WeekDays = dishesByDayName.Select(x => new WeekDayDto
-                {
+            var dto = new WeekMenuDto {
+                WeekDays = dishesByDayName.Select(x => new WeekDayDto {
                     WeekDay = x.Key,
-                    Suppliers = x.GroupBy(d => (id: d.Supplier.Id, name: d.Supplier.Name)).Select(d =>
-                    {
+                    Suppliers = x.GroupBy(d => (id: d.Supplier.Id, name: d.Supplier.Name)).Select(d => {
                         var dishItemByPairPairs =
                             d.Select(di => (key: (categoryId: di.Category.Id, categoryName: di.Category.Name),
                                 value: di));
                         var dishItemByPair = dishItemByPairPairs.ToLookup(y => y.key, y => y.value);
-                        return new SupplierDto
-                        {
+                        return new SupplierDto {
                             SupplierId = d.Key.id,
                             SupplierName = d.Key.name,
-                            Categories = dishItemByPair.Select(z => new CategoryDto
-                            {
+                            Categories = dishItemByPair.Select(z => new CategoryDto {
                                 Id = z.Key.categoryId,
                                 Name = z.Key.categoryName,
-                                Dishes = z.Select(f => new DishDto
-                                {
+                                Dishes = z.Select(f => new DishDto {
                                     Id = f.Id,
                                     Name = f.Name,
                                     Price = f.Price,
@@ -102,29 +90,26 @@ namespace WebUI.Controllers
         [HttpPost]
         [Authorize]
         [Route("post-order")]
-        public async Task<ActionResult> PostOrder([FromBody] int[] dishesIds)
-        {
+        public async Task<ActionResult> PostOrder([FromBody] int[] dishesIds) {
             var userId = User.GetUserId().Value;
             var orderedItemsIds = new HashSet<int>(dishesIds);
-                        
+
             IQueryable<DishItem> orderedDishItems = _repo.All<DishItem>().Where(x => orderedItemsIds.Contains(x.Id));
-            
+
 
             decimal orderPrice = orderedDishItems.Select(x => x.Price).Sum();
             int? supplierId = orderedDishItems.Select(x => x.Supplier.Id).FirstOrDefault();
-            if (supplierId.HasValue)
-            {
+            if (supplierId.HasValue) {
                 int maxPrice = GetMaxSumForSupplier(supplierId.Value);
                 orderPrice = Math.Max(maxPrice, orderPrice);
             }
+
             User user = _repo.GetById<User>(userId);
-            var order = new Order
-            {
+            var order = new Order {
                 Date = DateTime.Now,
                 Price = orderPrice,
                 User = user,
-                OrderItems = orderedDishItems.Select(x => new OrderItem
-                {
+                OrderItems = orderedDishItems.Select(x => new OrderItem {
                     Price = x.Price,
                     DishItem = x
                 }).ToArray()
@@ -136,13 +121,12 @@ namespace WebUI.Controllers
 
         [HttpGet]
         [Route("get-today-order")]
-        public ActionResult<WeekMenuDto> GetTodayOrder()
-        {
+        public ActionResult<WeekMenuDto> GetTodayOrder() {
             var query = _repo.All<Order>().Include(x => x.User)
                 .Include(x => x.OrderItems).ThenInclude(x => x.DishItem).ThenInclude(x => x.Category)
                 .Include(x => x.OrderItems).ThenInclude(x => x.DishItem).ThenInclude(x => x.Supplier);
-            var orders = !User.IsAuthenticated() 
-                ? query.Where(x => x.Date.Date == DateTime.Today.Date).ToArray() 
+            var orders = !User.IsAuthenticated()
+                ? query.Where(x => x.Date.Date == DateTime.Today.Date).ToArray()
                 : query.Where(x => x.UserId == User.GetUserId().Value && x.Date.Date == DateTime.Today.Date).ToArray();
             return new WeekMenuDto {WeekDays = orders.Select(ToWeekDayDto).ToArray()};
         }
@@ -150,8 +134,7 @@ namespace WebUI.Controllers
         [HttpPut]
         [Route("increment-rating")]
         [Authorize]
-        public async Task<ActionResult> IncrementRating(int dishItemId)
-        {
+        public async Task<ActionResult> IncrementRating(int dishItemId) {
             var dishItem = _repo.GetById<DishItem>(dishItemId);
             dishItem.PositiveReviews++;
             _repo.Update(dishItem);
@@ -163,8 +146,7 @@ namespace WebUI.Controllers
         [HttpPut]
         [Route("decrement-rating")]
         [Authorize]
-        public async Task<ActionResult> DecrementRating(int dishItemId)
-        {
+        public async Task<ActionResult> DecrementRating(int dishItemId) {
             var dishItem = _repo.GetById<DishItem>(dishItemId);
             dishItem.NegativeReviews++;
             _repo.Update(dishItem);
@@ -172,36 +154,31 @@ namespace WebUI.Controllers
             return new OkResult();
         }
 
-        private WeekDayDto ToWeekDayDto(Order order)
-        {
-            return new WeekDayDto
-            {
+        private WeekDayDto ToWeekDayDto(Order order) {
+            return new WeekDayDto {
                 WeekDay = order.Date.DayOfWeek.ToString(),
                 UserName = $"{order.User?.FirstName} {order.User?.LastName}",
-                Suppliers = order.OrderItems.GroupBy(x => (x.DishItem.Supplier.Id, x.DishItem.Supplier.Name)).Select(x => new SupplierDto
-                {
-                    SupplierId = x.Key.Id,
-                    SupplierName = x.Key.Name,
-                    Categories = x.GroupBy(oi => (oi.DishItem.Category.Id, oi.DishItem.Category.Name)).Select(c => new CategoryDto
-                    {
-                        Id = c.Key.Id,
-                        Name = c.Key.Name,
-                        Dishes = c.Select(d => new DishDto
-                        {
-                            Id = d.DishItemId,
-                            Name = d.DishItem.Name,
-                            NegativeRewievs = d.DishItem.NegativeReviews,
-                            PositiveRewievs = d.DishItem.PositiveReviews
-                        }).ToArray()
-                    }).ToArray()
-                }).OrderBy(x => x.SupplierId).ToArray()
+                Suppliers = order.OrderItems.GroupBy(x => (x.DishItem.Supplier.Id, x.DishItem.Supplier.Name)).Select(
+                    x => new SupplierDto {
+                        SupplierId = x.Key.Id,
+                        SupplierName = x.Key.Name,
+                        Categories = x.GroupBy(oi => (oi.DishItem.Category.Id, oi.DishItem.Category.Name)).Select(c =>
+                            new CategoryDto {
+                                Id = c.Key.Id,
+                                Name = c.Key.Name,
+                                Dishes = c.Select(d => new DishDto {
+                                    Id = d.DishItemId,
+                                    Name = d.DishItem.Name,
+                                    NegativeRewievs = d.DishItem.NegativeReviews,
+                                    PositiveRewievs = d.DishItem.PositiveReviews
+                                }).ToArray()
+                            }).ToArray()
+                    }).OrderBy(x => x.SupplierId).ToArray()
             };
         }
-        
-        private int GetMaxSumForSupplier(int supplierIdValue)
-        {
-            switch (supplierIdValue)
-            {
+
+        private int GetMaxSumForSupplier(int supplierIdValue) {
+            switch (supplierIdValue) {
                 case (int) FoodSupplier.Cafe: {
                     return _cafePrice;
                 }
@@ -209,7 +186,8 @@ namespace WebUI.Controllers
                     return _glagolPrice;
                 }
                 default:
-                    throw new KeyNotFoundException("FoodSupplier should be correlated with OrderPrice configuration in appSettings.json");
+                    throw new KeyNotFoundException(
+                        "FoodSupplier should be correlated with OrderPrice configuration in appSettings.json");
             }
         }
     }
