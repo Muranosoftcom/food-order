@@ -18,7 +18,7 @@ interface UserPayload {
 	pictureUrl: string;
 }
 
-const LOCAL_STORAGE_KEY = "food-order-session";
+export const LOCAL_STORAGE_KEY = "food-order-session";
 
 export default class AuthService {
 	public async loginByGoogle(googleIdToken: string) {

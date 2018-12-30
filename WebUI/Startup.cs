@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text;
 using BusinessLogic.Services;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +38,11 @@ namespace WebUI {
             services.AddDbContext<FoodOrderContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("FoodOrderDatabase")));
 
+            services.AddIdentity<User, IdentityRole>(options => {
+                options.User.RequireUniqueEmail = true;
+                options.ClaimsIdentity.UserIdClaimType = "id";
+                options.ClaimsIdentity.UserNameClaimType = "fullName";
+            });
             services
                 .AddAuthentication(options => {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

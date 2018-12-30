@@ -1,4 +1,4 @@
-import axios from "axios";
+import ajax from "../../vendors/ajax";
 
 import UserOrder from "../../domain/user-order";
 
@@ -8,15 +8,15 @@ export default class OrderService {
 	}
 
 	public async getTodayOrders(): Promise<UserOrder[]> {
-		return (await axios.get(`${this.api}/today-orders/`)).data;
+		return (await ajax().get(`${this.api}/today-orders/`)).data;
 	}
 
 	public async getSharedTodayOrders(): Promise<UserOrder[]> {
-		return (await axios.get(`${this.api}/shared-today-orders/`)).data;
+		return (await ajax().get(`${this.api}/shared-today-orders/`)).data;
 	}
 
 	public orderLunch(userOrder: UserOrder) {
-		return axios.post(`${this.api}/order-lunch/`, userOrder);
+		return ajax().post(`${this.api}/order-lunch/`, userOrder);
 	}
 
 	public async getWeekOrders(userId: string | null): Promise<UserOrder[]> {
@@ -24,6 +24,6 @@ export default class OrderService {
 			return []
 		}
 
-		return (await axios.get(`${this.api}/week-orders/${userId}`)).data;
+		return (await ajax().get(`${this.api}/week-orders/${userId}`)).data;
 	}
 }

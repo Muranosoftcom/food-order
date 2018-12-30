@@ -1,4 +1,4 @@
-import axios from "axios";
+import ajax from "../../vendors/ajax";
 
 import Day from "../../domain/day";
 
@@ -9,7 +9,7 @@ class CalendarService {
 
 	public async getDays(): Promise<Day[]> {
 		const url = this.api + "/next-two-weeks/";
-		return (await axios.get(url)).data;
+		return (await ajax().get(url)).data;
 	}
 }
 

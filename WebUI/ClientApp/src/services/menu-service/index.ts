@@ -1,4 +1,4 @@
-import axios from "axios";
+import ajax from "../../vendors/ajax";
 import { DayMenuDto } from "../../domain/dto";
 
 export default class MenuService {
@@ -9,6 +9,6 @@ export default class MenuService {
 	}
 
 	public async getWeekMenu(): Promise<DayMenuDto[]> {
-		return (await axios.get(this.api)).data;
+		return (await ajax().get(this.api)).data;
 	}
 }
