@@ -157,7 +157,7 @@ namespace WebUI.Controllers {
         private WeekDayDto ToWeekDayDto(Order order) {
             return new WeekDayDto {
                 WeekDay = order.Date.DayOfWeek.ToString(),
-                UserName = $"{order.User?.FirstName} {order.User?.LastName}",
+                UserName = $"{order.User?.UserName} {order.User?.UserName}",
                 Suppliers = order.OrderItems.GroupBy(x => (x.DishItem.Supplier.Id, x.DishItem.Supplier.Name)).Select(
                     x => new SupplierDto {
                         SupplierId = x.Key.Id,

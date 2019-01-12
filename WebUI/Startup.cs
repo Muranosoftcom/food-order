@@ -32,11 +32,15 @@ namespace WebUI {
         public void ConfigureServices(IServiceCollection services) {
             AuthOptions authOptions = new AuthOptions(Configuration);
             
-            // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
+            string connectionString = FoodOrderContext.GetConnectionString(
+                Configuration["FoodOrderDatabase:DatabaseName"],
+                Configuration["FoodOrderDatabase:UserId"],
+                Configuration["FoodOrderDatabase:Password"],
+                Configuration["FoodOrderDatabase:ServerName"]
+            );
             
             services.AddDbContext<FoodOrderContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("FoodOrderDatabase")));
+                options.UseSqlServer(connectionString));
 
             services.AddIdentity<User, IdentityRole>(options => {
                 options.User.RequireUniqueEmail = true;
@@ -73,14 +77,15 @@ namespace WebUI {
 
             // Add framework services.
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new Info {
                     Version = "v1",
                     Title = "My API",
                     Description = "My First ASP.NET Core Web API",
                     TermsOfService = "None",
-                    Contact = new Contact()
-                        {Name = "Talking Dotnet", Email = "contact@talkingdotnet.com", Url = "www.talkingdotnet.com"}
+                    Contact = new Contact {Name = "Talking Dotnet", Email = "contact@talkingdotnet.com", Url = "www.talkingdotnet.com"}
                 });
             });
         }

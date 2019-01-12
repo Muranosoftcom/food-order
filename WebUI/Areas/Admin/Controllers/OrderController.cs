@@ -40,7 +40,7 @@ namespace WebUI.Areas.Admin.Controllers
             var orders = _repository.All<Order>()
                 .Where(x => x.Price > higherPrice && x.Date.Month == DateTime.Today.AddMonths(-1).Month)
                 .Include(x => x.OrderItems).ThenInclude(x => x.DishItem).ThenInclude(x => x.Supplier)
-                .Include(x => x.User).OrderBy(x => x.User.FirstName).ToArray();
+                .Include(x => x.User).OrderBy(x => x.User.UserName).ToArray();
 
             var models = from order in orders
                 let suppId = order.OrderItems.First().DishItem.Supplier.Id
@@ -48,7 +48,7 @@ namespace WebUI.Areas.Admin.Controllers
                 where order.Price > processingPrice
                 select new OverpriceViewModel
                 {
-                    UserName = order.User.FirstName,
+                    UserName = order.User.UserName,
                     Price = order.Price,
                     MaxPrice = processingPrice,
                     PriceDifference = order.Price - processingPrice,

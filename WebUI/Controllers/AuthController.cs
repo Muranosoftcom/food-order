@@ -31,8 +31,7 @@ namespace WebUI.Controllers {
 
                 if (!await _userManager.IsRegisteredAsync(userEmail)) {
                     await _userManager.RegisterNewAsync(new User {
-                        FirstName = payload.GivenName, 
-                        LastName = payload.FamilyName, 
+                        UserName = payload.Name, 
                         Email = userEmail
                     });
                 }
@@ -60,7 +59,7 @@ namespace WebUI.Controllers {
             
             var claims = new [] {
                 new Claim("id", dbUser.Id.ToString()),
-                new Claim("fullName", dbUser.FullName),
+                new Claim("fullName", dbUser.UserName),
                 new Claim("isAdmin", dbUser.IsAdmin.ToString().ToLower()),
                 new Claim("pictureUrl", pictureUrl)
             };
