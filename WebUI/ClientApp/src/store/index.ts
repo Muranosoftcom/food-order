@@ -8,6 +8,7 @@ import CalendarService from "../services/calendar-service";
 import HomePageStore from "../pages/home/store/home-page-store";
 import OrderPageStore from "../pages/order/store/order-page-store";
 import WeekOrderPageStore from "../pages/week-order/store/week-order-page-store";
+import AdminPageStore from "../pages/admin/store/admin-page-store";
 import LoginPageStore from "../pages/login/store/store";
 import MyOrderStore from "./my-order-store";
 import IdentityStore from "./identity-store";
@@ -31,8 +32,9 @@ function createStores({ menuService, orderService, authService, calendarService 
 	const orderPageStore = new OrderPageStore(appStore, appModel);
 	const weekOrderPageStore = new WeekOrderPageStore(appStore, appModel);
 	const loginPageStore = new LoginPageStore(appStore);
+	const adminPageStore = new AdminPageStore(appStore);
 
-	return { appStore, homePageStore, orderPageStore, weekOrderPageStore, loginPageStore, myOrderStore };
+	return { appStore, homePageStore, orderPageStore, weekOrderPageStore, loginPageStore, myOrderStore, adminPageStore };
 }
 
 export { createStores };

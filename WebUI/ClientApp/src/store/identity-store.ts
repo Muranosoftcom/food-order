@@ -18,6 +18,11 @@ class IdentityStore {
 		return this.currentUser !== null;
 	};
 
+	@computed
+	public get isCurrentUserAdmin() {
+		return this.isAuthenticated && this.currentUser!.isAdmin;
+	};
+
 	@action
 	public async loginByGoogle(token: string) {
 		const user = await this.authService.loginByGoogle(token);

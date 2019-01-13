@@ -95,6 +95,11 @@ class Header extends React.Component<Props> {
 											<DropdownItem disabled>
 												Профиль
 											</DropdownItem>
+											{identity.isCurrentUserAdmin && (
+												<Link className="dropdown-item" to="/admin/">
+													Admin
+												</Link>
+											)}
 											<DropdownItem divider />
 											<DropdownItem onClick={this.handleLogout}>
 												Выход
