@@ -1,6 +1,6 @@
 using System;
-using System.Globalization;
 using System.Linq;
+using BusinessLogic.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Controllers {
@@ -17,7 +17,7 @@ namespace WebUI.Controllers {
                     var dayOfWeek = day.DayOfWeek;
 
                     return new {
-                        shortDate = day.Date.ToString("d", CultureInfo.InvariantCulture),
+                        shortDate = day.Date.PretifyDate(),
                         isHoliday = dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Sunday
                     };
 

@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTOs;
 using BusinessLogic.Services;
-using Core;
-using Domain.Entities;
+using BusinessLogic.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -55,7 +53,7 @@ namespace WebUI.Controllers {
         private string ToShortDate(DateTime[] daysOfWeek, string dayName) {
             return daysOfWeek
                 .First(day => day.ToString("ddd") == dayName)
-                .ToString("d", CultureInfo.InvariantCulture);
+                .PretifyDate();
         }
 
         private DateTime[] WeekDays() {

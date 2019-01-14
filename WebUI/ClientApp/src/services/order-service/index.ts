@@ -24,6 +24,6 @@ export default class OrderService {
 			return []
 		}
 
-		return (await ajax().get(`${this.api}/week-orders/${userId}`)).data;
+		return (await ajax().get(`${this.api}/week-orders/`)).data;
 	}
 }

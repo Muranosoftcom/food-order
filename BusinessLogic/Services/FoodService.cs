@@ -118,8 +118,8 @@ namespace BusinessLogic.Services {
                                     Id = f.Id,
                                     Name = f.Name,
                                     Price = f.Price,
-                                    NegativeRewievs = f.NegativeReviews,
-                                    PositiveRewievs = f.PositiveReviews
+                                    NegativeReviews = f.NegativeReviews,
+                                    PositiveReviews = f.PositiveReviews
                                 }).ToArray()
                             }).ToArray()
                         };
