@@ -17,6 +17,7 @@ using SpreadsheetIntegration.Google;
 using Swashbuckle.AspNetCore.Swagger;
 using SpreadsheetIntegration;
 using WebUI.Infrastructure;
+using WebUI.Models;
 
 namespace WebUI {
     public class Startup {
@@ -30,7 +31,7 @@ namespace WebUI {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            AuthOptions authOptions = new AuthOptions(Configuration);
+            AuthenticationSettings authOptions = new AuthenticationSettings(Configuration.GetSection("AuthenticationSettings"));
             
             string connectionString = FoodOrderContext.GetConnectionString(
                 Configuration["FoodOrderDatabase:DatabaseName"],
@@ -60,8 +61,8 @@ namespace WebUI {
                         ValidateAudience = true,
                         ValidateIssuerSigningKey = true,
                         ValidateLifetime = true,
-                        ValidIssuer = authOptions.Issuer,
-                        ValidAudience = authOptions.Audience,
+                        ValidIssuer = authOptions.JwtIssuer,
+                        ValidAudience = authOptions.JwtAudience,
                         IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
                         ClockSkew = TimeSpan.Zero
                     };
@@ -72,7 +73,7 @@ namespace WebUI {
             services.AddScoped<FoodOrderContext>();
             services.AddScoped<IRepository, FoodOrderRepository>();
             services.AddScoped<IFoodService, FoodService>();
-            services.AddSingleton<AuthOptions>();
+            services.AddSingleton(authOptions);
             services.AddScoped<UserManager>();
 
             // Add framework services.

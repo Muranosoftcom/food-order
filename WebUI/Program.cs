@@ -11,12 +11,14 @@ namespace WebUI {
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) {
             return WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
                 .ConfigureAppConfiguration((hostingContext, config) => {
                     config.SetBasePath(Directory.GetCurrentDirectory());
-                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-                    config.AddJsonFile("secrets.json", optional: false, reloadOnChange: true);
+                    config.AddJsonFile($"appsettings{(hostingContext.HostingEnvironment.IsProduction() ? ".production" : "")}.json", optional: false, reloadOnChange: true);
+                    config.AddJsonFile($"secrets{(hostingContext.HostingEnvironment.IsProduction() ? ".production" : "")}.json", optional: false, reloadOnChange: true);
                     config.AddCommandLine(args);
                 })
+                .UseIISIntegration()
                 .UseStartup<Startup>();
         }
     }

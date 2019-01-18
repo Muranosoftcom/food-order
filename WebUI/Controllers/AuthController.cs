@@ -8,16 +8,17 @@ using Google.Apis.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using WebUI.Infrastructure;
+using WebUI.Models;
 
 namespace WebUI.Controllers {
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : Controller {
-        private readonly AuthOptions _authOptions;
+        private readonly AuthenticationSettings _authenticationSettings;
         private readonly UserManager _userManager;
 
-        public AuthController(AuthOptions authOptions, UserManager userManager) {
-            _authOptions = authOptions;
+        public AuthController(AuthenticationSettings authenticationSettings, UserManager userManager) {
+            _authenticationSettings = authenticationSettings;
             _userManager = userManager;
         }
 
@@ -68,12 +69,12 @@ namespace WebUI.Controllers {
         }
 
         private AppSecurityToken GenerateJwtSecurityToken(IEnumerable<Claim> claims) {
-            var signingCredentials = new SigningCredentials(_authOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.UtcNow.AddDays(_authOptions.ExpireDays);
+            var signingCredentials = new SigningCredentials(_authenticationSettings.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.UtcNow.AddDays(_authenticationSettings.ExpireDays);
             var notBefore = DateTime.UtcNow;
             
             return new AppSecurityToken {
-                Token = new JwtSecurityToken(_authOptions.Issuer, _authOptions.Audience, claims, notBefore, expires, signingCredentials)
+                Token = new JwtSecurityToken(_authenticationSettings.JwtIssuer, _authenticationSettings.JwtAudience, claims, notBefore, expires, signingCredentials)
             };
         }
     }
