@@ -17,7 +17,7 @@ namespace WebUI.Controllers {
                     var dayOfWeek = day.DayOfWeek;
 
                     return new {
-                        shortDate = day.Date.PretifyDate(),
+                        shortDate = day.Date.PrettifyDate(),
                         isHoliday = dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Sunday
                     };
 

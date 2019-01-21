@@ -33,7 +33,7 @@ namespace WebUI.Controllers {
         [Route("today-orders")]
         public UserOrderDto[] GetTodayOrder() {
             return GetWeeOrders()
-                .Where(dto => dto.Day.ShortDate == DateTime.Today.Date.PretifyDate())
+                .Where(dto => dto.Day.ShortDate == DateTime.Today.Date.PrettifyDate())
                 .ToArray();
         }
 

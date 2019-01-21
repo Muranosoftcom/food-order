@@ -53,7 +53,7 @@ namespace WebUI.Controllers {
         private string ToShortDate(DateTime[] daysOfWeek, string dayName) {
             return daysOfWeek
                 .First(day => day.ToString("ddd") == dayName)
-                .PretifyDate();
+                .PrettifyDate();
         }
 
         private DateTime[] WeekDays() {
