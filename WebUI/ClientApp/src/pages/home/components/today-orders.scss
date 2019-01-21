@@ -1,0 +1,47 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins/breakpoints";
+
+.today-orders {
+	$text-color-secondary: #808080;
+
+	border-collapse: collapse;
+
+	th {
+		color: $text-color-secondary;
+		font-weight: normal;
+	}
+
+	&--authorized &__cell {
+		color: $text-color-secondary;
+	}
+
+	&__cell{
+		&--active {
+			background-color: #e4f3ff;
+			color: #333333 !important;
+		}
+	}
+
+	&__dishes {
+		@include media-breakpoint-down(md) {
+			order: 2;
+		}
+	}
+
+	&__supplier {
+		@include media-breakpoint-down(md) {
+			align-self: flex-start;
+			order: 1;
+		}
+	}
+
+	&__order-details {
+		display: flex;
+		justify-content: space-between;
+
+		@include media-breakpoint-down(md) {
+			flex-direction: column;
+		}
+	}
+}

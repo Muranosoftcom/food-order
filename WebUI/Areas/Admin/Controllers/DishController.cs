@@ -36,26 +36,7 @@ namespace WebUI.Areas.Admin.Controllers
         }
         
 
-        // POST: Dish/Create
-        [HttpPost]
-        [Route("sync")]
-        public async Task<ViewResult> Sync(SyncViewModel viewModel)
-        {
-            try
-            {
-                await _foodService.SynchronizeFood();
-                return View(new SyncViewModel
-                {
-                    SyncResult = "Синхронизация успешно завершена"
-                });
-            }
-            catch
-            {
-                return View(new SyncViewModel {
-                    SyncResult = "Ошибка при выполнении синхронизации"
-                });
-            }
-        }
+        
 
 //        public async Task<ViewResult> SendNotification(SyncViewModel viewModel)
 //        {

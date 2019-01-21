@@ -1,0 +1,29 @@
+.supplier {
+	margin-bottom: 1rem;
+
+	&__title {
+		background: #5199db;
+		color: #fff;
+		padding: 0.5rem 1rem;
+	}
+}
+
+.meal-category {
+	background-color: #eee;
+	padding: 0.5rem 0;
+
+	&__header {
+		background: #e4f3ff;
+		box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12);
+		padding: 0.5rem 0.3rem;
+		margin: 0 0.25rem;
+	}
+
+	&__name {
+		padding-left: 0.3rem;
+	}
+
+	&__dishes {
+		padding: 0.5rem 0.25rem 0 0.8rem;
+	}
+}

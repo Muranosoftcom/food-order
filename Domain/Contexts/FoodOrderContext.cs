@@ -2,18 +2,28 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Domain.Contexts
-{
-    public class FoodOrderContext : DbContext, IDesignTimeDbContextFactory<FoodOrderContext>, IFoodOrderContext
-    {
+namespace Domain.Contexts {
+    public class FoodOrderContext : DbContext, IDesignTimeDbContextFactory<FoodOrderContext>, IFoodOrderContext {
         public FoodOrderContext(DbContextOptions<FoodOrderContext> options)
-            : base(options)
-        {
+            : base(options) { }
+
+        public FoodOrderContext() { }
+
+        public FoodOrderContext CreateDbContext(string[] args) {
+            var optionsBuilder = new DbContextOptionsBuilder<FoodOrderContext>();
+            optionsBuilder.UseSqlServer(GetConnectionString());
+
+            return new FoodOrderContext(optionsBuilder.Options);
         }
 
-        public FoodOrderContext()
-        {
+        public static string GetConnectionString(string databaseName = "FoodOrderDatabase", string databaseUser = "login", string databasePass = "12345", string server = "localhost") {
+               return $"Server={server};" +
+                   $"Database={databaseName};" +
+                   $"User id={databaseUser};" +
+                   $"Password={databasePass};";
         }
+
+        public DbSet<Supplier> Suppliers { get; set; }
 
         public DbSet<DishItem> DishItems { get; set; }
 
@@ -24,15 +34,12 @@ namespace Domain.Contexts
         public DbSet<DishItemToWeekDay> DishItemsToWeekDays { get; set; }
 
         public DbSet<OrderItem> OrderItems { get; set; }
-        
-        public DbSet<Supplier> Suppliers { get; set; }
-        
+
         public DbSet<Order> Orders { get; set; }
-        
+
         public DbSet<User> Users { get; set; }
-        
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<DishItemToWeekDay>().HasKey(x => new {x.DishItemId, x.WeekDayId});
             modelBuilder.Entity<DishItemToWeekDay>()
                 .HasOne(bc => bc.WeekDay)
@@ -43,14 +50,6 @@ namespace Domain.Contexts
                 .HasOne(bc => bc.DishItem)
                 .WithMany(c => c.AvailableOn)
                 .HasForeignKey(bc => bc.DishItemId);
-        }
-
-        public FoodOrderContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<FoodOrderContext>();
-            optionsBuilder.UseSqlServer("Server=ua-muk100;Database=foodOrderDatabase;User id=login;Password=12345;");
-
-            return new FoodOrderContext(optionsBuilder.Options);
         }
     }
 }

@@ -1,0 +1,12 @@
+.dish-view {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+
+	&__name {}
+	&__price {}
+	&__price-value {}
+	&__money-unit {
+		margin-left: 0.5rem;
+	}
+}
