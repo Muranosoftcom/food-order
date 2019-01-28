@@ -18,7 +18,6 @@ namespace WebUI {
                     config.AddJsonFile($"secrets{(hostingContext.HostingEnvironment.IsProduction() ? ".production" : "")}.json", optional: false, reloadOnChange: true);
                     config.AddCommandLine(args);
                 })
-                .UseIISIntegration()
                 .UseStartup<Startup>();
         }
     }

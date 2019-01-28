@@ -18,11 +18,14 @@ const Order = React.lazy(() => import("../pages/order/index"));
 const MyOrder = React.lazy(() => import("../pages/my-order/index"));
 const MyWeekOrder = React.lazy(() => import("../pages/week-order/index"));
 const Login = React.lazy(() => import("../pages/login/index"));
+const Logout = React.lazy(() => import("../pages/logout/logout"));
 const AdminPage = React.lazy(() => import("../pages/admin/index"));
 
 interface Props extends RouteComponentProps {
 	appStore?: AppStore;
 }
+
+const EmptyLoader = () => (<div />);
 
 class App extends Component<Props> {
 	componentDidMount() {
@@ -84,8 +87,17 @@ class App extends Component<Props> {
 						<Route
 							path="/login/"
 							component={() => (
-								<Suspense fallback={<Loader/>}>
+								<Suspense fallback={<EmptyLoader />}>
 									<Login/>
+								</Suspense>
+							)}
+						/>
+						<Route
+							path="/logout/"
+							isAuthenticated={isAuthenticated}
+							component={() => (
+								<Suspense fallback={<EmptyLoader />}>
+									<Logout/>
 								</Suspense>
 							)}
 						/>

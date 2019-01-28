@@ -38,10 +38,6 @@ class Header extends React.Component<Props> {
 		this.isOpen = !this.isOpen;
 	});
 
-	handleLogout = action(() => {
-		this.props.appStore!.identity.logout();
-	});
-
 	render() {
 		const { className } = this.props;
 		const { identity } = this.props.appStore!;
@@ -101,9 +97,9 @@ class Header extends React.Component<Props> {
 												</Link>
 											)}
 											<DropdownItem divider />
-											<DropdownItem onClick={this.handleLogout}>
+											<Link className="dropdown-item" to="/logout/">
 												Выход
-											</DropdownItem>
+											</Link>
 										</DropdownMenu>
 									</UncontrolledDropdown>
 								)}

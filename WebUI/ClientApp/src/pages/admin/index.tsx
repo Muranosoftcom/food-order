@@ -30,7 +30,7 @@ class AdminPage extends Component<Props> {
 							Синхронизация меню от поставщиков из Excel
 						</Col>
 						<Col>
-							<Button onClick={this.handleSync}>Sync menu</Button>
+							<Button disabled={!adminPageStore!.isSyncEnabled} onClick={this.handleSync}>Sync menu</Button>
 						</Col>
 					</Row>
 				</>

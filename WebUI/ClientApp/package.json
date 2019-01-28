@@ -21,7 +21,6 @@
     "react-router-dom": "4.3.1",
     "react-scripts": "2.1.1",
     "react-select": "^2.1.2",
-    "react-social-login": "3.4.3",
     "reactstrap": "6.5.0",
     "validatorjs": "3.15.1"
   },

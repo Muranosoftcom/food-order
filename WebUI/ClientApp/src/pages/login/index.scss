@@ -1,0 +1,23 @@
+.login-page {
+	margin-top: 1rem;
+
+	&__content {
+		padding: 4rem 0;
+	}
+
+	&__signin-button-wrapper {
+		display: flex;
+		justify-content: center;
+		padding-top: 2rem;
+	}
+
+	&__signin-button {
+		background: none;
+		border: none;
+	}
+}
+
+.brand-info {
+	display: flex;
+	justify-content: center;
+}

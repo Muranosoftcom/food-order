@@ -9,11 +9,9 @@ class LoginPageStore extends PageStore {
 	}
 
 	@action.bound
-	loginByGoogle(user: any, err: any) {
-		if (user && user.token) {
-			this.appStore.identity.loginByGoogle(user.token.idToken);
-		} else {
-			console.error(err);
+	loginByGoogle(idToken: string) {
+		if (idToken) {
+			this.appStore.identity.loginByGoogle(idToken);
 		}
 	}
 }

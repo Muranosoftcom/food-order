@@ -1,9 +1,10 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 import { Link } from "react-router-dom";
-import { Col, Row } from "reactstrap";
+import { Col, Row, Button } from "reactstrap";
 
 import AppStore from "../../store/app-store";
+import { logout } from "../../vendors/google-api-auth";
 
 interface Props {
 	appStore?: AppStore;
@@ -13,8 +14,13 @@ interface Props {
 @observer
 class LogoutPage extends React.Component<Props> {
 	componentDidMount() {
-		this.props.appStore!.identity.logout();
+		this.handleLogout();
 	}
+
+	private handleLogout = async () => {
+		await logout();
+		this.props.appStore!.identity.logout();
+	};
 
 	render() {
 		const { isAuthenticated } = this.props.appStore!.identity;
@@ -22,7 +28,9 @@ class LogoutPage extends React.Component<Props> {
 		return (
 			<Row tag="section" className="mt-4">
 				{isAuthenticated ? (
-					<Col>Идет обработка...</Col>
+					<Col>
+						<Button onClick={this.handleLogout}>Выйти</Button>
+					</Col>
 				) : (
 					<Col lg={{ size: 6, offset: 3 }} md={{ size: 8, offset: 2 }}>
 						<div>Мы будем скучать по тебе :)</div>

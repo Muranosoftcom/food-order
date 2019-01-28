@@ -11,6 +11,9 @@ import { createServices } from "./services";
 import { config } from "./config";
 import "./vendors/index";
 import "./index.scss";
+import * as GoogleApi from "./vendors/google-api-auth";
+
+GoogleApi.onLoad();
 
 configure({ enforceActions: "always" });
 
