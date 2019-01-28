@@ -4,7 +4,36 @@
 	bottom: 30px;
 	min-height: 100px;
 	min-width: 100px;
-	padding: 10px;
+	padding: 10px 25px 10px 10px;
 	position: fixed;
 	right: 30px;
+
+	&__close-button {
+		font-size: 0.4rem;
+		line-height: 0.4rem !important;
+		position: absolute;
+		height: 15px;
+		width: 15px;
+		padding: 2px !important;
+
+		right: 5px;
+		top: 5px;
+	}
+
+	&--collapsed-mode {
+		$size: 60px;
+
+		background-color: #999;
+		border: 1px solid;
+		border-radius: 50%;
+		bottom: $size / 2;
+		color: #fff;
+		height: $size;
+		padding-top: 5px;
+		position: fixed;
+		right: - $size / 2;
+		text-align: center;
+		transform: rotateZ(-90deg);
+		width: $size;
+	}
 }
