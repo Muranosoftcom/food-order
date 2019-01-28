@@ -32,13 +32,17 @@ interface Props {
 @observer
 class Header extends React.Component<Props> {
 	@observable
-	isOpen: boolean = false;
+	private isOpen: boolean = false;
 
-	toggle = action(() => {
+	private toggle = action(() => {
 		this.isOpen = !this.isOpen;
 	});
 
-	render() {
+	private closeMenu = action(() => {
+		this.isOpen = false;
+	})
+
+	public render() {
 		const { className } = this.props;
 		const { identity } = this.props.appStore!;
 		const { canOrder } = this.props.myOrderStore!;
@@ -55,18 +59,18 @@ class Header extends React.Component<Props> {
 							<Nav className="ml-auto mr-auto" navbar>
 								{canOrder &&
 									<NavItem>
-										<Link className="nav-link" to="/order/">
+										<Link className="nav-link" to="/order/" onClick={this.closeMenu}>
 											Заказать обед
 										</Link>
 									</NavItem>
 								}
 								<NavItem>
-									<Link className="nav-link" to="/week-order/">
+									<Link className="nav-link" to="/week-order/" onClick={this.closeMenu}>
 										Заказ на неделю
 									</Link>
 								</NavItem>
 								<NavItem>
-									<Link className="nav-link" to="/my-order/">
+									<Link className="nav-link" to="/my-order/" onClick={this.closeMenu}>
 										Мой обед
 									</Link>
 								</NavItem>
@@ -74,30 +78,30 @@ class Header extends React.Component<Props> {
 							<Nav navbar>
 								{!identity.isAuthenticated && (
 									<NavItem>
-										<Link className="nav-link" to="/login/">
+										<Link className="nav-link" to="/login/" onClick={this.closeMenu}>
 											Вход
 										</Link>
 									</NavItem>
 								)}
 								{identity.isAuthenticated && (
 									<UncontrolledDropdown nav inNavbar>
-										<DropdownToggle nav caret>
+										<DropdownToggle nav caret onClick={this.closeMenu}>
 											<User
 												name={identity.currentUser!.fullName}
 												pictureUrl={identity.currentUser!.pictureUrl}
 											/>
 										</DropdownToggle>
 										<DropdownMenu right>
-											<DropdownItem disabled>
+											<DropdownItem disabled onClick={this.closeMenu}>
 												Профиль
 											</DropdownItem>
 											{identity.isCurrentUserAdmin && (
-												<Link className="dropdown-item" to="/admin/">
+												<Link className="dropdown-item" to="/admin/" onClick={this.closeMenu}>
 													Admin
 												</Link>
 											)}
 											<DropdownItem divider />
-											<Link className="dropdown-item" to="/logout/">
+											<Link className="dropdown-item" to="/logout/" onClick={this.closeMenu}>
 												Выход
 											</Link>
 										</DropdownMenu>
