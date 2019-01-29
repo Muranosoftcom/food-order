@@ -42,6 +42,8 @@ namespace BusinessLogic.Services {
                     var food = new SupplierDto {
                         SupplierId = (int) FoodSupplier.Glagol,
                         SupplierName = "ГлаголЪ",
+                        AvailableMoneyToOrder = 0,
+                        CanMultiSelect = false,
                         Categories = x.GroupBy(g => g.Category).Select(c => new CategoryDto {
                             Name = c.Key,
                             Dishes = c.GroupBy(g => (g.Name, g.Price)).Select(d => new DishDto {
@@ -60,6 +62,8 @@ namespace BusinessLogic.Services {
                     var food = new SupplierDto {
                         SupplierId = (int) FoodSupplier.Cafe,
                         SupplierName = "Столовая",
+                        AvailableMoneyToOrder = 51,
+                        CanMultiSelect = false,
                         Categories = x.GroupBy(g => g.Category).Select(c => new CategoryDto {
                             Name = c.Key,
                             Dishes = c.GroupBy(g => (g.Name, g.Price)).Select(d => new DishDto {
@@ -103,7 +107,7 @@ namespace BusinessLogic.Services {
             var dto = new WeekMenuDto {
                 WeekDays = dishesByDayName.Select(x => new WeekDayDto {
                     WeekDay = x.Key,
-                    Suppliers = x.GroupBy(d => (id: d.Supplier.Id, name: d.Supplier.Name)).Select(d => {
+                    Suppliers = x.GroupBy(d => (id: d.Supplier.Id, name: d.Supplier.Name, canMultiSelect: d.Supplier.CanMultiSelect, availableMoneyToOrder: d.Supplier.AvailableMoneyToOrder )).Select(d => {
                         var dishItemByPairPairs =
                             d.Select(di => (key: (categoryId: di.Category.Id, categoryName: di.Category.Name),
                                 value: di));
@@ -111,6 +115,8 @@ namespace BusinessLogic.Services {
                         return new SupplierDto {
                             SupplierId = d.Key.id,
                             SupplierName = d.Key.name,
+                            CanMultiSelect = d.Key.canMultiSelect,
+                            AvailableMoneyToOrder = d.Key.availableMoneyToOrder,
                             Categories = dishItemByPair.Select(z => new CategoryDto {
                                 Id = z.Key.categoryId,
                                 Name = z.Key.categoryName,
