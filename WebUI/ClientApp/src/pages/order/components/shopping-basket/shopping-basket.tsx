@@ -22,33 +22,41 @@ interface Props {
 function ShoppingBasket({ dishes, onUnselectDish, onMakeOrder, availableMoneyToOrder = 51 }: Props) {
 	const payment = dishes.reduce((acc, dish) => acc + dish.price, 0);
 	const overpayment = calcOverpayment(payment, availableMoneyToOrder);
+	const hasAnyDishes = dishes.length > 0;
 
 	return (
 		<div className="shopping-basket border">
-			<h3 className="shopping-basket__title text-center">Сумма заказа</h3>
-			<div className="shopping-basket__payment text-center">
-				<div className="shopping-basket__payment-value">
-					<span>{payment}</span>
-					<span className="shopping-basket__payment-money-unit">грн</span>
+			<div className="shopping-basket__title">Ваш заказ:</div>
+			{hasAnyDishes && (
+				<div className="shopping-basket__dishes">
+					{dishes.map(dish => {
+						return <DishSelector key={dish.id} isSelected dish={dish} onUnselect={onUnselectDish} />;
+					})}
 				</div>
-				{overpayment > 0 && (
-					<div className="overpayment text-danger">
-						<span className="overpayment__title">Переплата</span>
-						{overpayment}
-						<span className="overpayment__money-unit">грн</span>
+			)}
+			{payment > 0 && (
+				<div className="shopping-basket__payment check">
+					<div className="check__title">На сумму:</div>
+					<div className="check__total">
+						<div className="check__total-value">
+							<span>{payment}</span>
+							<span className="money-unit">грн</span>
+						</div>
+						{overpayment > 0 && (
+							<div className="check__overpayment overpayment">
+								<span className="overpayment__title">(переплата)</span>
+								{overpayment}
+								<span className="money-unit overpayment__money-unit">грн</span>
+							</div>
+						)}
 					</div>
-				)}
-			</div>
-			<div className="shopping-basket__dishes">
-				{dishes.map(dish => {
-					return <DishSelector key={dish.id} isSelected dish={dish} onUnselect={onUnselectDish}/>;
-				})}
-			</div>
-			{dishes.length > 0 && (
+				</div>
+			)}
+			{hasAnyDishes && (
 				<div className="text-right">
-					<Button className="shopping-basket__order-button" color="primary" onClick={onMakeOrder}>
+					<Button color="primary" onClick={onMakeOrder}>
 						Заказать
-						<ShoppingCart className="shopping-basket__order-button-icon"/>
+						<ShoppingCart className="shopping-basket__order-button-icon" />
 					</Button>
 				</div>
 			)}

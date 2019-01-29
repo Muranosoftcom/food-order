@@ -4,25 +4,19 @@
 	padding: 1rem;
 	margin-bottom: 1rem;
 
+	&__title {
+		font-style: italic;
+		font-size: 1.1rem;
+	}
+
 	&__payment {
-		margin-bottom: 1.5rem;
-	}
-
-	&__payment-value {
-		font-size: 4rem;
-	}
-
-	&__payment-money-unit {
-		color: #808080;
-		font-size: 1.5rem;
-		margin-left: 0.75rem;
+		margin-bottom: 1.2rem;
 	}
 
 	&__dishes {
+		margin-top: 1rem;
 		margin-bottom: 1.5rem;
 	}
-
-	&__order-button {}
 
 	&__order-button-icon {
 		fill: #fff;
@@ -30,12 +24,40 @@
 	}
 }
 
-.overpayment {
+.check {
+	align-items: stretch;
+	display: flex;
+	justify-content: space-between;
+
 	&__title {
-		margin-right: 1em;
+		font-style: italic;
+	}
+
+	&__total {
+		text-align: right;
+	}
+
+	&__total-value {
+		font-weight: bold;
+		font-size: 1.2rem;
+	}
+}
+
+.overpayment {
+	color: #d77158;
+
+	&__title {
+		font-size: 0.7em;
+		margin-right: 0.7em;
 	}
 
 	&__money-unit {
-		margin-left: 0.5em;
+		color: #d77158;
 	}
+}
+
+.money-unit {
+	font-size: 0.7em;
+	font-style: italic;
+	margin-left: 0.4em;
 }
