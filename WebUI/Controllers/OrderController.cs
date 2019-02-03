@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTOs;
-using BusinessLogic.Utils;
 using Core;
 using Domain.Entities;
 using Domain.Repositories;
@@ -11,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using WebUI.Dto;
 using WebUI.Infrastructure;
 
 namespace WebUI.Controllers {

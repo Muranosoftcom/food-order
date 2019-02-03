@@ -66,7 +66,7 @@ namespace Test {
             repo.Save();
             var currentCount = repo.All<User>().Count();
             var diff = currentCount - prevCount;
-            Assert.Equal(diff, 4);
+            Assert.Equal(4, diff);
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace Test {
             context.WeekDays.Add(new WeekDay {Name = "Wd"});
             context.SaveChanges();
             var t = context.WeekDays.FirstOrDefault(x => x.Name == "Wd");
-            Assert.Equal(t.Name, "Wd");
+            Assert.Equal("Wd", t.Name);
 
             context.Remove(t);
             context.SaveChanges();

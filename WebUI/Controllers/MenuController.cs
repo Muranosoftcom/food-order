@@ -4,9 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTOs;
 using BusinessLogic.Services;
-using BusinessLogic.Utils;
+using Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebUI.Dto;
 
 namespace WebUI.Controllers {
     [Route("api/[controller]")]
