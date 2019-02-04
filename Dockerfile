@@ -10,10 +10,10 @@ RUN npm install yarn -g
 WORKDIR /app
 COPY . .
 
-RUN dotnet publish ./WebUI/WebUI.csproj -c Release -o out 
+RUN dotnet publish ./FoodOrder.WebUI/FoodOrder.WebUI.csproj -c Release -o out 
 
 # Build runtime image
 FROM microsoft/dotnet:2.2-aspnetcore-runtime AS runtime
 WORKDIR /app
-COPY --from=build-env /app/WebUI/out .
-ENTRYPOINT ["dotnet", "WebUI.dll"]
+COPY --from=build-env /app/FoodOrder.WebUI/out .
+ENTRYPOINT ["dotnet", "FoodOrder.WebUI.dll"]

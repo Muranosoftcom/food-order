@@ -1,9 +1,0 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace WebUI.Controllers {
-    public class HomeController : Controller {
-        public IActionResult Error() {
-            return View();
-        }
-    }
-}

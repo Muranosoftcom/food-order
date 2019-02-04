@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\FoodOrder.Common\FoodOrder.Common.csproj" />
+      <ProjectReference Include="..\FoodOrder.Domain\FoodOrder.Domain.csproj" />
+      <ProjectReference Include="..\FoodOrder.SpreadsheetIntegration\FoodOrder.SpreadsheetIntegration.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Reactive" Version="4.1.2" />
+    </ItemGroup>
+
+</Project>

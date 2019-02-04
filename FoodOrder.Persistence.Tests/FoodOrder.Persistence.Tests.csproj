@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FoodOrder.BusinessLogic\FoodOrder.BusinessLogic.csproj" />
+    <ProjectReference Include="..\FoodOrder.Common\FoodOrder.Common.csproj" />
+    <ProjectReference Include="..\FoodOrder.Domain\FoodOrder.Domain.csproj" />
+    <ProjectReference Include="..\FoodOrder.Persistence\FoodOrder.Persistence.csproj" />
+    <ProjectReference Include="..\FoodOrder.SpreadsheetIntegration\FoodOrder.SpreadsheetIntegration.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="Food ordering-9e07ded32cf7.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
