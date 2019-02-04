@@ -41,16 +41,9 @@ namespace FoodOrder.Persistence.DbContexts {
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            modelBuilder.Entity<DishItemToWeekDay>().HasKey(x => new {x.DishItemId, x.WeekDayId});
-            modelBuilder.Entity<DishItemToWeekDay>()
-                .HasOne(bc => bc.WeekDay)
-                .WithMany(b => b.AvailableItems)
-                .HasForeignKey(bc => bc.WeekDayId);
-
-            modelBuilder.Entity<DishItemToWeekDay>()
-                .HasOne(bc => bc.DishItem)
-                .WithMany(c => c.AvailableOn)
-                .HasForeignKey(bc => bc.DishItemId);
+            modelBuilder.ApplyAllConfigurations();
+            
+            
         }
     }
 }
