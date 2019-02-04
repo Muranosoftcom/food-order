@@ -1,0 +1,19 @@
+.git
+.idea
+Dockerfile
+.DS_Store
+.gitignore
+README.md
+env.*
+devops
+
+# To prevent storing dev/temporary container data
+*.csv
+tmp
+
+**/.git
+**/.DS_Store
+**/**/node_modules
+
+**/**/bin/
+**/**/obj/

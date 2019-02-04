@@ -3,17 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetIntegration", "SpreadsheetIntegration\SpreadsheetIntegration.csproj", "{8299F8DC-C5AF-4353-BB5A-BE6B8E19953F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodOrder.SpreadsheetIntegration", "FoodOrder.SpreadsheetIntegration\FoodOrder.SpreadsheetIntegration.csproj", "{8299F8DC-C5AF-4353-BB5A-BE6B8E19953F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "WebUI\WebUI.csproj", "{7B7873B1-7C7D-42C6-A6E7-B718758E84E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodOrder.Domain", "FoodOrder.Domain\FoodOrder.Domain.csproj", "{FC515C84-24ED-4435-8959-5E7BFCA332B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{FC515C84-24ED-4435-8959-5E7BFCA332B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodOrder.Persistence.Tests", "FoodOrder.Persistence.Tests\FoodOrder.Persistence.Tests.csproj", "{4A4516D5-6DA7-4D69-BE0A-62CA6B42E9DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{4A4516D5-6DA7-4D69-BE0A-62CA6B42E9DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodOrder.Common", "FoodOrder.Common\FoodOrder.Common.csproj", "{D796C415-0067-41C6-8FC3-018119D0A1B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{D796C415-0067-41C6-8FC3-018119D0A1B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodOrder.BusinessLogic", "FoodOrder.BusinessLogic\FoodOrder.BusinessLogic.csproj", "{CA98FADA-FBC9-49BB-B54E-C7E7A58B8BDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{CA98FADA-FBC9-49BB-B54E-C7E7A58B8BDC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E18207F1-275C-402F-8844-1ED58050853E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E5FCE5FB-DA36-4C1B-9DEE-F012514B1CB0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{D4E44776-5D69-47E9-B993-2B37E948549A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodOrder.Persistence", "FoodOrder.Persistence\FoodOrder.Persistence.csproj", "{3AF80594-5BB4-4D05-AED7-CB615351FA36}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9B22B255-A472-4047-A668-CDFC76F71C9D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{FB3D8508-9E2F-449F-B52D-D1986F1917F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodOrder.WebUI", "FoodOrder.WebUI\FoodOrder.WebUI.csproj", "{01DFDDE7-0C35-4B2B-BD63-300289170229}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +37,6 @@ Global
 		{8299F8DC-C5AF-4353-BB5A-BE6B8E19953F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8299F8DC-C5AF-4353-BB5A-BE6B8E19953F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8299F8DC-C5AF-4353-BB5A-BE6B8E19953F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B7873B1-7C7D-42C6-A6E7-B718758E84E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B7873B1-7C7D-42C6-A6E7-B718758E84E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B7873B1-7C7D-42C6-A6E7-B718758E84E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B7873B1-7C7D-42C6-A6E7-B718758E84E1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FC515C84-24ED-4435-8959-5E7BFCA332B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FC515C84-24ED-4435-8959-5E7BFCA332B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC515C84-24ED-4435-8959-5E7BFCA332B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,11 +53,28 @@ Global
 		{CA98FADA-FBC9-49BB-B54E-C7E7A58B8BDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA98FADA-FBC9-49BB-B54E-C7E7A58B8BDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA98FADA-FBC9-49BB-B54E-C7E7A58B8BDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AF80594-5BB4-4D05-AED7-CB615351FA36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AF80594-5BB4-4D05-AED7-CB615351FA36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AF80594-5BB4-4D05-AED7-CB615351FA36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AF80594-5BB4-4D05-AED7-CB615351FA36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01DFDDE7-0C35-4B2B-BD63-300289170229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01DFDDE7-0C35-4B2B-BD63-300289170229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01DFDDE7-0C35-4B2B-BD63-300289170229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01DFDDE7-0C35-4B2B-BD63-300289170229}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {062A9945-6C19-4B3D-9AF6-450AFF7C025E}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FC515C84-24ED-4435-8959-5E7BFCA332B1} = {E18207F1-275C-402F-8844-1ED58050853E}
+		{D796C415-0067-41C6-8FC3-018119D0A1B2} = {E5FCE5FB-DA36-4C1B-9DEE-F012514B1CB0}
+		{3AF80594-5BB4-4D05-AED7-CB615351FA36} = {D4E44776-5D69-47E9-B993-2B37E948549A}
+		{CA98FADA-FBC9-49BB-B54E-C7E7A58B8BDC} = {E18207F1-275C-402F-8844-1ED58050853E}
+		{4A4516D5-6DA7-4D69-BE0A-62CA6B42E9DA} = {9B22B255-A472-4047-A668-CDFC76F71C9D}
+		{8299F8DC-C5AF-4353-BB5A-BE6B8E19953F} = {D4E44776-5D69-47E9-B993-2B37E948549A}
+		{01DFDDE7-0C35-4B2B-BD63-300289170229} = {FB3D8508-9E2F-449F-B52D-D1986F1917F5}
 	EndGlobalSection
 EndGlobal

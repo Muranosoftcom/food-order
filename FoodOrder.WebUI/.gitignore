@@ -340,4 +340,4 @@ ASALocalRun/
 
 # End of https://www.gitignore.io/api/visualstudio
 
-FoodOrder.WebUI/secrets.production.json
+secrets.production.json
