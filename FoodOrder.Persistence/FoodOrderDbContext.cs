@@ -17,7 +17,7 @@ namespace FoodOrder.Persistence {
             return new FoodOrderDbContext(optionsBuilder.Options);
         }
 
-        public static string GetConnectionString(string databaseName = "FoodOrderDatabase", string databaseUser = "login", string databasePass = "12345", string server = "localhost") {
+        public static string GetConnectionString(string databaseName = "FoodOrderDatabaseStaging", string databaseUser = "login", string databasePass = "12345", string server = "localhost") {
                return $"Server={server};" +
                    $"Database={databaseName};" +
                    $"User id={databaseUser};" +
