@@ -18,6 +18,7 @@ using FoodOrder.Domain.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using FoodOrder.SpreadsheetIntegration;
 using FoodOrder.SpreadsheetIntegration.Core;
+using DayOfWeek = System.DayOfWeek;
 
 namespace FoodOrder.BusinessLogic.Services {
     public class FoodService : IFoodService {
@@ -150,16 +151,16 @@ namespace FoodOrder.BusinessLogic.Services {
                         AvailableOn = d.WeekDay.Select(g => new DishItemToWeekDay {
                             WeekDayId = (int) g
                         }).ToList(),
-                        SupplierKey = x.SupplierId,
+                        SupplierId = x.SupplierId,
                         Category = categories.FirstOrDefault(dc => dc.Name == c.Name) ??
                                    new DishCategory {Name = c.Name}
-                    }))).ToDictionary(x => new DishKey(x.Name, x.SupplierKey));
+                    }))).ToDictionary(x => new DishKey(x.Name, x.SupplierId));
 
             DishItem[] allDishes = _repo.All<DishItem>().Include(x => x.AvailableOn).ToArray();
             DishItem[] existingItems = allDishes.Intersect(dishItems.Values, new DishKeyComparer()).ToArray();
 
             foreach (DishItem dishItem in existingItems) {
-                var item = dishItems[new DishKey(dishItem.Name, dishItem.SupplierKey)];
+                var item = dishItems[new DishKey(dishItem.Name, dishItem.SupplierId)];
                 dishItem.Price = item.Price;
                 dishItem.Category = item.Category;
                 dishItem.AvailableUntil = DateTime.Today.Next(DayOfWeek.Friday);
@@ -184,12 +185,12 @@ namespace FoodOrder.BusinessLogic.Services {
             public bool Equals(DishItem x, DishItem y) {
                 if (ReferenceEquals(null, y)) return false;
                 if (ReferenceEquals(x, y)) return true;
-                return string.Equals(x.Name, y.Name) && x.SupplierKey == y.SupplierKey;
+                return string.Equals(x.Name, y.Name) && x.SupplierId == y.SupplierId;
             }
 
             public int GetHashCode(DishItem obj) {
                 unchecked {
-                    return ((obj.Name != null ? obj.Name.GetHashCode() : 0) * 397) ^ obj.SupplierKey;
+                    return ((obj.Name != null ? obj.Name.GetHashCode() : 0) * 397) ^ obj.SupplierId;
                 }
             }
         }

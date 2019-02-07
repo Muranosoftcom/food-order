@@ -1,7 +1,7 @@
 using FoodOrder.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace FoodOrder.Persistence.DbContexts {
+namespace FoodOrder.Persistence {
     public interface IFoodOrderContext {
         DbSet<DishItem> DishItems { get; set; }
 

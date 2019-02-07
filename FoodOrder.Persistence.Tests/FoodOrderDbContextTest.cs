@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using FoodOrder.BusinessLogic.Services;
 using FoodOrder.Domain.Entities;
-using FoodOrder.Persistence.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using FoodOrder.SpreadsheetIntegration.Google;
 using Xunit;

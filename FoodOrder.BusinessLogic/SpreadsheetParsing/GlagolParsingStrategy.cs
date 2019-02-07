@@ -23,7 +23,7 @@ namespace FoodOrder.BusinessLogic.SpreadsheetParsing
                         Category = lastCategory,
                         Name = cell.x.Value,
                         Price = 0,
-                        Day = (Week) cell.index
+                        Day = (DayOfWeek) cell.index
                     };
                 }
             }

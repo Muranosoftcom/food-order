@@ -5,21 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FoodOrder.Domain.Entities {
 	public class DishItem : Entity {
-		[MaxLength(100)] public string Name { get; set; }
-
-		[Column(TypeName = "Money")] public decimal Price { get; set; }
-
+		public string Name { get; set; }
+		public decimal Price { get; set; }
 		public DateTime AvailableUntil { get; set; }
 		public virtual ICollection<DishItemToWeekDay> AvailableOn { get; set; }
 		public int PositiveReviews { get; set; }
 		public int NegativeReviews { get; set; }
 
-		[ForeignKey("CategoryKey")] public DishCategory Category { get; set; }
-
-		public int CategoryKey { get; set; }
-
-		[ForeignKey("SupplierKey")] public Supplier Supplier { get; set; }
-
-		public int SupplierKey { get; set; }
+		public DishCategory Category { get; set; }
+		public Supplier Supplier { get; set; }
+		public int SupplierId { get; set; }
 	}
 }

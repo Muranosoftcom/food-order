@@ -9,6 +9,6 @@ namespace FoodOrder.BusinessLogic.DTOs {
 		public decimal Price { get; set; }
 		public int NegativeReviews { get; set; }
 		public int PositiveReviews { get; set; }
-		public Week[] WeekDay { get; set; }
+		public DayOfWeek[] WeekDay { get; set; }
 	}
 }

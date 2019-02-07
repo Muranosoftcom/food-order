@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using FoodOrder.Domain.Entities;
 using FoodOrder.Domain.Repositories;
-using FoodOrder.Persistence.DbContexts;
 
 namespace FoodOrder.Persistence {
 	public class FoodOrderRepository : IRepository {

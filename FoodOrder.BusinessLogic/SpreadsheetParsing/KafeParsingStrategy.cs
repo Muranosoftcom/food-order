@@ -32,7 +32,7 @@ namespace FoodOrder.BusinessLogic.SpreadsheetParsing
                             Category = lastCategory,
                             Name = cell.x.Value,
                             Price = decimal.TryParse(rx.Match(cell.x.Value).Groups["price"].Value, out decimal price) ? price : 0,
-                            Day = (Week) cell.index
+                            Day = (DayOfWeek) cell.index
                         };
                     }
                 }

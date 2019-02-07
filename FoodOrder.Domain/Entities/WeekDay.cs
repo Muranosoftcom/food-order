@@ -3,8 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FoodOrder.Domain.Entities {
 	public class WeekDay : Entity {
-		[MaxLength(15)] public string Name { get; set; }
-
+		public string Name { get; set; }
 		public virtual ICollection<DishItemToWeekDay> AvailableItems { get; set; }
 	}
 }
