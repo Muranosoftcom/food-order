@@ -10,8 +10,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-#    depends_on:
-#      - "db"
+   depends_on:
+     - "db"
     ports:
       - "3000:3000"
 #    environment:
@@ -19,14 +19,19 @@ services:
     networks:
       - dockerapi-dev
 
-#  db:
-#    image: "postgres"
-#    environment:
-#      POSTGRES_PASSWORD: postgres
-#      POSTGRES_USER: postgres
-#      POSTGRES_DB: food-order-db
-#    volumes:
-#      - ./Storage/pgdata:/var/lib/postgressql/data
-#      - ./Storage/db_scripts/seed.sql:/docker-entrypoint-initdb.d/seed.sql
-#    ports:
-#      - "5432:5432"
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: food-order-db
+    volumes:
+      - postgres_data_volume:/var/lib/postgressql/data
+      - ./db_scripts/EFMigrations.sql:/docker-entrypoint-initdb.d/EFMigrations.sql
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data_volume:
+    external: true
