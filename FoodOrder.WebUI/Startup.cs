@@ -3,7 +3,6 @@ using FoodOrder.BusinessLogic.Services;
 using FoodOrder.Domain.Entities;
 using FoodOrder.Domain.Repositories;
 using FoodOrder.Persistence;
-using FoodOrder.Persistence.DbContexts;
 using FoodOrder.WebUI.Infrastructure;
 using FoodOrder.WebUI.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -93,7 +92,7 @@ namespace FoodOrder.WebUI {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, FoodOrderDbContext dbContext) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
@@ -124,6 +123,8 @@ namespace FoodOrder.WebUI {
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
                 }
             });
+            
+            dbContext.Database.EnsureCreated();
         }
     }
 }
