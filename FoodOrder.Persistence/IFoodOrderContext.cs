@@ -2,7 +2,7 @@ using FoodOrder.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FoodOrder.Persistence {
-    public interface IFoodOrderContext {
+    public interface IFoodOrderDbContext {
         DbSet<DishItem> DishItems { get; set; }
 
         DbSet<DishCategory> DishCategories { get; set; }
@@ -16,5 +16,6 @@ namespace FoodOrder.Persistence {
         DbSet<Order> Orders { get; set; }
 
         DbSet<User> Users { get; set; }
+        DbSet<Day> Calendar { get; set; }
     }
 }

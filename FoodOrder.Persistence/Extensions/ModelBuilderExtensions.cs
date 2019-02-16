@@ -1,3 +1,4 @@
+using System.Linq;
 using FoodOrder.Domain.Entities;
 using FoodOrder.Domain.Enumerations;
 using FoodOrder.Persistence.Configurations;
@@ -16,6 +17,7 @@ namespace FoodOrder.Persistence.Extensions {
 			
 			modelBuilder.ApplyConfiguration(new OrderConfiguration());
 			modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
+			modelBuilder.ApplyConfiguration(new DayConfiguration());
 		}
 		
 		public static void Seed(this ModelBuilder modelBuilder) {
@@ -25,7 +27,7 @@ namespace FoodOrder.Persistence.Extensions {
 					Position = 0,
 					Name = "Столовая №1",
 					CanMultiSelect = true,
-					AvailableMoneyToOrder = 51,
+					AvailableMoneyToOrder = 68,
 				},
 				
 				new Supplier {
@@ -72,6 +74,28 @@ namespace FoodOrder.Persistence.Extensions {
 					Id = (int) DayOfWeek.Sunday,
 					Name = "Sun"
 				}
+			);
+			
+			string[] holidays = {
+				"2019-01-01",
+				"2019-01-07",
+				"2019-03-08",
+				"2019-04-28",
+				"2019-04-29",
+				"2019-05-01",
+				"2019-05-08",
+				"2019-05-09",
+				"2019-06-17",
+				"2019-06-28",
+				"2019-08-24",
+				"2019-08-26",
+				"2019-10-14",
+				"2019-11-21",
+				"2019-12-25",
+			};
+			
+			modelBuilder.Entity<Day>().HasData(
+				holidays.Select(day => Day.Create(day, true))
 			);
 		}
 	}

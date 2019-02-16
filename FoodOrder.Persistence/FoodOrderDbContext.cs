@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace FoodOrder.Persistence {
-    public class FoodOrderDbContext : DbContext, IDesignTimeDbContextFactory<FoodOrderDbContext>, IFoodOrderContext {
+    public class FoodOrderDbContext : DbContext, IDesignTimeDbContextFactory<FoodOrderDbContext>, IFoodOrderDbContext {
         public FoodOrderDbContext() { }
         public FoodOrderDbContext(DbContextOptions options): base(options) { }
 
@@ -28,6 +28,7 @@ namespace FoodOrder.Persistence {
         public DbSet<WeekDay> WeekDays { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Day> Calendar { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.ApplyAllConfigurations();
