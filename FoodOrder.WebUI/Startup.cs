@@ -3,20 +3,18 @@ using FoodOrder.BusinessLogic.Services;
 using FoodOrder.Domain.Entities;
 using FoodOrder.Domain.Repositories;
 using FoodOrder.Persistence;
-using FoodOrder.WebUI.Infrastructure;
-using FoodOrder.WebUI.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using FoodOrder.SpreadsheetIntegration;
 using FoodOrder.SpreadsheetIntegration.Google;
+using FoodOrder.WebUI.App;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace FoodOrder.WebUI {
@@ -31,18 +29,15 @@ namespace FoodOrder.WebUI {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            AuthenticationSettings authOptions = new AuthenticationSettings(Configuration.GetSection("AuthenticationSettings"));
-            
-            string connectionString = FoodOrderDbContext.GetConnectionString(
-                Configuration["FoodOrderDatabase:DatabaseName"],
-                Configuration["FoodOrderDatabase:UserId"],
-                Configuration["FoodOrderDatabase:Password"],
-                Configuration["FoodOrderDatabase:ServerName"]
-            );
-            
-            services.AddDbContext<FoodOrderDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            var authOptions = new AuthenticationSettings(Configuration.GetSection("AuthenticationSettings"));
+            IDatabaseConfig dbConfig = new DatabaseConfig(Configuration.GetSection("FoodOrderDatabase"));
+            var stringBuilder = new PostgresDbConnectionStringBuilder(dbConfig);
+            var dbContextConnectionBuilder = new PostgresDbContextConnectionBuilder(stringBuilder);
+            services.AddDbContext<FoodOrderDbContext>(options => 
+                FoodOrderDbContext.ConfigureDbContextOptionsBuilder(options, dbContextConnectionBuilder));
 
+            
+            
             services.AddIdentity<User, IdentityRole>(options => {
                 options.User.RequireUniqueEmail = true;
                 options.ClaimsIdentity.UserIdClaimType = "id";
@@ -67,15 +62,14 @@ namespace FoodOrder.WebUI {
                         ClockSkew = TimeSpan.Zero
                     };
                 });
-
-
+            
             services.AddSingleton<IAsyncSpreadsheetProvider, GoogleSpreadsheetProvider>();
             services.AddScoped<FoodOrderDbContext>();
             services.AddScoped<IRepository, FoodOrderRepository>();
             services.AddScoped<IFoodService, FoodService>();
             services.AddSingleton(authOptions);
             services.AddScoped<UserManager>();
-
+            
             // Add framework services.
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             // In production, the React files will be served from this directory

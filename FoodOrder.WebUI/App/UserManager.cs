@@ -4,7 +4,7 @@ using FoodOrder.Domain.Entities;
 using FoodOrder.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace FoodOrder.WebUI.Infrastructure {
+namespace FoodOrder.WebUI.App {
     public class UserManager {
         private readonly IRepository _userRepository;
 

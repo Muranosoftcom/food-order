@@ -3,7 +3,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace FoodOrder.WebUI.Models {
+namespace FoodOrder.WebUI.App {
     public class AuthenticationSettings {
         public AuthenticationSettings(IConfigurationSection authSettingsConfigurationSection) {
             GoogleClientId = authSettingsConfigurationSection["Google:ClientId"];
@@ -27,4 +27,6 @@ namespace FoodOrder.WebUI.Models {
             return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSecret));
         }
     }
+
+    
 }

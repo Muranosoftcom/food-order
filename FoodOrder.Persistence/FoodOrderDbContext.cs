@@ -5,23 +5,19 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace FoodOrder.Persistence {
     public class FoodOrderDbContext : DbContext, IDesignTimeDbContextFactory<FoodOrderDbContext>, IFoodOrderContext {
-        public FoodOrderDbContext(DbContextOptions<FoodOrderDbContext> options)
-            : base(options) { }
-
         public FoodOrderDbContext() { }
+        public FoodOrderDbContext(DbContextOptions options): base(options) { }
 
         public FoodOrderDbContext CreateDbContext(string[] args) {
             var optionsBuilder = new DbContextOptionsBuilder<FoodOrderDbContext>();
-            optionsBuilder.UseSqlServer(GetConnectionString());
+            var dbContextConnectionBuilder = new DesignTimeDbContextConnectionBuilder();
 
-            return new FoodOrderDbContext(optionsBuilder.Options);
+            return new FoodOrderDbContext(dbContextConnectionBuilder.ConfigureDbContextOptionsBuilder(optionsBuilder).Options);
         }
 
-        public static string GetConnectionString(string databaseName = "FoodOrderDatabaseStaging", string databaseUser = "login", string databasePass = "12345", string server = "localhost") {
-               return $"Server={server};" +
-                   $"Database={databaseName};" +
-                   $"User id={databaseUser};" +
-                   $"Password={databasePass};";
+        public static DbContextOptionsBuilder ConfigureDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder, 
+            IDbContextConnectionBuilder dbContextConnectionBuilder) {
+            return dbContextConnectionBuilder.ConfigureDbContextOptionsBuilder(optionsBuilder);
         }
 
         public DbSet<User> Users { get; set; }
