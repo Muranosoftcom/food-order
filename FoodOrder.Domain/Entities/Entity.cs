@@ -1,5 +1,7 @@
+using System;
+
 namespace FoodOrder.Domain.Entities {
 	public class Entity {
-		public int Id { get; set; }
+		public Guid Id { get; set; }
 	}
 }
