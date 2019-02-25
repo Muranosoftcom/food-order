@@ -1,4 +1,4 @@
-namespace FoodOrder.Persistence {
+namespace FoodOrder.Persistence.PostgresDb {
 	public class PostgresDbConnectionStringBuilder : IConnectionStringBuilder {
 		private readonly IDatabaseConfig _config;
 

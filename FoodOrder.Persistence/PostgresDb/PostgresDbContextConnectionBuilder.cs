@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace FoodOrder.Persistence {
+namespace FoodOrder.Persistence.PostgresDb {
 	public class PostgresDbContextConnectionBuilder: IDbContextConnectionBuilder {
 		private readonly IConnectionStringBuilder _connectionStringBuilder;
 

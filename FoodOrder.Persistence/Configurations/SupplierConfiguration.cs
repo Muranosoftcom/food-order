@@ -17,11 +17,8 @@ namespace FoodOrder.Persistence.Configurations {
 
 			builder
 				.HasMany(s => s.Categories)
-				.WithOne(c => c.Supplier);
-			
-			builder
-				.HasMany(s => s.DishItems)
-				.WithOne(d => d.Supplier);
+				.WithOne(c => c.Supplier)
+				.OnDelete(DeleteBehavior.Cascade);
 		}
 	}
 }

@@ -3,7 +3,7 @@ using FoodOrder.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace FoodOrder.Persistence {
+namespace FoodOrder.Persistence.Contexts {
     public class FoodOrderDbContext : DbContext, IDesignTimeDbContextFactory<FoodOrderDbContext>, IFoodOrderDbContext {
         public FoodOrderDbContext() { }
         public FoodOrderDbContext(DbContextOptions options): base(options) { }
@@ -15,20 +15,19 @@ namespace FoodOrder.Persistence {
             return new FoodOrderDbContext(dbContextConnectionBuilder.ConfigureDbContextOptionsBuilder(optionsBuilder).Options);
         }
 
-        public static DbContextOptionsBuilder ConfigureDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder, 
+        public static void ConfigureDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder, 
             IDbContextConnectionBuilder dbContextConnectionBuilder) {
-            return dbContextConnectionBuilder.ConfigureDbContextOptionsBuilder(optionsBuilder);
+            dbContextConnectionBuilder.ConfigureDbContextOptionsBuilder(optionsBuilder);
         }
 
+        public DbSet<Day> Calendar { get; set; }
         public DbSet<User> Users { get; set; }
+        
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<DishCategory> DishCategories { get; set; }
-        public DbSet<DishItem> DishItems { get; set; }
-        public DbSet<DishItemToWeekDay> DishItemsToWeekDays { get; set; }
-        public DbSet<WeekDay> WeekDays { get; set; }
+        public DbSet<Dish> DishItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<Day> Calendar { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.ApplyAllConfigurations();
