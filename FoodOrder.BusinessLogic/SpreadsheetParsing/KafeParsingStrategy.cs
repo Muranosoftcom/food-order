@@ -1,8 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using FoodOrder.Common;
-using FoodOrder.Domain.Enumerations;
 using FoodOrder.SpreadsheetIntegration.Core;
 
 namespace FoodOrder.BusinessLogic.SpreadsheetParsing
@@ -32,7 +31,7 @@ namespace FoodOrder.BusinessLogic.SpreadsheetParsing
                             Category = lastCategory,
                             Name = cell.x.Value,
                             Price = decimal.TryParse(rx.Match(cell.x.Value).Groups["price"].Value, out decimal price) ? price : 0,
-                            Day = (Week) cell.index
+                            Day = (DayOfWeek) cell.index
                         };
                     }
                 }

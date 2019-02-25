@@ -1,0 +1,31 @@
+.supplier {
+	$color: #61dafb;
+
+	border: 1px solid $color;
+	margin-bottom: 0.5rem;
+
+	&__header {
+		align-items: center;
+		background-color: $color;
+		display: flex;
+		justify-content: space-between;
+		padding: 0.5rem;
+	}
+
+	&__name {
+		flex-grow: 1;
+		margin-left: 0.5rem;
+	}
+
+	&__add-new {
+		background-color: #fff;
+		margin-bottom: 0.5rem;
+		margin-left: 0.5rem;
+		margin-top: 0.5rem;
+	}
+
+	&__categories {
+		background-color: #fff;
+	}
+}
+

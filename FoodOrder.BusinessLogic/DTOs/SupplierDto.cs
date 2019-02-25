@@ -1,15 +1,16 @@
-using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace FoodOrder.BusinessLogic.DTOs {
 	public class SupplierDto {
-		[Required] public int SupplierId { get; set; }
+		public Guid SupplierId { get; set; }
 
 		public string SupplierName { get; set; }
 
 		public bool CanMultiSelect { get; set; } = true;
 
-		public decimal AvailableMoneyToOrder { get; set; } = 51;
+		public decimal AvailableMoneyToOrder { get; set; } = 68;
+		public int Position { get; set; }
 
-		[Required] public CategoryDto[] Categories { get; set; }
+		public CategoryDto[] Categories { get; set; }
 	}
 }

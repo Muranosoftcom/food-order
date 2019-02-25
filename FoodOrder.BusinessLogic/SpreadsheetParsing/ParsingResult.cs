@@ -1,5 +1,4 @@
-using FoodOrder.Common;
-using FoodOrder.Domain.Enumerations;
+using System;
 
 namespace FoodOrder.BusinessLogic.SpreadsheetParsing
 {
@@ -8,6 +7,6 @@ namespace FoodOrder.BusinessLogic.SpreadsheetParsing
         public string Category { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public Week Day { get; set; }
+        public DayOfWeek Day { get; set; }
     }
 }

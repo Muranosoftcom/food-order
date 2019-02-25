@@ -1,9 +1,9 @@
 import { computed } from "mobx";
 
-import AppViewModel from "../models/app";
+import AppModel from "../models/app";
 
 class CalendarStore {
-	constructor(private appModel: AppViewModel) {}
+	constructor(private appModel: AppModel) {}
 
 	@computed
 	public get days() {

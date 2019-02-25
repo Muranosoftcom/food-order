@@ -14,7 +14,7 @@ interface Params {
 	orderService: OrderService;
 }
 
-class AppViewModel {
+class AppModel {
 	constructor({ calendarService, menuService, orderService }: Params) {
 		this.timeWatcher = new TimeWatcher(config.timeUpdateInterval);
 		this.calendar = new CalendarModel(calendarService);
@@ -37,8 +37,8 @@ class AppViewModel {
 
 	@computed
 	public get isOrderAllowed() {
-		return this.timeWatcher.currentTime.isBetween(this.timeWatcher.currentThursday, this.timeWatcher.currentSunday);
+		return true;// this.timeWatcher.currentTime.isBetween(this.timeWatcher.currentThursday, this.timeWatcher.currentSunday);
 	}
 }
 
-export default AppViewModel
+export default AppModel

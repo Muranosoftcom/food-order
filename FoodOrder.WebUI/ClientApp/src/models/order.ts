@@ -5,11 +5,11 @@ import UserOrder from "../domain/user-order";
 import { DayMenuDto } from "../domain/dto";
 import OrderService from "../services/order-service";
 import Day from "../domain/day";
-import AppViewModel from "./app";
+import AppModel from "./app";
 import MenuService from "../services/menu-service";
 
 class OrderModel {
-	constructor(private menuService: MenuService, private orderService: OrderService, private appModel: AppViewModel) {}
+	constructor(private menuService: MenuService, private orderService: OrderService, private appModel: AppModel) {}
 
 	@observable
 	public nextWeekMenu: DayMenu[] = [];

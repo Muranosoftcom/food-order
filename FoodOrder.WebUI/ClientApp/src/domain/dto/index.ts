@@ -1,3 +1,5 @@
+import { DayOfWeek } from "../day-of-week";
+
 export interface UserDto {
 	id: string;
 	name: string;
@@ -15,12 +17,15 @@ export interface DishDto {
 	price: number;
 	negativeReviews: number;
 	positiveReviews: number;
+	categoryId: string;
+	availableAt: DayOfWeek[];
 }
 
 export interface DishCategoryDto {
 	id: string;
 	name: string;
 	canMultiSelect: boolean;
+	position: number;
 	dishes: DishDto[];
 }
 

@@ -1,14 +1,16 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using FoodOrder.Domain.Enumerations;
 
 namespace FoodOrder.BusinessLogic.DTOs {
 	public class DishDto {
-		[Required] public int Id { get; set; }
+		[Required] public Guid Id { get; set; }
 
 		public string Name { get; set; }
 		public decimal Price { get; set; }
 		public int NegativeReviews { get; set; }
 		public int PositiveReviews { get; set; }
-		public Week[] WeekDay { get; set; }
+		public Guid CategoryId { get; set; }
+		public ICollection<int> AvailableAt { get; set; }
 	}
 }

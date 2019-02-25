@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using FoodOrder.Domain.Enumerations;
 using FoodOrder.SpreadsheetIntegration.Core;
 
 namespace FoodOrder.BusinessLogic.SpreadsheetParsing
@@ -23,7 +23,7 @@ namespace FoodOrder.BusinessLogic.SpreadsheetParsing
                         Category = lastCategory,
                         Name = cell.x.Value,
                         Price = 0,
-                        Day = (Week) cell.index
+                        Day = (DayOfWeek) cell.index
                     };
                 }
             }

@@ -1,11 +1,11 @@
 import { action, computed } from "mobx";
 
-import AppViewModel from "../../../models/app";
+import AppModel from "../../../models/app";
 import PageStore from "../../../store/page-store";
 import AppStore from "../../../store/app-store";
 
 export default class WeekOrderPageStore extends PageStore {
-	constructor(appStore: AppStore, private appModel: AppViewModel) {
+	constructor(appStore: AppStore, private appModel: AppModel) {
 		super(appStore);
 	}
 

@@ -2,10 +2,10 @@ import { computed } from "mobx";
 
 import AppStore from "../../../store/app-store";
 import PageStore from "../../../store/page-store";
-import AppViewModel from "../../../models/app";
+import AppModel from "../../../models/app";
 
 class HomePageStore extends PageStore {
-	constructor(appStore: AppStore, private appModel: AppViewModel) {
+	constructor(appStore: AppStore, private appModel: AppModel) {
 		super(appStore);
 	}
 

@@ -1,7 +1,13 @@
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace FoodOrder.Domain.Entities {
 	public class DishCategory : Entity {
-		[StringLength(100)] public string Name { get; set; }
+		public DishCategory() {
+			DishItems = new HashSet<Dish>();
+		}
+		public string Name { get; set; }
+		public int Position { get; set; }
+		public Supplier Supplier { get; set; }
+		public ICollection<Dish> DishItems { get; set; }
 	}
 }

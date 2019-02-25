@@ -20,6 +20,7 @@ const MyWeekOrder = React.lazy(() => import("../pages/week-order/index"));
 const Login = React.lazy(() => import("../pages/login/index"));
 const Logout = React.lazy(() => import("../pages/logout/logout"));
 const AdminPage = React.lazy(() => import("../pages/admin/index"));
+const MenuEditorPage = React.lazy(() => import("../pages/admin/menu-editor/index"));
 
 interface Props extends RouteComponentProps {
 	appStore?: AppStore;
@@ -102,6 +103,7 @@ class App extends Component<Props> {
 							)}
 						/>
 						<Route
+							exact
 							path="/admin/"
 							isPrivate
 							isAuthenticated={isAuthenticated}
@@ -109,6 +111,18 @@ class App extends Component<Props> {
 							component={() => (
 								<Suspense fallback={<Loader/>}>
 									<AdminPage />
+								</Suspense>
+							)}
+						/>
+						<Route
+							exact
+							path="/admin/menu-editor/"
+							isPrivate
+							isAuthenticated={isAuthenticated}
+							isCurrentUserAdmin={isCurrentUserAdmin}
+							component={() => (
+								<Suspense fallback={<Loader/>}>
+									<MenuEditorPage />
 								</Suspense>
 							)}
 						/>

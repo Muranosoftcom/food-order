@@ -6,11 +6,11 @@ namespace FoodOrder.WebUI.Areas.Admin.Controllers {
 	[Route("admin/dish")]
 	public class DishController : BaseController {
 		private readonly IFoodService _foodService;
-		private IRepository _repository;
+		private IFoodOrderRepository _foodOrderRepository;
 
-		public DishController(IFoodService foodService, IRepository repository) {
+		public DishController(IFoodService foodService, IFoodOrderRepository foodOrderRepository) {
 			_foodService = foodService;
-			_repository = repository;
+			_foodOrderRepository = foodOrderRepository;
 		}
 
 		public IActionResult Index() {
