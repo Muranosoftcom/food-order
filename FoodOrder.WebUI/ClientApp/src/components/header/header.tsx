@@ -40,7 +40,7 @@ class Header extends React.Component<Props> {
 
 	private closeMenu = action(() => {
 		this.isOpen = false;
-	})
+	});
 
 	public render() {
 		const { className } = this.props;
@@ -98,6 +98,11 @@ class Header extends React.Component<Props> {
 											{identity.isCurrentUserAdmin && (
 												<Link className="dropdown-item" to="/admin/" onClick={this.closeMenu}>
 													Admin
+												</Link>
+											)}
+											{identity.isCurrentUserAdmin && (
+												<Link className="dropdown-item" to="/admin/menu-editor" onClick={this.closeMenu}>
+													Редактор меню
 												</Link>
 											)}
 											<DropdownItem divider />

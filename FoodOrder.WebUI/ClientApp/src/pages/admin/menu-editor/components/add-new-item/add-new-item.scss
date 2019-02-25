@@ -1,0 +1,13 @@
+.add-new-item {
+	align-items: center;
+	display: flex;
+	padding-left: 0.8rem;
+	padding-right: 1rem;
+
+	&__add-icon {
+		fill: #fff;
+		height: 1rem;
+		margin-right: 0.5rem;
+		width: 1rem;
+	}
+}

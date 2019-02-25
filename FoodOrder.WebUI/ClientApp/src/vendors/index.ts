@@ -1,4 +1,4 @@
-import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.css";
 import moment from "moment";
 import "moment/locale/ru";
 import { extendMoment } from "moment-range";

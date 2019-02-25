@@ -3,10 +3,10 @@ import { computed } from "mobx";
 import OperationManager from "./opearation-manager";
 import IdentityStore from "./identity-store";
 import CalendarStore from "./calendar-store";
-import AppViewModel from "../models/app";
+import AppModel from "../models/app";
 
 interface Params {
-	appModel: AppViewModel;
+	appModel: AppModel;
 	identityStore: IdentityStore;
 }
 
@@ -20,7 +20,7 @@ export default class AppStore {
 		this.operationManager.runWithProgress(() => this.appModel.init())
 	}
 
-	public appModel: AppViewModel;
+	public appModel: AppModel;
 	public identity: IdentityStore;
 	public calendar: CalendarStore;
 	public operationManager: OperationManager;

@@ -1,0 +1,17 @@
+.dish-view {
+	align-items: center;
+	background-color: #edffcd;
+	border-bottom: 1px solid black;
+	color: black;
+	display: flex;
+	padding: 0.5rem;
+
+	&__name {
+		flex-grow: 1;
+		padding-left: 2rem;
+	}
+
+	&__availability-status {
+		margin-right: 2rem;
+	}
+}
