@@ -15,18 +15,18 @@ using FoodOrder.Domain.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using FoodOrder.SpreadsheetIntegration;
 using FoodOrder.SpreadsheetIntegration.Core;
-using DayOfWeek = System.DayOfWeek;
 
 namespace FoodOrder.BusinessLogic.Services {
     public class FoodService : IFoodService {
-        private readonly IRepository _repo;
+        private readonly IFoodOrderRepository _repo;
         private readonly IAsyncSpreadsheetProvider _spreadsheetProvider;
 
-        public FoodService(IRepository repo, IAsyncSpreadsheetProvider spreadsheetProvider) {
+        public FoodService(IFoodOrderRepository repo, IAsyncSpreadsheetProvider spreadsheetProvider) {
             _repo = repo;
             _spreadsheetProvider = spreadsheetProvider;
         }
 
+        /*
         public async Task SynchronizeFood() {
             var completionSource = new TaskCompletionSource<Unit>();
             var glagolFood = _spreadsheetProvider.GetAsync(
@@ -37,10 +37,10 @@ namespace FoodOrder.BusinessLogic.Services {
                 "1sbbFJqa-X4KW91EmPyO9NTbP8bbuwg3szCSC3FTeR2c",
                 new SpreadsheetGetRequest("Menu", "A2:E100"), CancellationToken.None).ToObservable();
 
-            var glagolFoodDto = glagolFood.Select(x => ParsingRegistry.GetParser(FoodSupplier.Glagol).ExtractFood(x))
+            var glagolFoodDto = glagolFood.Select(x => ParsingRegistry.GetParser(SupplierType.Glagol).ExtractFood(x))
                 .Select(x => {
                     var food = new SupplierDto {
-                        SupplierId = (int) FoodSupplier.Glagol,
+                        SupplierId = SupplierType.Glagol.Id,
                         SupplierName = "ГлаголЪ",
                         AvailableMoneyToOrder = 0,
                         CanMultiSelect = false,
@@ -57,10 +57,10 @@ namespace FoodOrder.BusinessLogic.Services {
                     return food;
                 });
 
-            var kafeFoodDto = kafeFood.Select(x => ParsingRegistry.GetParser(FoodSupplier.Cafe).ExtractFood(x)).Select(
+            var kafeFoodDto = kafeFood.Select(x => ParsingRegistry.GetParser(SupplierType.Cafe).ExtractFood(x)).Select(
                 x => {
                     var food = new SupplierDto {
-                        SupplierId = (int) FoodSupplier.Cafe,
+                        SupplierId = SupplierType.Cafe.Id,
                         SupplierName = "Столовая",
                         AvailableMoneyToOrder = 51,
                         CanMultiSelect = false,
@@ -83,19 +83,27 @@ namespace FoodOrder.BusinessLogic.Services {
             }).Subscribe(async x => await SaveChanges(x, completionSource));
             await completionSource.Task;
         }
+        */
+
+        public Task SynchronizeFood() {
+            throw new NotImplementedException();
+        }
 
         public WeekMenuDto GetWeekMenu() {
             var now = DateTime.UtcNow;
 
+            return new WeekMenuDto();
+
+            /*
             var availableDishes = _repo.All<DishItem>()
                 .Include(x => x.AvailableOn)
-                .Include(x => x.Supplier)
                 .Include(x => x.Category)
+                    .ThenInclude(category => category.Supplier)
                 .Where(x => x.AvailableUntil >= now);
 
             List<(string dayName, DishItem dish)> dayNameDishPairs = new List<(string, DishItem)>();
             foreach (var dish in availableDishes) {
-                var dayIds = new HashSet<int>(dish.AvailableOn.Select(x => x.WeekDayId));
+                var dayIds = new HashSet<Guid>(dish.AvailableOn.Select(x => x.WeekDayId));
                 var dayNames = _repo.All<WeekDay>().Where(x => dayIds.Contains(x.Id)).Select(x => x.Name);
                 foreach (var dayName in dayNames) {
                     dayNameDishPairs.Add((dayName: dayName, dish: dish));
@@ -133,9 +141,10 @@ namespace FoodOrder.BusinessLogic.Services {
                 }).ToArray()
             };
 
-            return dto;
+            return dto;*/
         }
 
+        /*
         private async Task SaveChanges(List<SupplierDto> food, TaskCompletionSource<Unit> completionSource) {
             var categories = _repo.All<DishCategory>().ToList();
             categories.AddRange(food.SelectMany(x => x.Categories.Select(c => new DishCategory {Name = c.Name})));
@@ -145,10 +154,10 @@ namespace FoodOrder.BusinessLogic.Services {
                         Name = d.Name,
                         Price = d.Price,
                         AvailableUntil = DateTime.Today.Next(DayOfWeek.Friday),
-                        AvailableOn = d.WeekDay.Select(g => new DishItemToWeekDay {
-                            WeekDayId = (int) g
-                        }).ToList(),
-                        SupplierId = x.SupplierId,
+                        // AvailableOn = d.WeekDay.Select(g => new DishItemToWeekDay {
+                        //     WeekDayId = (int) g
+                        // }).ToList(),
+                        // SupplierId = x.SupplierId,
                         Category = categories.FirstOrDefault(dc => dc.Name == c.Name) ??
                                    new DishCategory {Name = c.Name}
                     }))).ToDictionary(x => new DishKey(x.Name, x.SupplierId));
@@ -182,24 +191,25 @@ namespace FoodOrder.BusinessLogic.Services {
             public bool Equals(DishItem x, DishItem y) {
                 if (ReferenceEquals(null, y)) return false;
                 if (ReferenceEquals(x, y)) return true;
-                return string.Equals(x.Name, y.Name) && x.SupplierId == y.SupplierId;
+                return string.Equals(x.Name, y.Name) && x.Category.Id == y.Category.Id;
             }
+     
 
             public int GetHashCode(DishItem obj) {
                 unchecked {
-                    return ((obj.Name != null ? obj.Name.GetHashCode() : 0) * 397) ^ obj.SupplierId;
+                    return ((obj.Name != null ? obj.Name.GetHashCode() : 0) * 397) ^ Math.Abs(obj.Category.Id.GetHashCode());
                 }
             }
         }
 
         private class DishKey : IEquatable<DishKey> {
-            public DishKey(string name, int supplierId) {
+            public DishKey(string name, Guid supplierId) {
                 Name = name;
                 SupplierId = supplierId;
             }
 
             private string Name { get; }
-            private int SupplierId { get; }
+            private Guid SupplierId { get; }
 
             public bool Equals(DishKey other) {
                 if (ReferenceEquals(null, other)) return false;
@@ -217,9 +227,9 @@ namespace FoodOrder.BusinessLogic.Services {
 
             public override int GetHashCode() {
                 unchecked {
-                    return ((Name != null ? Name.GetHashCode() : 0) * 397) ^ SupplierId;
+                    return ((Name != null ? Name.GetHashCode() : 0) * 397) ^ Math.Abs(SupplierId.GetHashCode());
                 }
             }
-        }
+        }*/
     }
 }
