@@ -3,6 +3,8 @@ using FoodOrder.BusinessLogic.Services;
 using FoodOrder.Domain.Entities;
 using FoodOrder.Domain.Repositories;
 using FoodOrder.Persistence;
+using FoodOrder.Persistence.Contexts;
+using FoodOrder.Persistence.PostgresDb;
 using FoodOrder.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -67,10 +69,11 @@ namespace FoodOrder.WebUI {
             services.AddSingleton<IAsyncSpreadsheetProvider, GoogleSpreadsheetProvider>();
             services.AddScoped<FoodOrderDbContext>();
             services.AddScoped<IFoodOrderDbContext, FoodOrderDbContext>();
-            services.AddScoped<IRepository, FoodOrderRepository>();
+            services.AddScoped<IFoodOrderRepository, FoodOrderRepository>();
             services.AddScoped<ICalendarRepository, CalendarRepository>();
             services.AddScoped<IFoodService, FoodService>();
             services.AddScoped<ICalendarService, CalendarService>();
+            services.AddScoped<IMenuEditorService, MenuEditorService>();
             services.AddSingleton(authOptions);
             services.AddScoped<UserManager>();
             

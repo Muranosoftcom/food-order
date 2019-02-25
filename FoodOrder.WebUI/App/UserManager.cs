@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FoodOrder.WebUI.App {
     public class UserManager {
-        private readonly IRepository _userRepository;
+        private readonly IFoodOrderRepository _userRepository;
 
-        public UserManager(IRepository userRepository) {
+        public UserManager(IFoodOrderRepository userRepository) {
             _userRepository = userRepository;
         }
         

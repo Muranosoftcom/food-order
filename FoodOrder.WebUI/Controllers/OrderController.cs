@@ -20,9 +20,9 @@ namespace FoodOrder.WebUI.Controllers {
     public class OrderController : Controller {
         private readonly int _cafePrice;
         private readonly int _glagolPrice;
-        private readonly IRepository _repo;
+        private readonly IFoodOrderRepository _repo;
 
-        public OrderController(IRepository repo, IConfiguration configuration) {
+        public OrderController(IFoodOrderRepository repo, IConfiguration configuration) {
             _repo = repo;
             var configuration1 = configuration;
 
@@ -48,7 +48,7 @@ namespace FoodOrder.WebUI.Controllers {
         [Authorize]
         [Route("week-orders")]
         public UserOrderDto[] WeekOrders() {
-            int userId = User.GetUserId().Value;
+            Guid userId = User.GetUserId();
             
             return GetWeeOrders()
                 .Where(dto => dto.User.Id == userId)
@@ -70,21 +70,21 @@ namespace FoodOrder.WebUI.Controllers {
                 UserName = $"{order.User?.UserName} {order.User?.UserName}",
                 Suppliers = order
                     .OrderItems
-                        .GroupBy(x => (x.DishItem.Supplier.Id, x.DishItem.Supplier.Name))
+                        .GroupBy(x => (x.Dish.Category.Supplier.Id, x.Dish.Category.Supplier.Name))
                         .Select(
                             x => new SupplierDto {
                                 SupplierId = x.Key.Id,
                                 SupplierName = x.Key.Name,
-                                Categories = x.GroupBy(oi => (oi.DishItem.Category.Id, oi.DishItem.Category.Name))
+                                Categories = x.GroupBy(oi => (oi.Dish.Category.Id, oi.Dish.Category.Name))
                                     .Select(c =>
                                         new CategoryDto {
                                             Id = c.Key.Id,
                                             Name = c.Key.Name,
                                             Dishes = c.Select(d => new DishDto {
                                                 Id = d.DishItemId,
-                                                Name = d.DishItem.Name,
-                                                NegativeReviews = d.DishItem.NegativeReviews,
-                                                PositiveReviews = d.DishItem.PositiveReviews
+                                                Name = d.Dish.Name,
+                                                NegativeReviews = d.Dish.NegativeReviews,
+                                                PositiveReviews = d.Dish.PositiveReviews
                                             }).ToArray()
                                         }).ToArray()
                             })
@@ -93,29 +93,27 @@ namespace FoodOrder.WebUI.Controllers {
             };
         }
 
-        private int GetMaxSumForSupplier(int supplierIdValue) {
-            switch (supplierIdValue) {
-                case (int) FoodSupplier.Cafe: {
-                    return _cafePrice;
-                }
-                case (int) FoodSupplier.Glagol: {
-                    return _glagolPrice;
-                }
-                default:
-                    throw new KeyNotFoundException(
-                        "FoodSupplier should be correlated with OrderPrice configuration in appSettings.json");
+        private int GetMaxSumForSupplier(Guid supplierIdValue) {
+            if (supplierIdValue == SupplierType.Cafe.Id) {
+                return _cafePrice;
             }
+            
+            if (supplierIdValue == SupplierType.Glagol.Id) {
+                return _glagolPrice;
+            }
+            throw new KeyNotFoundException(
+                    "FoodSupplier should be correlated with OrderPrice configuration in appSettings.json");
         }
 
-        private async Task MakeOrder(int[] dishesIds) {
-            var userId = User.GetUserId().Value;
-            var orderedItemsIds = new HashSet<int>(dishesIds);
+        private async Task MakeOrder(Guid[] dishesIds) {
+            var userId = User.GetUserId();
+            var orderedItemsIds = new HashSet<Guid>(dishesIds);
 
-            var orderedDishItems = _repo.All<DishItem>().Where(x => orderedItemsIds.Contains(x.Id));
+            var orderedDishItems = _repo.All<Dish>().Where(x => orderedItemsIds.Contains(x.Id));
 
 
             var orderPrice = orderedDishItems.Select(x => x.Price).Sum();
-            int? supplierId = orderedDishItems.Select(x => x.Supplier.Id).FirstOrDefault();
+            Guid? supplierId = orderedDishItems.Select(x => x.Category.Supplier.Id).FirstOrDefault();
             if (supplierId.HasValue) {
                 var maxPrice = GetMaxSumForSupplier(supplierId.Value);
                 orderPrice = Math.Max(maxPrice, orderPrice);
@@ -128,7 +126,7 @@ namespace FoodOrder.WebUI.Controllers {
                 User = user,
                 OrderItems = orderedDishItems.Select(x => new OrderItem {
                     Price = x.Price,
-                    DishItem = x
+                    Dish = x
                 }).ToArray()
             };
             
@@ -140,8 +138,10 @@ namespace FoodOrder.WebUI.Controllers {
         private IEnumerable<UserOrderDto> GetWeeOrders() {
             var query = _repo.All<Order>()
                 .Include(x => x.User)
-                .Include(x => x.OrderItems).ThenInclude(x => x.DishItem).ThenInclude(x => x.Category)
-                .Include(x => x.OrderItems).ThenInclude(x => x.DishItem).ThenInclude(x => x.Supplier);
+                .Include(x => x.OrderItems)
+                    .ThenInclude(x => x.Dish)
+                    .ThenInclude(x => x.Category)
+                    .ThenInclude(x => x.Supplier);
             
             return query
                 .ToArray()
@@ -156,10 +156,10 @@ namespace FoodOrder.WebUI.Controllers {
                         },
                         Order = new OrderDto {
                             SupplierName = order.OrderItems
-                                .Select(item => item.DishItem)
-                                .First().Supplier.Name,
+                                .Select(item => item.Dish)
+                                .First().Category.Supplier.Name,
                             Dishes = order.OrderItems
-                                .Select(item => item.DishItem)
+                                .Select(item => item.Dish)
                                 .Select(di => new DishDto {
                                     Id = di.Id,
                                     Name = di.Name,

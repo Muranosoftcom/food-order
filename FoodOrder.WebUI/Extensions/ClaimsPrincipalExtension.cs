@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 
 namespace FoodOrder.WebUI.Extensions {
@@ -8,10 +9,12 @@ namespace FoodOrder.WebUI.Extensions {
                    isAdmin;
         }
 
-        public static int? GetUserId(this ClaimsPrincipal claims) {
-            return int.TryParse(claims.Claims.FirstOrDefault(c => c.Type == "id")?.Value, out int id)
+        public static Guid GetUserId(this ClaimsPrincipal claims) {
+            return Guid.Parse(claims.Claims.FirstOrDefault(c => c.Type == "id")?.Value);
+            
+            /*return int.TryParse(claims.Claims.FirstOrDefault(c => c.Type == "id")?.Value, out Guid id)
                 ? id
-                : (int?) null;
+                : (int?) null;*/
         }
 
         public static bool IsAuthenticated(this ClaimsPrincipal claims) =>

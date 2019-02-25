@@ -11,14 +11,14 @@ using WebUI.Areas.Admin.Models;
 namespace FoodOrder.WebUI.Areas.Admin.Controllers {
 	[Route("admin/order")]
 	public class OrderController : BaseController {
-		private readonly IRepository _repository;
+		private readonly IFoodOrderRepository _foodOrderRepository;
 		private readonly decimal _cafePrice;
 		private readonly IConfiguration _configuration;
 
 		private readonly decimal _glagolPrice;
 
-		public OrderController(IRepository repository, IConfiguration configuration) {
-			_repository = repository;
+		public OrderController(IFoodOrderRepository foodOrderRepository, IConfiguration configuration) {
+			_foodOrderRepository = foodOrderRepository;
 			_configuration = configuration;
 
 			decimal.TryParse(_configuration["OrderPrice:Glagol"], out _glagolPrice);
@@ -29,7 +29,7 @@ namespace FoodOrder.WebUI.Areas.Admin.Controllers {
 			return View();
 		}
 
-		[Route("statistic")]
+		/*[Route("statistic")]
 		public IActionResult Statistic() {
 			var higherPrice = _cafePrice > _glagolPrice ? _cafePrice : _glagolPrice;
 			var orders = _repository.All<Order>()
@@ -39,7 +39,7 @@ namespace FoodOrder.WebUI.Areas.Admin.Controllers {
 
 			var models = from order in orders
 						 let suppId = order.OrderItems.First().DishItem.Supplier.Id
-						 let processingPrice = suppId == (int) FoodSupplier.Cafe ? _cafePrice : _glagolPrice
+						 let processingPrice = suppId == SupplierType.Cafe.Id ? _cafePrice : _glagolPrice
 						 where order.Price > processingPrice
 						 select new OverpriceViewModel {
 							 UserName = order.User.UserName,
@@ -50,6 +50,6 @@ namespace FoodOrder.WebUI.Areas.Admin.Controllers {
 						 };
 
 			return View(models.ToArray());
-		}
+		}*/
 	}
 }
