@@ -89,60 +89,7 @@ namespace FoodOrder.BusinessLogic.Services {
             throw new NotImplementedException();
         }
 
-        public WeekMenuDto GetWeekMenu() {
-            var now = DateTime.UtcNow;
-
-            return new WeekMenuDto();
-
-            /*
-            var availableDishes = _repo.All<DishItem>()
-                .Include(x => x.AvailableOn)
-                .Include(x => x.Category)
-                    .ThenInclude(category => category.Supplier)
-                .Where(x => x.AvailableUntil >= now);
-
-            List<(string dayName, DishItem dish)> dayNameDishPairs = new List<(string, DishItem)>();
-            foreach (var dish in availableDishes) {
-                var dayIds = new HashSet<Guid>(dish.AvailableOn.Select(x => x.WeekDayId));
-                var dayNames = _repo.All<WeekDay>().Where(x => dayIds.Contains(x.Id)).Select(x => x.Name);
-                foreach (var dayName in dayNames) {
-                    dayNameDishPairs.Add((dayName: dayName, dish: dish));
-                }
-            }
-
-            var dishesByDayName = dayNameDishPairs.ToLookup(x => x.dayName, x => x.dish);
-
-            var dto = new WeekMenuDto {
-                WeekDays = dishesByDayName.Select(x => new WeekDayDto {
-                    WeekDay = x.Key,
-                    Suppliers = x.GroupBy(d => (id: d.Supplier.Id, name: d.Supplier.Name, canMultiSelect: d.Supplier.CanMultiSelect, availableMoneyToOrder: d.Supplier.AvailableMoneyToOrder )).Select(d => {
-                        var dishItemByPairPairs =
-                            d.Select(di => (key: (categoryId: di.Category.Id, categoryName: di.Category.Name),
-                                value: di));
-                        var dishItemByPair = dishItemByPairPairs.ToLookup(y => y.key, y => y.value);
-                        return new SupplierDto {
-                            SupplierId = d.Key.id,
-                            SupplierName = d.Key.name,
-                            CanMultiSelect = d.Key.canMultiSelect,
-                            AvailableMoneyToOrder = d.Key.availableMoneyToOrder,
-                            Categories = dishItemByPair.Select(z => new CategoryDto {
-                                Id = z.Key.categoryId,
-                                Name = z.Key.categoryName,
-                                Dishes = z.Select(f => new DishDto {
-                                    Id = f.Id,
-                                    Name = f.Name,
-                                    Price = f.Price,
-                                    NegativeReviews = f.NegativeReviews,
-                                    PositiveReviews = f.PositiveReviews
-                                }).ToArray()
-                            }).ToArray()
-                        };
-                    }).OrderBy(t => t.SupplierId).ToArray()
-                }).ToArray()
-            };
-
-            return dto;*/
-        }
+        
 
         /*
         private async Task SaveChanges(List<SupplierDto> food, TaskCompletionSource<Unit> completionSource) {

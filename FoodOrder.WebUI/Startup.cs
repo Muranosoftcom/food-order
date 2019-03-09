@@ -74,6 +74,7 @@ namespace FoodOrder.WebUI {
             services.AddScoped<IFoodService, FoodService>();
             services.AddScoped<ICalendarService, CalendarService>();
             services.AddScoped<IMenuEditorService, MenuEditorService>();
+            services.AddScoped<IWeekMenuService, WeekMenuService>();
             services.AddSingleton(authOptions);
             services.AddScoped<UserManager>();
             

@@ -67,7 +67,7 @@ namespace FoodOrder.WebUI.Controllers {
         private WeekDayDto ToWeekDayDto(Order order) {
             return new WeekDayDto {
                 WeekDay = order.Date.DayOfWeek.ToString(),
-                UserName = $"{order.User?.UserName} {order.User?.UserName}",
+                UserName = $"{order.User?.UserName}",
                 Suppliers = order
                     .OrderItems
                         .GroupBy(x => (x.Dish.Category.Supplier.Id, x.Dish.Category.Supplier.Name))

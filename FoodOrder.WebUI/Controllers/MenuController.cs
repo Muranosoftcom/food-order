@@ -14,9 +14,11 @@ namespace FoodOrder.WebUI.Controllers {
     [ApiController]
     public class MenuController : Controller {
         private readonly IFoodService _foodService;
+        private readonly IWeekMenuService _menuService;
 
-        public MenuController(IFoodService foodService) {
+        public MenuController(IFoodService foodService, IWeekMenuService menuService) {
             _foodService = foodService;
+            _menuService = menuService;
         }
         
         [HttpPost]
@@ -41,23 +43,22 @@ namespace FoodOrder.WebUI.Controllers {
         [Authorize]
         [Route("week-menu")]
         public ActionResult<DayMenuDto[]> WeekMenu() {
-            WeekMenuDto weekMenuDto = _foodService.GetWeekMenu();
+            DateTime[] nextWeekDays = GetNextWeekDays();
+            WeekDayDto[] weekDaysMenu = _menuService.GetWeekDaysMenu();
 
-            var daysOfWeek = WeekDays();
-            
-            return weekMenuDto.WeekDays.Select(wd => new DayMenuDto {
-                ShortDate = ToShortDate(daysOfWeek, wd.WeekDay),
-                Suppliers = wd.Suppliers,
+            return weekDaysMenu.Select(dayMenu => new DayMenuDto {
+                ShortDate = ToShortDate(nextWeekDays, dayMenu.DayOfWeek),
+                Suppliers = dayMenu.Suppliers,
             }).ToArray();
         }
 
-        private string ToShortDate(DateTime[] daysOfWeek, string dayName) {
+        private string ToShortDate(DateTime[] daysOfWeek, DayOfWeek dayOfWeek) {
             return daysOfWeek
-                .First(day => day.ToString("ddd") == dayName)
+                .First(day => day.DayOfWeek == dayOfWeek)
                 .PrettifyDate();
         }
 
-        private DateTime[] WeekDays() {
+        private DateTime[] GetNextWeekDays() {
             var today = DateTime.Today;
             bool isForNextWeek = today.DayOfWeek >= DayOfWeek.Tuesday && today.DayOfWeek <= DayOfWeek.Sunday;
                 

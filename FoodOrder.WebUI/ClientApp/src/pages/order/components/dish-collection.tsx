@@ -26,7 +26,7 @@ class DishCollection extends React.Component<Props> {
 
 	private handleSelectDish = (dish: Dish) => {
 		if (this.onlySingleSelect && this.isSomeDishSelected) {
-			alert("Множественный выбор запрещен!!!");
+			alert("Множественный выбор для этого поставщика запрещен!!!");
 			return;
 		}
 
