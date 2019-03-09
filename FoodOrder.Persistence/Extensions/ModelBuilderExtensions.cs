@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using FoodOrder.Domain.Entities;
 using FoodOrder.Domain.Enumerations;
@@ -25,15 +26,78 @@ namespace FoodOrder.Persistence.Extensions {
 					Position = 0,
 					Name = "Столовая №1",
 					CanMultiSelect = true,
-					AvailableMoneyToOrder = 68,
+					AvailableMoneyToOrder = 68
 				},
-				
 				new Supplier {
 					Id = SupplierType.Glagol.Id,
 					Position = 1,
 					Name = "ГлаголЪ",
 					CanMultiSelect = false,
 					AvailableMoneyToOrder = 0,
+				}
+			);
+			
+			modelBuilder.Entity<DishCategory>().HasData(
+				new DishCategory {
+					Id = Guid.NewGuid(),
+					Name = "Салаты",
+					Position = 0,
+					SupplierId = SupplierType.Cafe.Id
+				},
+				new DishCategory {
+					Id = Guid.NewGuid(),
+					Name = "Первое",
+					Position = 1,
+					SupplierId = SupplierType.Cafe.Id
+				},
+				new DishCategory {
+					Id = Guid.NewGuid(),
+					Name = "Мясное",
+					Position = 2,
+					SupplierId = SupplierType.Cafe.Id
+				},
+				new DishCategory {
+					Id = Guid.NewGuid(),
+					Position = 3,
+					Name = "Гарниры",
+					SupplierId = SupplierType.Cafe.Id
+				},
+				new DishCategory {
+					Id = Guid.NewGuid(),
+					Name = "Десерты",
+					Position = 4,
+					SupplierId = SupplierType.Cafe.Id
+				},
+				new DishCategory {
+					Id = Guid.NewGuid(),
+					Name = "Пироги",
+					Position = 5,
+					SupplierId = SupplierType.Cafe.Id
+				},
+				new DishCategory {
+					Id = Guid.NewGuid(),
+					Name = "Напитки",
+					Position = 6,
+					SupplierId = SupplierType.Cafe.Id
+				},
+				
+				new DishCategory {
+					Id = Guid.NewGuid(),
+					Name = "Первые блюда",
+					Position = 0,
+					SupplierId = SupplierType.Glagol.Id
+				},
+				new DishCategory {
+					Id = Guid.NewGuid(),
+					Name = "Вторые блюда",
+					Position = 1,
+					SupplierId = SupplierType.Glagol.Id
+				},
+				new DishCategory {
+					Id = Guid.NewGuid(),
+					Position = 2,
+					Name = "Салаты, пирожки",
+					SupplierId = SupplierType.Glagol.Id
 				}
 			);
 			
