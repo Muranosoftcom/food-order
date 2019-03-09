@@ -68,8 +68,6 @@ class SupplierStore {
 
 		runInAction(() => {
 			this.suppliers = orderBy(suppliers, ["position"]);
-
-			console.log(this.suppliers);
 		});
 
 		return;
