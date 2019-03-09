@@ -1,14 +1,17 @@
 import { action, computed, observable, runInAction } from "mobx";
+import orderBy from "lodash.orderby";
 
 import { SupplierDto } from "../../../../domain/dto";
 import MenuEditorService from "../../../../services/menu-editor-service";
 import MenuEditorPageStore from "./menu-editor-page-store";
+
 
 const emptySupplier: SupplierDto = {
 	supplierId: "",
 	supplierName: "",
 	canMultiSelect: false,
 	availableMoneyToOrder: 0,
+	position: 0,
 	categories: []
 };
 
@@ -29,7 +32,7 @@ class SupplierStore {
 	}
 
 	public addSupplier = () => {
-		this.editSupplier({...emptySupplier});
+		this.editSupplier({...emptySupplier, position: this.suppliers.length});
 	};
 
 	public editSupplier = (supplier: SupplierDto) => {
@@ -64,7 +67,9 @@ class SupplierStore {
 		const suppliers: SupplierDto[] = await this.menuEditorService.supplier.getAll();
 
 		runInAction(() => {
-			this.suppliers = suppliers;
+			this.suppliers = orderBy(suppliers, ["position"]);
+
+			console.log(this.suppliers);
 		});
 
 		return;

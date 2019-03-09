@@ -34,5 +34,6 @@ export interface SupplierDto {
 	supplierName: string;
 	availableMoneyToOrder: number;
 	canMultiSelect: boolean;
+	position: number;
 	categories: DishCategoryDto[];
 }

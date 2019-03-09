@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { inject } from "mobx-react";
+import orderBy from "lodash.orderby";
 
 import Expander from "../../../../../components/expander/expander";
 import { AddNewItem } from "../add-new-item/add-new-item";
 import { CategoryView } from "../category-view/category-view";
 import { EditButton } from "../edit-button/edit-button";
 import { DeleteButton } from "../delete-button/delete-button";
-import { SupplierDto } from "../../../../../domain/dto";
+import { DishCategoryDto, SupplierDto } from "../../../../../domain/dto";
 import DishCategoryStore from "../../store/dish-category-store";
 
 import "./supplier-view.scss";
@@ -36,7 +37,8 @@ export class SupplierView extends Component<Props> {
 		const { supplier, dishCategoryStore } = this.props;
 
 		if (categoryName) {
-			dishCategoryStore!.createNew(categoryName.trim(), supplier.supplierId);
+			const position = supplier.categories.length;
+			dishCategoryStore!.createNew(categoryName.trim(), supplier.supplierId, position);
 		}
 	};
 
@@ -62,7 +64,7 @@ export class SupplierView extends Component<Props> {
 				}
 			>
 				<div className="supplier__categories">
-					{categories.map(category => (
+					{orderBy(categories, ["position"]).map((category: DishCategoryDto) => (
 						<CategoryView key={category.id} category={category} />
 					))}
 				</div>

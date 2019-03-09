@@ -23,15 +23,17 @@ const checkLogin = () =>
 
 export const onLoad = () =>
 	new Promise((resolve, reject) => {
-		window.gapi.load("auth2", () => {
-			window.gapi.auth2
-				.init({
-					client_id: config.googleClientId,
-					fetch_basic_profile: true,
-					scope: "profile",
-				})
-				.then(resolve, error => reject(error));
-		});
+		if(window.gapi) {
+			window.gapi.load("auth2", () => {
+				window.gapi.auth2
+					.init({
+						client_id: config.googleClientId,
+						fetch_basic_profile: true,
+						scope: "profile",
+					})
+					.then(resolve, error => reject(error));
+			});
+		}
 	});
 
 export const login = () =>

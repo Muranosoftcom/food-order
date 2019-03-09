@@ -2,6 +2,7 @@ import { DishDto } from "../../../../domain/dto";
 import MenuEditorService from "../../../../services/menu-editor-service";
 import MenuEditorPageStore from "./menu-editor-page-store";
 import { computed, observable, runInAction } from "mobx";
+import { DayOfWeek } from "../../../../domain/day-of-week";
 
 const emptyDish: DishDto = {
 	id: "",
@@ -9,7 +10,7 @@ const emptyDish: DishDto = {
 	price: 0,
 	negativeReviews: 0,
 	positiveReviews: 0,
-	availableAt: [],
+	availableAt: [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday],
 	categoryId: "",
 };
 

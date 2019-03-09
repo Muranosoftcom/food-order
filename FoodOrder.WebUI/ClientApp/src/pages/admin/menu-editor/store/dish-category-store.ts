@@ -6,8 +6,8 @@ class DishCategoryStore {
 	constructor(readonly menuEditor: MenuEditorPageStore, readonly menuEditorService: MenuEditorService) {
 	}
 
-	createNew(categoryName: string, supplierId: string) {
-		return this.menuEditor.performUpdate(() => this.menuEditorService.category.create(categoryName, supplierId));
+	createNew(categoryName: string, supplierId: string, position: number) {
+		return this.menuEditor.performUpdate(() => this.menuEditorService.category.create(categoryName, supplierId, position));
 	}
 
 	update(category: DishCategoryDto) {

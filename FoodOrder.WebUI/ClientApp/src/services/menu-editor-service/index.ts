@@ -30,8 +30,8 @@ class CategoryService {
 		this.api = api + "/category";
 	}
 
-	public create(name: string, supplierId: string) {
-		return ajax().post(this.api, { supplierId, name });
+	public create(name: string, supplierId: string, position: number) {
+		return ajax().post(this.api, { supplierId, name, position });
 	}
 
 	public update(category: DishCategoryDto) {
